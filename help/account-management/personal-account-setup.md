@@ -4,7 +4,7 @@ Welcome to mytaptrack®! This guide will help you set up your personal account t
 
 ## Account Setup Steps
 
-1. Visit https://portal.mytaptrack.com/
+1. Visit your mytaptrack front end url
 2. Click "Create Account"
 3. Choose your signup method:
    - Sign up with Google

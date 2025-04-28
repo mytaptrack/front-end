@@ -10,7 +10,7 @@ Before creating your mytaptrack account:
 
 ## Account Creation Steps
 
-1. Visit https://portal.mytaptrack.com/
+1. Visit your mytaptrack's front end domain name
 2. Click "Create Account"
 3. Choose one of the following:
    - Sign up with Google (if using a Gmail account)

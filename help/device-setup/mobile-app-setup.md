@@ -11,7 +11,7 @@ This guide walks you through the process of adding and syncing students to your 
 ## QR Code Generation
 
 1. Log into your account:
-   - Visit https://portal.mytaptrack.com/signin
+   - Visit https://{your front end domain name}/signin
    - Enter your credentials
 
 2. Navigate to student settings:
