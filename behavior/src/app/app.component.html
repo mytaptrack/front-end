@@ -1,0 +1,56 @@
+<amplify-authenticator [loginMechanisms]="['email']" [socialProviders]="['google']" [formFields]="formFields">
+    <ng-template amplifySlot="header">
+        <div style="padding: var(--amplify-space-large); text-align: center">
+          <img
+            class="amplify-image"
+            alt="mytaptrack&reg; logo"
+            src="/assets/images/sm-text-logo.gif"
+          />
+        </div>
+    </ng-template>
+    <ng-template
+      amplifySlot="authenticated"
+      let-user="user"
+      let-signOut="signOut">
+        <div class="container-fuid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="container-inner">
+                        <app-behavior-header></app-behavior-header>
+                        <div class="content view-area">
+                            <div class="container-fluid">
+                                <div *ngIf="user && isMobile" class="row">
+                                    <div class="col-12">
+                                        <label>Student:</label>
+                                        <select class="form-control" [(ngModel)]="studentId" #t>
+                                            <option *ngFor="let student of students" [value]="student?.studentId">{{student.firstName}} {{student.lastName}}</option>
+                                        </select>
+                                        <div *ngFor="let invite of teamInvites">
+                                            <app-invite [invite]="invite" (resolved)="removeInvite(invite)"></app-invite>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" [class.dashboard-container-mobile]="isMobile" [class.dashboard-container-desktop]="!isMobile">
+                                    <div id="student-container" class="d-print-none studentArea scrollable" [class.col-3]="user" [class.collapse]="user && collapseStudents" *ngIf="showStudents() && !isMobile">
+                                        <app-student-list [selectedStudent]="selectedStudent" (selected)="selectedStudent = $event"></app-student-list>
+                                    </div>
+                                    <div id="route-container" class="main-area" [class.col-12]="!collapseStudents || isMobile" [class.col-9]="!collapseStudents && !isMobile" [class.col-12]="(collapseStudents || !showStudents()) && !isMobile">
+                                        <div *ngIf="user && !isMobile">
+                                            <a class="no-print" (click)="collapseStudents = !collapseStudents">
+                                                <span *ngIf="!collapseStudents"><mat-icon>chevron_left</mat-icon> Hide Students</span>
+                                                <span *ngIf="collapseStudents"><mat-icon>chevron_right</mat-icon> Show Students</span>
+                                            </a>
+                                        </div>
+                                        <router-outlet></router-outlet>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</amplify-authenticator>
+
+

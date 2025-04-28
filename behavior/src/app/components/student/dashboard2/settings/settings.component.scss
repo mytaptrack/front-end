@@ -1,0 +1,56 @@
+
+.settings {
+    border-top: solid var(--border) 1px;
+    border-bottom: solid var(--border) 1px;
+    margin: 10px 0px;
+    padding: 5px 0px;
+    background: var(--headerBackgroundColor);
+}
+
+.advanced-settings label {
+    margin-right: 10px;
+    font-weight: 300;
+}
+
+.advanced-settings .device-container {
+    height: 160px;
+    overflow-y: scroll;
+}
+
+.calc-type {
+    margin-top: -10px;
+    margin-bottom: -10px;
+}
+
+.settings-accordian-body {
+    height:250px;
+    overflow-y: scroll;
+}
+
+.selection-item {
+    position: relative;
+}
+
+.selection-item > a {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.select-behaviors-container {
+    height: 300px;
+    overflow-y: scroll;
+    border: solid var(--border) 1px;
+}
+
+.card-header {
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.card-header .btn-block {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

@@ -1,0 +1,168 @@
+
+<!-- Registration Form -->
+<div *ngIf="!selected.saving">
+    <!-- Initial Registration -->
+    <div *ngIf="!selected.isRegistered">
+        <mat-form-field>
+            <mat-label>DSN (Device Serial Number)</mat-label>
+            <input matInput
+                id="student-setting-device-track-2-0-dsn"
+                [(ngModel)]="selected.dsn" />
+            <mat-hint>Enter the Device Serial Number found on your device</mat-hint>
+        </mat-form-field>
+
+        <div class="button-container">
+            <button mat-raised-button
+                id="student-setting-device-track-2-0-register"
+                [color]="isDsnValid() ? 'primary' : undefined"
+                [disabled]="!isDsnValid()"
+                (click)="selected.register()">
+                Register
+            </button>
+        </div>
+
+        <!-- DSN Location Guide -->
+        <mat-card class="guide-card">
+            <mat-card-header>
+                <mat-card-title>Where to find it</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <img alt="Where to find the DNS" 
+                        class="guide-image" 
+                        src="assets/images/dsn-overview.png" />
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <!-- Verification Process -->
+    <div *ngIf="selected.isRegistered && !selected.isVerified">
+        <!-- Click Instruction -->
+        <div class="verification-prompt mat-elevation-z1">
+            <mat-icon>touch_app</mat-icon>
+            <span>Click the device to verify possession</span>
+            <mat-progress-spinner
+                mode="indeterminate"
+                diameter="20">
+            </mat-progress-spinner>
+        </div>
+
+        <!-- WiFi Setup Guide -->
+        <mat-expansion-panel class="wifi-guide">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Have you configured your device's Wi-Fi? Here's how
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="guide-header">
+                <h3>Step-by-Step Instructions</h3>
+                <a mat-raised-button
+                    color="primary"
+                    href="assets/pdf/mytaptrack-wifi-setup.pdf"
+                    download="mytaptrack-wifi-setup">
+                    <mat-icon>download</mat-icon>
+                    Download PDF
+                </a>
+            </div>
+
+            <p class="setup-intro">Wi-Fi setup via mobile phone, tablet or computer</p>
+
+            <mat-list>
+                <mat-list-item>
+                    1. Press and hold the Track 2.0 button until the light starts blinking purple
+                </mat-list-item>
+                <mat-list-item>
+                    2. Release the button for two seconds
+                </mat-list-item>
+                <mat-list-item>
+                    3. Press and hold the button again until the light turns a solid purple
+                </mat-list-item>
+                <mat-list-item>
+                    4. With a smart phone or a WiFi-enabled computer, search the list of available WiFi
+                </mat-list-item>
+                <mat-list-item>
+                    5. Select the WiFi named "Mytaptrack"
+                </mat-list-item>
+                <mat-list-item class="note-item">
+                    <mat-icon color="accent">info</mat-icon>
+                    <span>NOTE: The WiFi might take up to 30 seconds to show up in your list of WiFi options</span>
+                </mat-list-item>
+                <mat-list-item>
+                    6. After connecting open a web browser and browse to "http://10.10.0.1"
+                </mat-list-item>
+                <mat-list-item>
+                    7. The webpage for the device will allow you to connect to your local WiFi network
+                </mat-list-item>
+                <mat-list-item>
+                    8. Click the button when done to complete WiFi setup
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+    </div>
+    <div *ngIf="selected.isRegistered && selected.isVerified">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput 
+                id="student-setting-device-track-2-0-nn-name" 
+                [(ngModel)]="selected.deviceName" 
+                [readonly]="!administrator" />    
+        </mat-form-field>
+        <div class="form-group">
+            <label>Switch prompt</label>
+            <div class="bold" *ngIf="selected.term && !codewordSetupInProgress">To switch to this student hold the button down and say "Switch to {{selected.term}}"</div>
+            <div><a class="link-item" *ngIf="!codewordSetupInProgress" (click)="setupCodeword()">Setup Code Word</a></div>
+            <div *ngIf="codewordSetupInProgress && !loading" class="code-word-setup text-center">
+                <i class="fa fa-circle-o-notch fa-spin"></i>
+            </div>
+            <div class="hint" *ngIf="codewordSetupInProgress">
+                <span>To set a codeword:</span> 
+                <ul>
+                    <li>1. Hold down the Track 2.0 button</li>
+                    <li>2. Wait for the light to turn green</li>
+                    <li>3. Say "Set switch to" then say the code word you want to use for the student</li>
+                    <li>4. Release the button and confirm the specified code word is now shown on the student dashboard</li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="student-device-action" *ngFor="let event of selected.events">
+                <mat-form-field>
+                    <mat-label>{{event.presses}} Clicks</mat-label>
+                    <mat-select [(ngModel)]="event.eventId">
+                        <mat-option *ngFor="let behavior of activeBehaviors" [value]="behavior.id">{{behavior.name}}</mat-option>
+                    </mat-select>    
+                </mat-form-field>
+                
+                <div class="col-6" *ngIf="selected.enterpriseId">
+                    <select class="form-control" [(ngModel)]="event.delayDelivery">
+                        <option value="30">30 minutes</option>
+                        <option value="60">1 hour</option>
+                        <option value="240">4 hours</option>
+                        <option value="EOD">12 AM</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div>
+            <span><b>DSN:</b> {{selected.dsn}}</span>
+        </div>
+        <div class="text-center">
+            <button id="student-setting-device-save" class="btn btn-primary" (click)="selected.save()">Save <i *ngIf="selected.saving" class="fa fa-circle-o-notch fa-spin"></i></button>
+            <button id="student-setting-device-cancel" class="btn btn-secondary" (click)="selected.cancel()">Cancel <i *ngIf="selected.saving" class="fa fa-circle-o-notch fa-spin"></i></button>
+            <button id="student-setting-device-reset" *ngIf="buttonVersion != 1" class="btn btn-warning" (click)="selected.resyncSecurity()">Reset Security <i *ngIf="selected.saving" class="fa fa-circle-o-notch fa-spin"></i></button>
+            <button id="student-setting-device-remove" class="btn btn-danger" (click)="selected.delete()" *ngIf="administrator">Remove <i *ngIf="selected.saving" class="fa fa-circle-o-notch fa-spin"></i></button>
+        </div>
+        <div class="status">
+            {{status}}
+        </div>
+    </div>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="selected.saving" class="loading-container">
+    <mat-progress-spinner
+        mode="indeterminate"
+        diameter="50">
+    </mat-progress-spinner>
+    <span class="loading-text">Saving</span>
+</div>

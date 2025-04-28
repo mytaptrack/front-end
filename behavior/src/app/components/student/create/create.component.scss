@@ -1,0 +1,86 @@
+.dialog-view {
+    // max-height: 90vh;
+    // overflow-y: scroll;
+}
+.create-student-card {
+  max-width: 800px;
+  margin: 24px auto;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.label-margin {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.copy-behaviors-section {
+  margin: 16px 0;
+  
+  mat-form-field {
+    margin-top: 16px;
+  }
+}
+
+.license-section {
+  margin: 24px 0;
+  
+  .mat-button-toggle-group {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    .mat-button-toggle {
+      flex: 1;
+      min-width: 200px;
+      
+      ::ng-deep .mat-button-toggle-label-content {
+        line-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+      
+      &.mat-button-toggle-checked {
+        background-color: #e0e0e0;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+mat-card-actions {
+  padding: 16px 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .create-student-card {
+    margin: 16px;
+  }
+  
+  .license-section {
+    .mat-button-toggle-group {
+      flex-direction: column;
+      
+      .mat-button-toggle {
+        width: 100%;
+      }
+    }
+  }
+}

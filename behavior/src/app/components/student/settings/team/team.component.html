@@ -1,0 +1,216 @@
+<app-loading *ngIf="loading" text="Loading"></app-loading>
+<div *ngIf="!loading">
+    <div class="team-container">    
+        <div *ngIf="team" class="content-container">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Team Members</mat-card-title>
+                </mat-card-header>
+    
+                <mat-card-content>
+                    <div class="grid-container">
+                        <!-- Team Members List -->
+                        <div class="left-panel">
+                            <mat-nav-list>
+                                <mat-list-item *ngFor="let item of team; let i = index"
+                                    [class.selected]="selected && item.userId === selected.userId"
+                                    [id]="'student-settings-team-' + i"
+                                    (click)="setSelected(item)">
+                                    {{item.details.name}}
+                                </mat-list-item>
+    
+                                <!-- Add New Member -->
+                                <mat-list-item [class.selected]="!selected || !selected.userId"
+                                    id="student-settings-team-new"
+                                    (click)="create()">
+                                    <mat-icon matListItemIcon>add</mat-icon>
+                                    <span matListItemTitle>Add New Team Member</span>
+                                </mat-list-item>
+                            </mat-nav-list>
+                        </div>
+    
+                        <!-- Member Details -->
+                        <div class="right-panel">
+                            <mat-progress-spinner *ngIf="loading" 
+                                mode="indeterminate" 
+                                diameter="50"
+                                class="loading-spinner">
+                            </mat-progress-spinner>
+    
+                            <!-- Existing Member Name -->
+                            <mat-form-field *ngIf="!isNew" class="full-width">
+                                <mat-label>Name</mat-label>
+                                <input matInput [value]="name" disabled="true">
+                            </mat-form-field>
+    
+                            <!-- New Member Email -->
+                            <mat-form-field class="full-width" [class.mat-form-field-invalid]="emailError">
+                                <mat-label>Email</mat-label>
+                                <input matInput
+                                    id="student-settings-team-email"
+                                    [(ngModel)]="selected.details.email"
+                                    type="email" [disabled]="!isNew">
+                                <mat-error *ngIf="emailError">
+                                    Please enter a valid email address
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-hint *ngIf="isNew">
+                                Invitation email will be sent to this email address with steps to create a mytaptrack account and accept this student. 
+                                Please be sure the new Team member creates their account using the same email address as the one you add here.
+                            </mat-hint>
+    
+                            <!-- Permissions Section -->
+                            <div class="permissions-section">
+                                <table mat-table [dataSource]="permissionsList" class="permissions-table">
+                                    <!-- Permission Column -->
+                                    <ng-container matColumnDef="permission">
+                                        <th mat-header-cell *matHeaderCellDef>Permission</th>
+                                        <td mat-cell *matCellDef="let row">
+                                            {{row.name}}
+                                            <mat-icon *ngIf="row.info" 
+                                                [matTooltip]="row.info"
+                                                class="info-icon">
+                                                info
+                                            </mat-icon>
+                                        </td>
+                                    </ng-container>
+    
+                                    <!-- Edit Access Column -->
+                                    <ng-container matColumnDef="edit">
+                                        <th mat-header-cell *matHeaderCellDef class="center-cell">
+                                            Edit <mat-checkbox [(ngModel)]="editAll"></mat-checkbox>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row" class="center-cell">
+                                            <mat-radio-button
+                                                [name]="row.name"
+                                                [checked]="getPermissionValue(row.key) == 'Admin'"
+                                                (change)="setPermissionValue(row.key, 'Admin')"
+                                                [disabled]="!administrator">
+                                            </mat-radio-button>
+                                        </td>
+                                    </ng-container>
+    
+                                    <!-- Read Access Column -->
+                                    <ng-container matColumnDef="read">
+                                        <th mat-header-cell *matHeaderCellDef class="center-cell">
+                                            Read <mat-checkbox [(ngModel)]="readAll"></mat-checkbox>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row" class="center-cell">
+                                            <mat-radio-button
+                                                [name]="row.name"
+                                                [checked]="getPermissionValue(row.key) == 'Read'"
+                                                (change)="setPermissionValue(row.key, 'Read')"
+                                                [disabled]="!administrator">
+                                            </mat-radio-button>
+                                        </td>
+                                    </ng-container>
+    
+                                    <!-- No Access Column -->
+                                    <ng-container matColumnDef="none">
+                                        <th mat-header-cell *matHeaderCellDef class="center-cell">
+                                            Hidden <mat-checkbox [(ngModel)]="noneAll"></mat-checkbox>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row" class="center-cell">
+                                            <mat-radio-button
+                                                [name]="row.name"
+                                                [checked]="getPermissionValue(row.key) == 'No Access'"
+                                                (change)="setPermissionValue(row.key, 'No Access')"
+                                                [disabled]="!administrator">
+                                            </mat-radio-button>
+                                        </td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="['permission', 'edit', 'read', 'none']"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: ['permission', 'edit', 'read', 'none'];"></tr>
+                                </table>
+
+                                <div *ngIf="selected.restrictions.reports == 'Admin'">
+                                    <mat-checkbox [(checked)]="overrideReport">Override Snapshot</mat-checkbox>
+                                </div>
+    
+                                <!-- Behaviors Section -->
+                                <div class="behaviors-section">
+                                    <h3 class="mat-h3">Behaviors</h3>
+                                    
+                                    <mat-radio-group [(ngModel)]="accessType" [disabled]="!administrator">
+                                        <mat-radio-button [value]="'full'">
+                                            All Behaviors
+                                        </mat-radio-button>
+                                        <mat-radio-button [value]="'limited'" class="ml-3">
+                                            Limited Behaviors
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+    
+                                    <div *ngIf="accessType === 'limited'" class="behavior-controls">
+                                        <div *ngIf="administrator" class="behavior-actions">
+                                            <button mat-button (click)="selectAllBehaviors()">
+                                                Select All
+                                            </button>
+                                            <button mat-button (click)="clearAllBehaviors()">
+                                                Clear All
+                                            </button>
+                                        </div>
+    
+                                        <!-- Active Behaviors -->
+                                        <div class="behavior-list">
+                                            <h4 class="mat-h4">Active Behaviors:</h4>
+                                            <mat-selection-list [disabled]="!administrator">
+                                                <mat-list-option *ngFor="let b of activeBehaviors"
+                                                    [selected]="hasPermission(b)"
+                                                    (selectionChange)="togglePermission(b)">
+                                                    {{b.name}}
+                                                    <mat-icon *ngIf="b.isDuration">schedule</mat-icon>
+                                                </mat-list-option>
+                                            </mat-selection-list>
+                                        </div>
+    
+                                        <!-- Archived Behaviors -->
+                                        <div class="behavior-list archived">
+                                            <h4 class="mat-h4">Archived Behaviors:</h4>
+                                            <mat-selection-list [disabled]="!administrator">
+                                                <mat-list-option *ngFor="let b of archivedBehaviors"
+                                                    [selected]="hasPermission(b)"
+                                                    (selectionChange)="togglePermission(b)">
+                                                    {{b.name}}
+                                                    <mat-icon *ngIf="b.isDuration">schedule</mat-icon>
+                                                </mat-list-option>
+                                            </mat-selection-list>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!-- Action Buttons -->
+                            <div class="action-buttons" *ngIf="administrator">
+                                <mat-error *ngIf="emailError">
+                                    The email address supplied is either invalid or not formatted correctly.
+                                </mat-error>
+                                <mat-error *ngIf="roleError">
+                                    A role was not specified for the new team member.
+                                </mat-error>
+    
+                                <button mat-raised-button 
+                                    color="primary"
+                                    (click)="save()">
+                                    Save
+                                </button>
+                                <button mat-button
+                                    (click)="cancel()">
+                                    Cancel
+                                </button>
+                                <button mat-raised-button
+                                    color="warn"
+                                    *ngIf="!isNew"
+                                    (click)="remove()">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+    
+</div>

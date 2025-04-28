@@ -1,0 +1,29 @@
+.content-body  {
+    padding: 10px;
+
+    mat-card {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 20px;
+
+        mat-toolbar {
+            background: var(--backgroundColor);
+            color: var(--darkText);
+
+            mat-form-field .mdc-text-field {
+                background: transparent;
+            }
+        }
+    }
+}
+
+.button-spinner {
+    max-height: 18px;
+    max-width: 18px;
+    margin-right:5px;
+    display:inline-block !important;
+}
+
+button.single-line {
+    word-break: keep-all;
+}

@@ -1,0 +1,107 @@
+.header {
+  &.mat-toolbar {
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+.mytaptrack-header {
+  padding: 0 16px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-spacer {
+  flex: 1 1 auto;
+}
+
+.logo-link {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-right: 16px;
+
+  img {
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.mobile-nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .separator {
+    margin: 0 8px;
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  a {
+    text-decoration: none;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.user-menu-button {
+  mat-icon {
+    margin-left: 4px;
+  }
+}
+
+// Material overrides
+::ng-deep {
+  .mat-menu-item {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+
+  .mat-button {
+    .mat-icon {
+      vertical-align: middle;
+    }
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mytaptrack-header {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .logo-link {
+    height: 32px;
+  }
+}

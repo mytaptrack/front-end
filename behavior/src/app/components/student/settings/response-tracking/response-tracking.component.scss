@@ -1,0 +1,116 @@
+input[type='checkbox'] {
+    margin-left: 15px;
+    margin-right: 5px;
+    margin-top: -2px;
+}
+
+[data-toggle="collapse"]:before {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  content: "\f054";
+  transform: rotate(90deg) ;
+  transition: all linear 0.25s;
+  }   
+[data-toggle="collapse"].collapsed:before {
+  transform: rotate(0deg) ;
+}
+
+.card-header {
+    padding: 0px;
+    background-color: var(--headerBackgroundColor);
+}
+
+.show-error {
+    border-color:#A00;
+    border-width: 3px;
+}
+
+.details {
+    background-color: var(--headerBackgroundColor);
+    border: solid 2px var(--headerTextColor);
+    padding: 0px;
+}
+
+.input-group-append button {
+    margin: 0px;
+}
+
+.objective-block {
+    display: inline-block;
+    margin: 20px;
+}
+
+.objective-block label {
+    margin-left:20px;
+}
+
+.warn {
+    color: var(--warningColor);
+    font-size:10pt;
+    margin-top: -20px;
+}
+
+.selected {
+    margin-right: -15px;
+    margin-left: -10px;
+    padding-left: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-left: solid 2px var(--headerTextColor);
+    border-top: solid 2px var(--headerTextColor);
+    border-bottom: solid 2px var(--headerTextColor);
+    background-color: var(--headerBackgroundColor);
+}
+
+.square {
+    height: 25px;
+    width: 25px;
+}
+
+.green {
+    color: #0A0;
+}
+
+.yellow {
+    color: #AA0;
+}
+
+.red {
+    color: #A00;
+}
+
+.target {
+    padding: 0px 10px 5px 0px;
+    margin: 10px;
+    z-index: 0;
+}
+
+.target-bordered {
+    border: 1px solid var(--headerTextColor);
+    border-radius: 5px;
+}
+
+.target input[type='text'] {
+    margin-left: 20px;
+}
+
+.target .form-control {
+    max-width: 100px;
+}
+
+.target-legend .item {
+    display: inline-block;
+    margin: 5px 20px;
+}
+
+.target-legend .item i {
+    font-size: 18pt;
+}
+
+.saving {
+    z-index: 100;
+}

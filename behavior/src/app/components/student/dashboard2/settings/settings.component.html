@@ -1,0 +1,196 @@
+<div class="settings">
+    <h2>Settings</h2>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <div class="accordion" id="behaviorsAccordion">
+                    <div class="card">
+                        <div class="card-header" id="headingBehaviorsSelection">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#behaviorsSelection" aria-expanded="true" aria-controls="behaviorsSelection">
+                                    Select Behaviors
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="behaviorsSelection" class="collapse show" aria-labelledby="headingBehaviorsSelection" data-parent="#behaviorsAccordion">
+                            <div class="select-behaviors-container">
+                                <ul class="list-group">
+                                    <li class="list-group-item selection-item">
+                                        <span *ngIf="isAllSettingsSelected()">
+                                            <mat-icon>check</mat-icon>
+                                        </span>
+                                        <label for="settingsSelectAll">Select All</label>
+                                        <a (click)="selectAllSettings()"></a>
+                                    </li>
+                                    <li class="list-group-item" *ngFor="let behavior of settings.behaviors">
+                                        <div class="selection-item">
+                                            <span style="float:right" *ngIf="behavior.duration">
+                                                <mat-icon *ngIf="behavior.expanded">keyboard_arrow_down</mat-icon>
+                                                <mat-icon *ngIf="!behavior.expanded">chevron_right</mat-icon>
+                                            </span>
+                                            <span *ngIf="behaviorSettingChecked(behavior)" [class.lighten]="!behaviorSettingsAllChecked(behavior)"><mat-icon>check</mat-icon></span>
+                                            <span> {{getBehaviorName(behavior.id)}} </span>
+                                            <a (click)="behaviorSettingClicked(behavior)"></a>
+                                        </div>
+                                        <ul class="list-group" *ngIf="behavior.expanded">
+                                            <li class="list-group-item selection-item">
+                                                <span *ngIf="behavior.frequency"><mat-icon>check</mat-icon> </span> 
+                                                <span> Occurrence</span>
+                                                <a (click)="behavior.frequency = !behavior.frequency;"></a>
+                                            </li>
+                                            <li><b>Line Chart Only:</b></li>
+                                            <li class="list-group-item selection-item">
+                                                <span *ngIf="behavior.duration.sum"><mat-icon>check</mat-icon></span> 
+                                                <span> Sum of Durations</span>
+                                                <a (click)="behavior.duration.sum = !behavior.duration.sum"></a>
+                                            </li>
+                                            <li class="list-group-item selection-item">
+                                                <span *ngIf="behavior.duration.avg"><mat-icon>check</mat-icon></span> 
+                                                <span> Average Duration</span>
+                                                <a (click)="behavior.duration.avg = !behavior.duration.avg"></a>
+                                            </li>
+                                            <li class="list-group-item selection-item">
+                                                <span *ngIf="behavior.duration.max"><mat-icon>check</mat-icon></span> 
+                                                <span> Maximum Duration</span>
+                                                <a (click)="behavior.duration.max = !behavior.duration.max"></a>
+                                            </li>
+                                            <li class="list-group-item selection-item">
+                                                <span *ngIf="behavior.duration.min"><mat-icon>check</mat-icon></span> 
+                                                <span> Minimum Duration</span>
+                                                <a (click)="behavior.duration.min = !behavior.duration.min"></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="abcEnabled">
+                        <div class="card-header" id="headingAntecedentsSelection">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#antecedentsSelection" aria-expanded="true" aria-controls="antecedentsSelection">
+                                    Select Antecedents
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="antecedentsSelection" class="collapse" aria-labelledby="headingAntecedentsSelection" data-parent="#behaviorsAccordion">
+                            <div class="select-behaviors-container">
+                                <ul class="list-group">
+                                    <li class="list-group-item selection-item" *ngFor="let item of settings.antecedents">
+                                        <span *ngIf="item.display">
+                                            <mat-icon>check</mat-icon>
+                                        </span>
+                                        {{item.name}}
+                                        <a (click)="item.display = !item.display"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 advanced-settings">
+                <div class="accordion" id="settingsAccordion">
+                    <div class="card">
+                        <div class="card-header" id="headingTrackingSource">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#trackingSource" aria-expanded="true" aria-controls="trackingSource">
+                                    Tracking Source
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="trackingSource" class="collapse show" aria-labelledby="headingTrackingSource" data-parent="#settingsAccordion">
+                            <div class="card-body settings-accordian-body">
+                                <table class="table">
+                                    <thead>
+                                        <th>Device</th>
+                                        <th>Graph Settings</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let device of devices?.items ?? []">
+                                            <td>{{getDeviceName(device)}}</td>
+                                            <td class="device-options">
+                                                <select class="form-control calc-type" [(ngModel)]="device.calculation">
+                                                    <option value="Pooled">Pooled</option>
+                                                    <option value="Independent">Independent</option>
+                                                    <option value="Hidden">Hidden</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTimeSpanSummary">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#timespanSummary" aria-expanded="true" aria-controls="timespanSummary">
+                                    Time Range & Summaries
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="timespanSummary" class="collapse" aria-labelledby="headingTimeSpanSummary" data-parent="#settingsAccordion">
+                            <div class="card-body settings-accordian-body">
+                                <div>
+                                    <label>Summarize after 45 days:</label>
+                                    <label><input type="radio" name="settings-summarize-data-45" [(ngModel)]="settings.summary.after45" [value]="'Days'"/> Day</label>
+                                    <label><input type="radio" name="settings-summarize-data-45" [(ngModel)]="settings.summary.after45" [value]="'Weeks'"/> Week</label>
+                                    <label><input type="radio" name="settings-summarize-data-45" [(ngModel)]="settings.summary.after45" [value]="'Months'"/> Month</label>
+                                </div>
+                                <div>
+                                    <label>Summarize After 150 days:</label>
+                                    <label><input type="radio" name="settings-summarize-data-150" [(ngModel)]="settings.summary.after150" [value]="'Days'"/> Day</label>
+                                    <label><input type="radio" name="settings-summarize-data-150" [(ngModel)]="settings.summary.after150" [value]="'Weeks'"/> Week</label>
+                                    <label><input type="radio" name="settings-summarize-data-150" [(ngModel)]="settings.summary.after150" [value]="'Months'"/> Month</label>
+                                </div>
+                                <div>
+                                    <label>Summary type:</label>
+                                    <label><input type="radio" name="settings-summarize-type" [(ngModel)]="settings.summary.calculationType" [value]="'avg'"/> Average</label>
+                                    <label><input type="radio" name="settings-summarize-type" [(ngModel)]="settings.summary.calculationType" [value]="'sum'"/> Sum</label>
+                                </div>
+
+                                <div>
+                                    <label>Show target lines on summary:</label>
+                                    <label><input type="radio" name="settings-summarize-target-line" [(ngModel)]="settings.summary.showTargets" [value]="true"/> Yes</label>
+                                    <label><input type="radio" name="settings-summarize-target-line" [(ngModel)]="settings.summary.showTargets" [value]="false"/> No</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Days per week tracked:</label>
+                                    <div>
+                                        <label *ngFor="let day of weekdays"><input type="checkbox" [(ngModel)]="day.boolValue"/> {{day.dayName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- <div>
+                    <div>
+                        <label>Velocity Tracking:</label>
+                        <label><input type="radio" name="velocity" [(ngModel)]="settings.velocity.enabled" [value]="true"/> On</label>
+                        <label><input type="radio" name="velocity" [(ngModel)]="settings.velocity.enabled" [value]="false"/> Off</label>
+                    </div>
+                    <div *ngIf="settings.velocity.enabled">
+                        <label>Select class or intervention start event</label>
+                        <select class="form-control">
+                            <option [value]="undefined"></option>
+                            <option *ngFor="let behavior of settings.behaviors" [value]="behavior.id">{{getBehaviorName(behavior.id)}}</option>
+                        </select>
+                    </div>
+                </div> -->
+            </div>
+            <div class="col-12 text-center">
+                <button class="btn btn-primary" (click)="loadDefaultSettings()">Load Defaults</button>
+                <button class="btn btn-primary" (click)="applySettings()">Apply</button>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Save</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" (click)="saveSettings()">Save for you</a>
+                        <a class="dropdown-item" (click)="saveAsDefault()">Save as student default</a>
+                    </div>
+                </div>
+                <button class="btn btn-primary" (click)="cancelSettings()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

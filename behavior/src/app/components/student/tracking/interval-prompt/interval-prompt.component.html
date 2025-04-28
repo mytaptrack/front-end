@@ -1,0 +1,38 @@
+<div class="row interval-options" *ngIf="showInterval && !intervalStart">
+    <div class="col-4" *ngIf="showDuration">
+        <div>
+            <label>Interval Duration:</label>
+        </div>
+        <div class="input-group">
+            <input type="number" class="form-control" [(ngModel)]="intervalDuration" />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{intervalType}}</button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="intervalType = 'seconds'">seconds</a>
+                    <a class="dropdown-item" (click)="intervalType = 'minutes'">minutes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 input-align">
+        <label><input type="checkbox" [(ngModel)]="intervalAlign" /> Align with clock</label>
+    </div>
+    <div class="col-4 input-align">
+        <label><input type="checkbox" [(ngModel)]="intervalFlash" /> Visual Alert</label>
+    </div>
+    <div class="col-4 input-align">
+        <label><input type="checkbox" [(ngModel)]="intervalPlaySound" /> Audible Alert</label>
+    </div>
+    <div class="col-12">
+        <button class="btn btn-primary" (click)="startInterval()"><mat-icon>play_arrow</mat-icon> Start</button>
+    </div>
+</div>
+<div class="row" *ngIf="intervalStart">
+    <div class="col-12 text-center interval-counter" [class.interval-flash]="intervalFlashOn">
+        <span id="intervalDisplayTimeElement"></span>
+        <button class="btn btn-primary" (click)="stopInterval()"><mat-icon>stop</mat-icon> Stop</button>
+    </div>
+    <div class="col-12">
+        <span class="hint">Timer might appear to skip numbers. This can be due to an effort to align with the time on the computer</span>
+    </div>
+</div>

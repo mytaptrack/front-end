@@ -1,0 +1,65 @@
+.student-template-container {
+  padding: 24px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.tags-section {
+  margin-bottom: 24px;
+
+  mat-label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.tabs-section {
+  margin: 24px 0;
+
+  ::ng-deep .mat-tab-body-wrapper {
+    min-height: 200px;
+  }
+}
+
+.tab-label {
+  .beta-tag {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-progress-spinner {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .student-template-container {
+    padding: 16px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

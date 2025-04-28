@@ -1,0 +1,166 @@
+.responseItem {
+    font-style: italic;
+}
+
+.warning {
+    background: var(--backgroundColor);
+    padding: 2px;
+}
+
+.app-container {
+    padding: 24px;
+    position: relative;
+}
+
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.text-alerts {
+    display: block;
+    margin: 16px 0;
+}
+
+.warning-card {
+    margin: 16px 0;
+    background-color: #fff3e0;
+}
+
+.warning-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+    margin-bottom: 16px;
+
+    mat-icon {
+        color: #f44336;
+    }
+}
+
+.behaviors-card,
+.responses-card {
+    margin: 24px 0;
+}
+
+.behaviors-table,
+.responses-table {
+    width: 100%;
+}
+
+.order-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.response-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .info-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.qr-section {
+    .print-content {
+        margin-bottom: 24px;
+    }
+
+    .header {
+        margin-bottom: 24px;
+
+        .title-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .device-name {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: rgba(0, 0, 0, 0.87);
+        }
+    }
+
+    .security-section,
+    .setup-section {
+        margin-bottom: 24px;
+    }
+
+    .qr-code-container {
+        display: flex;
+        justify-content: center;
+        margin: 24px 0;
+    }
+}
+
+::ng-deep {
+    .mat-list-item {
+        height: auto !important;
+        padding: 8px 0 !important;
+    }
+
+    .mat-list-item-content {
+        white-space: normal !important;
+    }
+}
+
+@media print {
+    .action-buttons {
+        display: none;
+    }
+
+    mat-card {
+        box-shadow: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding: 16px;
+    }
+
+    .order-controls {
+        flex-direction: column;
+    }
+}
+
+.trackable-item {
+    display: grid;
+    grid-template-columns: 10% 60% 15% 15%;
+    gap: 5px;
+}
+
+.trackable-item div {
+    display:inline-block;
+}
+
+.table-labels {
+    border-bottom: solid 1px var(--backgroundColorDarker);
+    margin-bottom: 5px;
+}

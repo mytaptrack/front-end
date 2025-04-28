@@ -1,0 +1,58 @@
+.activeNoResponse {
+    background-color: var(--warningColor);
+}
+.badge {
+    margin-top:10px;
+    margin-right: 2px;
+    float: right;
+}
+
+.badge-warn {
+    color: var(--waitingColor);
+}
+
+#enrollStudent {
+    font-size:14pt;
+    margin: 10px 5px;
+}
+
+.input-group-append button {
+    margin: 0px;
+}
+
+.invite-all {
+    padding: 10px;
+    color: var(--linkItemColor);
+    background-color: var(--headerBackgroundColor);
+    border-bottom: 1px solid var(--border);
+}
+
+.no-student-option {
+    margin-top: 30px;
+}
+
+.student-heading {
+    padding-left: 10px;
+}
+
+.student-list-item {
+    position:relative;
+    border-bottom:solid 1px var(--border);
+    padding:2px 10px 2px 20px;
+}
+
+.student-list-item.selected {
+    background-color: var(--selected);
+}
+
+.student-list-item:hover {
+    background-color: var(--selectedHover);
+}
+
+.student-name {
+    font-size: 16pt;
+}
+
+.hidden {
+    display:none;
+}

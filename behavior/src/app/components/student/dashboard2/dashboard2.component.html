@@ -1,0 +1,456 @@
+<div class="scroll-header">
+    <h2>{{selectedStudent?.displayName}} - Dashboard</h2>
+</div>
+<div id="dashboardBody" *ngIf="selectedStudent" class="container-fluid">
+
+    <div class="row d-print-none" *ngIf="showAlerts">
+        <div *ngIf="!alertsActionInProgress">
+            <div class="col-12">
+                <h4 *ngIf="awaitingResponse">A behavior was tracked that needs a response</h4>
+                <h4>Your Alerts: {{studentNotifications? studentNotifications.length : 0 + dataErrors.length}}</h4>
+            </div>
+            <div class="col-12 notification" *ngFor="let notification of getTopNotifications()">
+                <mat-icon>warning</mat-icon>
+                <span>{{getNotificationText(notification)}}</span>
+                <a (click)="dismissNotification(notification)">Dismiss</a>
+            </div>
+            <div class="col-12 notification" *ngFor="let notification of dataErrors">
+                <mat-icon>warning</mat-icon>
+                <span>{{notification}}</span>
+            </div>
+            <div>
+                <a class="link-item clearAll" (click)="clearAllNotifications()">Clear All</a>
+                <a class="link-item clearAll" (click)="clearAllPending()">Clear Alert</a>
+            </div>
+        </div>
+        <div id="notificationSpinner" *ngIf="alertsActionInProgress">
+            <mat-progress-spinner></mat-progress-spinner>
+        </div>
+    </div>
+    <div class="row charts d-print-none">
+        <div class="col-12" *ngIf="showSettingsDropdown">
+            <app-dashboard-settings [student]="student" [(settings)]="settings" (close)="showSettingsDropdown = false" (apply)="selectStudent(selectedStudent)"></app-dashboard-settings>
+        </div>
+        <div class="col-4">
+            <a class="btn btn-primary d-print-none" [routerLink]="['/student/print']" [queryParams]="{ studentId: student? student.studentId : '', startDate: getDay(startDate), endDate: getDay(endDate) }"><mat-icon>description</mat-icon> Behavior Impact Report</a>
+        </div>
+        <div class="col-md-4 text-center d-print-none">
+            <h2>Overview</h2>
+        </div>
+        <div class="col-4 text-center d-print-none">
+            <button class="btn btn-primary" style="width:250px;" (click)="showSettingsDropdown = !showSettingsDropdown">Dashboard Configuration</button>
+        </div>
+        <div class="col-12 text-center">
+            <h3>
+                <a (click)="previousWeek()" class="d-print-none" title="Previous Week"><mat-icon>chevron_left</mat-icon></a>
+                <span>{{ getDateRange() }}</span>
+                <app-date-dropdown [startDate]="startDate" (selected)="setWeekStart($event)"></app-date-dropdown>
+                <a class="d-print-none" (click)="nextWeek()" title="Next Week"><mat-icon>chevron_right</mat-icon></a>
+                <a class="refresh-button" (click)="refreshData()"><mat-icon>refresh</mat-icon></a>
+            </h3>
+        </div>
+        <div class="col-12 text-center ">
+            <div class="legend-container">
+                <h5>Legend</h5>
+                <div *ngIf="warning" class="warn">
+                    {{warning}}
+                </div>
+                <div class="legend" *ngFor="let b of displayBehaviors">
+                    <svg width="30" height="10">
+                        <rect width="30" height="10" style="stroke-width:1;stroke:rgb(0,0,0)" [style.fill]="b.color" />
+                        
+                    </svg>
+                    <span>&nbsp;{{b.name}}</span>
+                    <span *ngIf="b.metricType != 'occurence'">&nbsp;({{b.metricType}})</span>
+                </div>
+                <div class="legend" *ngFor="let b of displayTargets">
+                    <svg width="30" height="10">
+                        <line x1="0" y1="5" x2="30" y2="5" stroke-dasharray="4" style="stroke-width:3px;" [style.stroke]="b.color" />
+                    </svg>
+                    <span>&nbsp;{{b.name}}</span>
+                    <span *ngIf="b.metricType != 'occurence'">&nbsp;({{b.metricType}})</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-right chart-div col-4" [hidden]="!frequencyChart" [class.offset-2]="chartCount == 2" [class.offset-4]="chartCount == 1">
+            <a (click)="setLargeChart('frequency')"><h5 class="text-center">Frequency</h5></a>
+            <div class="chart-container">
+                <canvas id="trendChart" class="limited-chart" baseChart width="400" height="300"
+                    [data]="frequencyChart?.data" 
+                    [options]="frequencyChart?.options" 
+                    [type]="frequencyChart?.type"
+                    [legend]="false"
+                    [plugins]="inlinePluginFrequency"
+                    (chartClick)="goToReportDetailsFromLine($event, true)"
+                    ></canvas>
+                <svg id="trendChartMilestones" class="milestone" *ngIf="milestones?.length > 0">
+                </svg>
+            </div>
+        </div>
+        <div class="text-right chart-div col-4" [hidden]="!durationChart">
+            <a (click)="setLargeChart('duration')"><h5 class="text-center">Duration</h5></a>
+            <div class="chart-container">
+                <canvas id="durationChart" class="limited-chart" baseChart width="400" height="300" 
+                    (chartClick)="goToReportDetailsFromLine($event, true)" 
+                    [datasets]="(durationChart)? durationChart.data.datasets : []" 
+                    [labels]="(durationChart)? durationChart.data.labels : []" 
+                    [options]="durationChart?.options || {}" 
+                    [type]="(durationChart)? durationChart.type : ''"
+                    [legend]="false"
+                    [plugins]="inlinePluginDuration"></canvas>
+                <svg id="durationChartMilestones" class="milestone milestone-graph" *ngIf="milestones?.length > 0">
+                </svg>
+            </div>
+        </div>
+        <div class="text-right chart-div col-4" [hidden]="!dotChart">
+            <a (click)="setLargeChart('dot')"><h5 class="text-center">Occurrences</h5></a>
+            <div class="chart-container">
+                <canvas id="dotChart" class="limited-chart" baseChart width="400" height="300" 
+                    (chartClick)="goToReportDetailsFromDot($event, false)" 
+                    [data]="dotChart?.data" 
+                    [options]="dotChart?.options" 
+                    [type]="dotChart?.type"
+                    [legend]="false"
+                    [plugins]="inlinePluginDot"></canvas>
+                <svg id="dotChartMilestones" class="milestone milestone-graph" *ngIf="milestones?.length > 0">
+                </svg>
+            </div>
+        </div>
+        <div class="col-12 text-center" *ngIf="milestones && milestones.length > 0">
+            <h4>Support Change / Milestone</h4>
+            <div class="legend" *ngFor="let m of milestones">
+                <svg class="milestone" width="30" height="10">
+                    <rect width="30" height="10" style="stroke-width:1;stroke:rgb(0,0,0);" [style.fill]="m.color" />
+                </svg>
+                {{m.title}} - {{m.date}}
+            </div>
+        </div>
+        <div *ngIf="features.abc && abcAvailable" class="col-12 abc-summary">
+            <h2>ABC Summary <span style="font-style:italic">(beta)</span></h2>
+            <div class="container-fluid">
+                <div class="row">
+                    <div *ngFor="let stat of abcBStats" class="col-3 text-center">
+                        <h4>{{stat.options.plugins.title.text}} Antecedents</h4>
+                        <canvas class="limited-chart" baseChart width="400" height="300"
+                            [data]="stat.data" 
+                            [options]="stat.options" 
+                            [type]="stat.type"></canvas>
+                    </div>
+                    <div class="col-12 chart-section" *ngIf="!loading">
+                        <canvas baseChart width="400" [height]="abcAChartHeight"
+                            [data]="abcAChart.data" 
+                            [options]="abcAChart.options" 
+                            [type]="abcAChart.type"></canvas>
+                    </div>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <th>Antecedent</th>
+                    <th>Behavior</th>
+                    <th>Consequence</th>
+                    <th>Events</th>
+                    <th>Percentage</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stat of abcStats">
+                        <td>{{stat.a}}</td>
+                        <td>{{stat.b}}</td>
+                        <td>{{stat.c}}</td>
+                        <td>{{stat.events}}</td>
+                        <td>{{stat.percent}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row d-print-none" [hidden]="!showLarge">
+        <div class="col-12">
+            <a id="largeChartArea"></a>
+        </div>
+        <div class="col-12 text-right">
+            <button class="btn btn-primary" (click)="zoomIn()"><mat-icon>zoom_in</mat-icon> Zoom In</button>
+            <button class="btn btn-primary" (click)="zoomOut()" [disabled]="largeChartSize &lt;= 30"> <mat-icon>zoom_out</mat-icon> Zoom Out</button>
+            <button class="btn btn-primary" (click)="showLarge = ''"><mat-icon>close</mat-icon> Close</button>
+        </div> 
+        <div class="text-center chart-div col-12" [hidden]="!(frequencyChart && showLarge == 'frequency')">
+            <h5 class="text-center">Frequency</h5>
+            <div class="chart-container">
+                <canvas id="largeTrendChart" baseChart width="100vw" [height]="largeChartSize"
+                    (chartClick)="goToReportDetailsFromLine($event, true)" 
+                    [datasets]="(frequencyChart)? frequencyChart.data.datasets : []" 
+                    [labels]="(frequencyChart)? frequencyChart.data.labels : []" 
+                    [options]="(frequencyChart)? frequencyChart.options : {}" 
+                    [type]="(frequencyChart)? frequencyChart.type : ''"
+                    [legend]="false"
+                    [plugins]="inlinePluginLargeFrequency"></canvas>
+                <svg id="largeTrendChartMilestones" class="milestone">
+                    <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+                </svg>
+            </div>
+        </div>
+        <div class="text-center chart-div col-12" [hidden]="!(durationChart && showLarge == 'duration')">
+            <h5 class="text-center">Duration</h5>
+            <div class="chart-container">
+                <canvas id="largeDurationChart" baseChart width="100vw" [height]="largeChartSize"
+                    (chartClick)="goToReportDetailsFromLine($event, true)" 
+                    [datasets]="(durationChart)? durationChart.data.datasets : []" 
+                    [labels]="(durationChart)? durationChart.data.labels : []" 
+                    [options]="(durationChart)? durationChart.options : {}" 
+                    [type]="(durationChart)? durationChart.type : ''"
+                    [legend]="false"
+                    [plugins]="inlinePluginLargeDuration"></canvas>
+                <svg id="largeDurationChartMilestones" class="milestone">
+                    <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+                </svg>
+            </div>
+        </div>
+        <div class="text-center chart-div col-12" [hidden]="!(dotChart && showLarge == 'dot')">
+            <h5 class="text-center">Occurrences</h5>
+            <div class="chart-container">
+                <canvas id="largeDotChart" baseChart width="100vw" [height]="largeChartSize"
+                    (chartClick)="goToReportDetailsFromDot($event, false)" 
+                    [datasets]="(dotChart)? dotChart.data.datasets : []" 
+                    [labels]="(dotChart)? dotChart.data.labels : []" 
+                    [options]="(dotChart)? dotChart.options : {}" 
+                    [type]="(dotChart)? dotChart.type : ''"
+                    [legend]="false"
+                    [plugins]="inlinePluginLargeDot"></canvas>
+                <svg id="largeDotChartMilestones" class="milestone">
+                    <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div id="details-loading" class="row" *ngIf="loadingDay">
+        <div class="col-12" style="min-height: 400px; position: relative">
+            <app-loading [absolute]="true"></app-loading>
+            &nbsp;
+        </div>
+    </div>
+    <div id="details" class="row" *ngIf="!loadingDay">
+        <div class="col-12 daily-start text-center d-print-none" style="position:relative">
+            <h3>Daily Details</h3>
+            <h4>
+                <a class="d-print-none" (click)="addDays(-1)" title="Previous Week"><mat-icon>chevron_left</mat-icon></a>
+                <span>{{ getDay(currentDay) }}</span>
+                <a class="d-print-none" (click)="addDays(1)" title="Next Week"><mat-icon>chevron_right</mat-icon></a>
+            </h4>
+            <div class="d-print-none" style="position:absolute; top:20px; right: 5px;">
+                <a (click)="scrollToTop()"><mat-icon>keyboard_double_arrow_up</mat-icon> Back to overview</a>
+            </div>
+        </div>
+        <div class="col-12 d-print-none">
+            <ul class="nav nav-tabs">
+                <li class="nav-link" (click)="setDailyChart('frequency')" [class.active]="isDailyChartActive('frequency')">Frequency</li>
+                <li class="nav-link" (click)="setDailyChart('duration')" [class.active]="isDailyChartActive('duration')">Duration</li>
+                <li class="nav-link" (click)="setDailyChart('interval')" [class.active]="isDailyChartActive('interval')">Interval</li>
+                <li class="nav-link" (click)="setDailyChart('notes')" [class.active]="isDailyChartActive('notes')" *ngIf="commentsRead">Notes</li>
+            </ul>
+        </div>
+        <div class="col-12" *ngIf="(dailyChartType == 'frequency' || dailyChartType == 'duration')">
+            <canvas class="daily-chart" 
+                *ngIf="dayChart" 
+                baseChart 
+                width="500" height="100"
+                (chartClick)="goToReportDetails($event)" 
+                [datasets]="(dayChart)? dayChart.data.datasets : []" 
+                [labels]="(dayChart)? dayChart.data.labels : []" 
+                [options]="(dayChart)? dayChart.options : {}" 
+                [type]="(dayChart)? dayChart.type : ''"></canvas>
+        </div>
+        <div #intervalReport id="intervalReport" class="col-12" *ngIf="dailyChartType == 'interval'">
+            <div class="container-fluid">
+                <div id="activityRow" class="row no-print">
+                    <div class="col-12 text-right">
+                        <div class="dropdown regular-dropdown">
+                            <div class="input-group">
+                                <input type="number" class="form-control" [(ngModel)]="intervalMinutes" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{intervalType}}</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" (click)="intervalType = 'minutes'">minutes</a>
+                                        <a class="dropdown-item" (click)="intervalType = 'seconds'">seconds</a>
+                                    </div>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" (click)="loadDay()">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top:-1px" (click)="print()">Print</button>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="print-content"><span>Interval Report Date: {{ getDay(currentDay) }}</span></div>
+                        <div class="intervalView">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Minutes:Seconds</th>
+                                        <th>Hours</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Start - Stop</th>
+                                        <th class="frequency-header" *ngFor="let hour of getHours()">{{hour}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dataRow of intervalData.data">
+                                        <td class="ensure-formatting" *ngFor="let dataCol of dataRow">
+                                            <pre>{{dataCol}}</pre>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center" *ngIf="intervalData.data.length == 0">
+                                <h1>No data collected</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="dailyChartType == 'frequency' || dailyChartType == 'duration'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Details</h3>
+                    </div>
+                    <div class="col-6 text-right d-print-none">
+                        <button class="btn btn-danger" (click)="excludeDate()" *ngIf="dataAdmin && !isDateExcluded()"><mat-icon>close</mat-icon> Exclude Day</button>
+                        <button class="btn btn-danger" (click)="includeDate()" *ngIf="dataAdmin && isDateExcluded()"><mat-icon>add</mat-icon> Include Day</button>
+                        <button class="btn btn-primary" (click)="addEventClicked()" *ngIf="dataAdmin"><mat-icon>add</mat-icon> Add Event</button>
+                        <button class="btn btn-primary" (click)="toggleSource()"><mat-icon>search</mat-icon>&nbsp;<span *ngIf="!showDataSource">Show</span><span *ngIf="showDataSource">Hide</span> Source</button>
+                        <button class="btn btn-primary" *ngIf="features.abc && abcPermission && dailyChartType == 'frequency'" (click)="showAbc = !showAbc"><mat-icon>bolt</mat-icon>&nbsp;<span *ngIf="!showAbc">Show</span><span *ngIf="showAbc">Hide</span> ABC <span style="font-style:italic">(beta)</span></button>
+                        <div class="dropdown regular-dropdown">
+                            <button id="dropdownScheduleButton" class="btn btn-primary dropdown-toggle" *ngIf="scheduleAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{getScheduleDisplayName()}}</button>
+                            <div class="dropdown-menu collapse" aria-labelledby="dropdownScheduleButton">
+                                <div class="dropdown-item" *ngFor="let schedule of schedules">
+                                    <a (click)="setSchedule(schedule)" class="highlight-hover">
+                                        <span *ngIf="scheduleName == schedule?.name"><mat-icon>check</mat-icon></span>
+                                        <span>{{schedule?.name}}</span>
+                                    </a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a [routerLink]="['student/settings/schedule']" [queryParams]="{studentId: student.studentId}" class="highlight-hover">Manage Schedules</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="showAddEvent">
+                        <div class="container" *ngIf="savingEvent">
+                            <div class="row"><div class="col-12 text-center" style="position:relative"><app-loading text="Saving"></app-loading></div></div>
+                        </div>
+                        <div class="container" *ngIf="!savingEvent">
+                            <div class="row">  
+                                <div [class.col-6]="!isDuration(addEventBehavior)" [class.col-3]="isDuration(addEventBehavior)">
+                                    <label>Behavior</label>
+                                    <select class="form-control" [(ngModel)]="addEventBehavior">
+                                        <option *ngFor="let behavior of getActiveBehaviors()" [value]="behavior.id">{{getBehaviorName(behavior.id)}}</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="isDuration(addEventBehavior)" class="col-3">
+                                    <label>Event Type</label>
+                                    <select class="form-control" [(ngModel)]="addEventDurationType">
+                                        <option value="missing">Add Missing Stop</option>
+                                        <option value="new" selected>New Duration</option>
+                                    </select>
+                                    <div class="hint" *ngIf="addEventDurationType == 'missing' && dailyChartType == 'frequency'">
+                                        Stop events will not be shown on the frequency tab.
+                                    </div>
+                                </div>
+                                <div [class.col-6]="!isDuration(addEventBehavior) || addEventDurationType != 'new'" [class.col-3]="isDuration(addEventBehavior)">
+                                    <label *ngIf="isDuration(addEventBehavior) && addEventDurationType == 'new'">Start Time</label>
+                                    <label *ngIf="!isDuration(addEventBehavior) || addEventDurationType != 'new'">Time</label>
+                                    <app-time-input [time]="addEventTime" (timeChange)="addEventTime = $event"></app-time-input>
+                                </div>
+                                <div *ngIf="isDuration(addEventBehavior) && addEventDurationType == 'new'" class="col-3">
+                                    <label>End Time</label>
+                                    <app-time-input [time]="addEventStopTime" (timeChange)="addEventStopTime = $event"></app-time-input>
+                                </div>
+                                <div class="col-12 text-right">
+                                    <button class="btn btn-primary" (click)="addEvent()">Add</button>
+                                    <button class="btn btn-primary" (click)="showAddEvent = false">Cancel</button>
+                                    <a href="assets/samples/SampleEventImport.xlsx">Sample File</a>
+                                    <input #importFileElement class="btn" type="file" [(ngModel)]="importFile" observeFiles/>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th *ngIf="scheduleName">Activity</th>
+                                    <th *ngIf="scheduleName">Start</th>
+                                    <th *ngIf="scheduleName">End</th>
+                                    <th>Time</th>
+                                    <th>Behavior</th>
+                                    <th *ngIf="dailyChartType == 'duration'">Start/Stop</th>
+                                    <th *ngIf="dailyChartType == 'duration'">Occurrence</th>
+                                    <th *ngIf="dailyChartType == 'duration'">Duration</th>
+                                    <th *ngIf="showDataSource">Source</th>
+                                    <th *ngIf="showAbc && dailyChartType == 'frequency'">Antecedent</th>
+                                    <th *ngIf="showAbc && dailyChartType == 'frequency'">Consequence</th>
+                                    <th style="width:80px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of dayDetails" [style.background-color]="data.color">
+                                    <td class="no-color" *ngIf="data.activity && scheduleName" [attr.rowspan]="data.rowSpan">{{data.activity}}</td>
+                                    <td class="no-color" *ngIf="data.activity && scheduleName" [attr.rowspan]="data.rowSpan">{{data.activityStart}}</td>
+                                    <td class="no-color" *ngIf="data.activity && scheduleName" [attr.rowspan]="data.rowSpan">{{data.activityEnd}}</td>
+                                    <td>{{data.time}}</td>
+                                    <td>
+                                        <span [class.manual]="data.isManual" [title]="data.isManual? 'Manually Added Data' : ''">{{data.name}}</span>
+                                        <span class="manual" *ngIf="data.isManual" title="Manually Added Data">&nbsp;<mat-icon>info</mat-icon></span>
+                                    </td>
+                                    <td *ngIf="dailyChartType == 'duration'">
+                                        <span *ngIf="data.name">
+                                            <i *ngIf="data.isStart" class="fa fa-play" aria-hidden="true"></i>
+                                            <i *ngIf="!data.isStart" class="fa fa-stop" aria-hidden="true"></i>
+                                        </span>
+                                    </td>
+                                    <td *ngIf="dailyChartType == 'duration'">{{data.occurance}}</td>
+                                    <td *ngIf="dailyChartType == 'duration'">{{!data.isStart? formatDuration(data.duration) : ''}}</td>
+                                    <td *ngIf="showDataSource">{{getRaterName(data)}}</td>
+                                    <td *ngIf="showAbc && dailyChartType == 'frequency'">
+                                        <span *ngIf="!data.abc || !dataAdmin">
+                                            {{data.abc? data.abc.a : ''}}
+                                        </span>
+                                        <app-edit-dropdown *ngIf="data.abc && dataAdmin && data.name" [(value)]="data.abc.a" [options]="abc.antecedents"></app-edit-dropdown>
+                                    </td>
+                                    <td *ngIf="showAbc && dailyChartType == 'frequency'">
+                                        <span *ngIf="!dataAdmin">
+                                            {{data.abc? data.abc.c : ''}}
+                                        </span>
+                                        <app-edit-dropdown *ngIf="data.abc && dataAdmin && data.name" [(value)]="data.abc.c" [options]="abc.consequences"></app-edit-dropdown>
+                                    </td>
+                                    <td>
+                                        <a [class.daily-action]="showAbc" (click)="saveData(data)" *ngIf="dataAdmin && showAbc"><mat-icon>save</mat-icon></a>
+                                        <a [class.daily-action]="showAbc" (click)="deleteData(data)" *ngIf="dataAdmin"><mat-icon>delete</mat-icon></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="dailyChartType == 'notes' && commentsRead">
+            <app-notes [student]="student" [date]="currentDay" textHeight="300px" (refreshChange)="loadingDay = $event" (onUnsavedChange)="setNotesUnsaved($event)"></app-notes>
+        </div>
+    </div>
+</div>
+<div class="getting-started" *ngIf="user?.students?.length == 0">
+    <h1>Getting Started</h1>
+    <p>
+        In order to get started on mytaptrack&reg; you need to either accept an invite to an existing
+        student or create a student.
+    </p>
+</div>
+
+<app-loading *ngIf="loading"></app-loading>

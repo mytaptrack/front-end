@@ -1,0 +1,13 @@
+<div class="student-list-item-static">
+    <div class="hint">Invite</div>
+    <h3 class="student-name">
+        <span>{{invite.details.firstName}} {{invite.details.lastName}}</span>
+        <span class="hidden">{{invite.details.studentId}}</span>
+    </h3>
+    <div *ngIf="!inAction">
+        <a class="accept-invite link-item" (click)="acceptInvite()">Accept</a><a class="link-item" (click)="ignoreInvite()">Ignore</a>
+    </div>
+    <div *ngIf="inAction" class="spinner">
+        <mat-progress-spinner></mat-progress-spinner>
+    </div>
+</div>

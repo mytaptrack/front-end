@@ -1,0 +1,45 @@
+<div class="row" *ngIf="restrictions && selected">
+    <div class="col-12">
+        <h2>Behaviors</h2>
+    </div>
+    <div class="col-4">
+        <ul>
+            <li class="list-item" [class.selected]="item.id == selected.id" *ngFor="let item of activeBehaviors; index as i">
+                <a [id]="'student-setting-behavior-' + i" (click)="selected = item">
+                    {{item.name}}&nbsp;
+                    <i *ngIf="item.isDuration" class="fa fa-clock-o"></i>
+                </a>
+            </li>
+            <li class="list-item" [class.selected]="!selected.id">
+                <a *ngIf="administrator"  title="Add new behavior" (click)="create()"><mat-icon>add</mat-icon> Add New Behavior</a>
+            </li>  
+        </ul>
+        <h4 *ngIf="baselineBehaviors.length > 0">Baseline</h4>
+        <ul>
+            <li class="list-item" [class.selected]="item.id == selected.id" *ngFor="let item of baselineBehaviors; index as i">
+                <a id="'student-setting-behavior-arch-' + i" (click)="selected = item">
+                    {{item.name}}&nbsp;
+                    <i *ngIf="item.isDuration" class="fa fa-clock-o"></i>
+                </a>
+            </li>
+        </ul>
+        <div *ngIf="archivedBehaviors?.length">
+            <a *ngIf="!showArchived" (click)="showArchived = true" class="link">Show Archived Behaviors</a>
+            <a *ngIf="showArchived" (click)="showArchived = false" class="link">Hide Archived Behaviors</a>
+            <div *ngIf="showArchived">
+                <h4 *ngIf="archivedBehaviors.length > 0">Archived</h4>
+                <ul *ngIf="archivedBehaviors.length > 0">
+                    <li class="list-item" [class.selected]="item.id == selected.id" *ngFor="let item of archivedBehaviors; index as i">
+                        <a id="'student-setting-behavior-arch-' + i" (click)="selected = item">
+                            {{item.name}}&nbsp;
+                            <i *ngIf="item.isDuration" class="fa fa-clock-o"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <app-behavior [selected]="selected" [features]="features" [restrictions]="student.restrictions"></app-behavior>
+    </div>
+</div>

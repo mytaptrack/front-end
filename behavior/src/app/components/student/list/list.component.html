@@ -1,0 +1,44 @@
+<div class="student-heading">
+    <span style="float:right" *ngIf="user.license"><a id="enrollStudent" (click)="createStudent()" title="Create new student"><mat-icon>add</mat-icon> Enroll Student</a></span>
+    <h3>Students</h3>
+    <div *ngIf="hasHidenStudents">
+        <label><input id="recentlyActive" type="checkbox" [(ngModel)]="showRecentlyActive"/> Recently Active Only</label>
+    </div>
+</div>
+<div class="input-group">
+    <input type="text" class="form-control" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" aria-describedby="basic-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="searchText = ''">Clear</button>
+    </div>
+</div>
+<div class="invite-all text-right" *ngIf="user.teamInvites.length > 1">
+    <a *ngIf="!acceptingAll" (click)="acceptAllInvites()">Accept All</a>
+    <span *ngIf="acceptingAll">
+        <mat-progress-spinner></mat-progress-spinner>
+    </span>
+</div>
+<div *ngFor="let invite of user.teamInvites">
+    <app-invite [invite]="invite"></app-invite>
+</div>
+<div *ngIf="students">
+    <div *ngFor="let student of students" class="student-list-item" [class.activeNoResponse]="isActiveNoResponse(student)" [class.selected]="student.studentId == selectedStudent?.studentId">
+        <div class="badge badge-danger" style="float:right" *ngIf="getNotificationCount(student) > 0">
+            {{getNotificationCount(student)}}
+        </div>
+        <div class="badge badge-danger" *ngIf="isActiveNoResponse(student)"><a title="A behavior was tracked that needs a response, but no response tracked yet"><mat-icon>warning</mat-icon></a></div>
+        <h3>
+            <span class="student-name">{{student.firstName}} {{student.lastName}}</span>
+            <span class="hidden">{{student.studentId}}</span>
+        </h3>
+        <div class="hint">
+            <app-mtt-tags [tagField]="student.displayTags ?? student.tags" [edit]="false"></app-mtt-tags>
+        </div>
+        <div *ngIf="!showRecentlyActive" class="hint">
+            Last Active: {{getDate(student.lastTracked)}}
+        </div>
+        <a class="student-selector-link" (click)="selectedStudent = student"></a>
+    </div>
+</div>
+<div class="text-center no-student-option" *ngIf="!user || !user.details || !user.students || user.students.length == 0">
+    <a class="btn btn-primary" [routerLink]="['student/create']"><mat-icon>add</mat-icon> Create Student</a>
+</div>

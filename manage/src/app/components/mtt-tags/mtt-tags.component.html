@@ -1,0 +1,27 @@
+<div class="tags-container">
+  <!-- Tags List -->
+  <div class="tags-list">
+    <mat-chip-listbox>
+      <mat-chip *ngFor="let tag of ngModel" 
+                [class.group]="typeText === 'group'"
+                [removable]="edit"
+                (removed)="remove(tag)">
+        {{getDisplayFormat(tag)}}
+        <mat-icon matChipRemove *ngIf="edit">cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-listbox>
+  </div>
+
+  <!-- Add Tag Input -->
+  <div *ngIf="edit" class="tag-input-container">
+    <mat-form-field appearance="outline" class="tag-input">
+      <mat-label>Add {{typeText}}</mat-label>
+      <input matInput
+             [(ngModel)]="newTag"
+             (keyup.enter)="addTag()">
+      <button mat-icon-button matSuffix (click)="addTag()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>

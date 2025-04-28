@@ -1,0 +1,100 @@
+<div class="tag-management-container">
+    <a href="/"><mat-icon>arrow_left</mat-icon> Back</a>
+
+    <h1 class="mat-headline-4">Tag Management</h1>
+
+    <!-- Display Tags Section -->
+    <mat-card>
+        <mat-card-content>
+            <app-mtt-tags [(tagField)]="displayTags" title="Display Tag Names" [autoSort]="false" typeText="tag name">
+            </app-mtt-tags>
+
+            <mat-hint>
+                This is the list of tags and their order which will be displayed in the student roster.
+            </mat-hint>
+
+            <div class="button-container">
+                <button mat-raised-button color="primary" (click)="saveDisplayTags()">
+                    <mat-icon *ngIf="!displayTagsSaving">save</mat-icon>
+                    <mat-progress-spinner *ngIf="displayTagsSaving" mode="indeterminate" diameter="20">
+                    </mat-progress-spinner>
+                    Save
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- Tag Explorer Section -->
+    <mat-card class="tag-explorer">
+        <mat-card-header>
+            <mat-card-title>Tag Explorer</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-accordion>
+                <!-- Tag Panels -->
+                <mat-expansion-panel *ngFor="let tag of tags">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Tag Name: {{tag.name}} (Values: {{tag.values.length}}, Students: {{tag.studentCount}})
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <button mat-icon-button color="warn" *ngIf="!processing"
+                                (click)="tag.delete(); $event.stopPropagation()">
+                                <mat-icon *ngIf="!tag.deleting">delete</mat-icon>
+                                <mat-progress-spinner *ngIf="tag.deleting" mode="indeterminate" diameter="20">
+                                </mat-progress-spinner>
+                            </button>
+                            <mat-progress-spinner *ngIf="processing" mode="indeterminate" diameter="20">
+                            </mat-progress-spinner>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <!-- Tag Values -->
+                    <mat-accordion class="nested-accordion">
+                        <mat-expansion-panel *ngFor="let val of tag.values">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Tag Value: {{val.value}} (Students: {{val.studentCount}})
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    <button mat-icon-button color="warn"
+                                        (click)="val.delete(); $event.stopPropagation()">
+                                        <mat-icon *ngIf="!val.deleting">delete</mat-icon>
+                                        <mat-progress-spinner *ngIf="val.deleting" mode="indeterminate" diameter="20">
+                                        </mat-progress-spinner>
+                                    </button>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+                            <!-- Students Table -->
+                            <table mat-table [dataSource]="val.students" class="mat-elevation-z0">
+                                <ng-container matColumnDef="firstName">
+                                    <th mat-header-cell *matHeaderCellDef>First Name</th>
+                                    <td mat-cell *matCellDef="let student">{{student.details.firstName}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="lastName">
+                                    <th mat-header-cell *matHeaderCellDef>Last Name</th>
+                                    <td mat-cell *matCellDef="let student">{{student.details.lastName}}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let student">
+                                        <button mat-icon-button color="warn"
+                                            (click)="removeStudentFromTag(student, tag, val)" *ngIf="!student.saving">
+                                            <mat-icon>remove_circle</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="['firstName', 'lastName', 'actions']"></tr>
+                                <tr mat-row *matRowDef="let row; columns: ['firstName', 'lastName', 'actions'];"></tr>
+                            </table>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,27 @@
+
+.container {
+    display: flex;
+    max-width: 100vw;
+}
+
+.col-equal {
+    flex: auto 1 1;
+    padding: 2px 1px;
+}
+
+.col-static {
+    flex: auto 0 0;
+    padding: 2px 1px;
+}
+
+.full-form-fields mat-form-field {
+    width: 100%;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.mat-drawer-container-sub {
+    margin-top:50px;
+}

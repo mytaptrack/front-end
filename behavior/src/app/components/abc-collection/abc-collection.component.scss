@@ -1,0 +1,51 @@
+.abc-collection-container {
+  padding: 0px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.abc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-progress-spinner {
+      margin-right: 8px;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .abc-collection-container {
+    padding: 16px;
+  }
+
+  .abc-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

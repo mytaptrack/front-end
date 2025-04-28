@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <mat-form-field>
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
+                    <input matEndDate placeholder="End date" [(ngModel)]="toDate">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+
+            <ng-template #t let-date let-focused="focused">
+                <span class="custom-day" [class.focused]="focused" [class.outsideMonth]="isOutsideMonth(date)"
+                    [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)"
+                    (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                    {{ date.day }}
+                </span>
+            </ng-template>
+        </div>
+    </div>
+</div>

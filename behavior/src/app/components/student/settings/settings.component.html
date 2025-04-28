@@ -1,0 +1,99 @@
+<div class="view-area">
+    <div class="container-fluid" *ngIf="!firstLoad">
+        <div>
+            <div class="row" *ngIf="student">
+                <div class="col-12">
+                    <a class="help-button" [routerLink]="['']" [queryParams]="{ studentId: id}">
+                        <mat-icon>arrow_back</mat-icon> <span>Back to Dashboard</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <h1>
+                        {{student.details.firstName}} {{student.details.lastName}}
+                    </h1>
+                    <div class="hint" *ngIf="student.details.nickname">
+                        Nickname: {{student.details.nickname}}
+                    </div>
+                    <div *ngIf="student.license">
+                        <div class="hint" *ngIf="student.license">
+                            License: {{licenseType}} <a class="hint a-link" *ngIf="allowLicenseUpgrade()" (click)="applyLicense(true)">(Convert to Dedicated License)</a>
+                        </div>
+                        <div class="hint" *ngIf="student.license">
+                            Expiration: {{student.licenseDetails.expiration}}
+                        </div>
+                    </div>
+                    <div *ngIf="isLicenseExpired()">
+                        Student license is expired
+                    </div>
+                    <div *ngIf="!student.license || isLicenseExpired()">
+                        <button *ngIf="hasSingleUserLicenses()" (click)="applyLicense(true)" class="btn btn-primary">Apply Annual Dedicated License</button>
+                        <button *ngIf="hasMultiUserLicense()" (click)="applyLicense(false)" class="btn btn-primary">Apply Annual Flexible License</button>
+                    </div>
+                    <a class="btn btn-primary" (click)="editStudent()"><mat-icon>edit</mat-icon> Edit</a>
+                    <button *ngIf="canDeleteStudent" (click)="deleteStudent()" class="btn btn-danger">Delete Student</button>
+                </div>
+                <div *ngIf="hasLicense && !isLicenseExpired()" class="col-12">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" *ngIf="behaviorAccess">
+                          <a class="nav-link" [class.active]="selectedTab == 'behaviors'" [routerLink]="['/student/settings/behaviors']" queryParamsHandling="merge">Behaviors</a>
+                        </li>
+                        <li class="nav-item" *ngIf="responseAccess">
+                            <a class="nav-link" [class.active]="selectedTab == 'responseTracking'" [routerLink]="['/student/settings/responseTracking']" queryParamsHandling="merge">Response Tracking</a>
+                        </li>
+                        <li class="nav-item" *ngIf="abcAccess">
+                            <a class="nav-link" [class.active]="selectedTab == 'abc'" [routerLink]="['/student/settings/abc']" queryParamsHandling="merge">ABC <span style="font-style:italic">(beta)</span></a>
+                        </li>
+                        <li class="nav-item" *ngIf="milestoneAccess">
+                          <a class="nav-link"  [class.active]="selectedTab == 'milestones'" [routerLink]="['/student/settings/milestones']" queryParamsHandling="merge">Support Changes</a>
+                        </li>
+                        <li class="nav-item" *ngIf="scheduleAccess">
+                          <a class="nav-link"  [class.active]="selectedTab == 'schedule'" [routerLink]="['/student/settings/schedule']" queryParamsHandling="merge">Schedule</a>
+                        </li>
+                        <li class="nav-item" *ngIf="deviceAccess">
+                          <a class="nav-link"  [class.active]="selectedTab == 'devices'" [routerLink]="['/student/settings/devices']" queryParamsHandling="merge">Devices</a>
+                        </li>
+                        <li class="nav-item" *ngIf="teamAccess">
+                          <a class="nav-link"  [class.active]="selectedTab == 'team'" [routerLink]="['/student/settings/team']" queryParamsHandling="merge">Team</a>
+                        </li>
+                        <li class="nav-item" *ngIf="notificationAccess">
+                          <a class="nav-link"  [class.active]="selectedTab == 'notifications'" [routerLink]="['/student/settings/notifications']" queryParamsHandling="merge">Notifications</a>
+                        </li>
+                        <li class="nav-item" *ngIf="documentsAccess">
+                          <a class="nav-link"  [class.active]="selectedTab == 'documents'" [routerLink]="['/student/settings/documents']" queryParamsHandling="merge">Documents</a>
+                        </li>
+                      </ul>
+                </div>
+            </div>
+            <div *ngIf="student && hasLicense && !isLicenseExpired()">
+                <div *ngIf="selectedTab == 'team'">
+                    <app-team [student]="student"></app-team>
+                </div>
+                <div *ngIf="selectedTab == 'behaviors'">
+                    <app-behaviors [student]="student"></app-behaviors>
+                </div>
+                <div *ngIf="selectedTab == 'devices' && features.devices">
+                    <app-devices [student]="student" [templatesOnly]="false"></app-devices>
+                </div>
+                <div *ngIf="selectedTab == 'milestones'">
+                    <app-milestones [student]="student"></app-milestones>
+                </div>
+                <div *ngIf="selectedTab == 'schedule'">
+                    <app-manage-schedule [student]="student"></app-manage-schedule>
+                </div>
+                <div *ngIf="selectedTab == 'responseTracking'">
+                    <app-response-tracking [student]="student"></app-response-tracking>
+                </div>
+                <div *ngIf="selectedTab == 'abc'">
+                    <app-abc [student]="student" [restrictions]="restrictions"></app-abc>
+                </div>
+                <div *ngIf="selectedTab == 'notifications'">
+                    <app-subscriptions [student]="student" [restrictions]="restrictions"></app-subscriptions>
+                </div>
+                <div *ngIf="selectedTab == 'documents'">
+                    <app-documents [student]="student" [restrictions]="restrictions"></app-documents>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loading *ngIf="loading"></app-loading>

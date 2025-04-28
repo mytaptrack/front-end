@@ -1,0 +1,110 @@
+<div class="milestone-container" *ngIf="student">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Support Changes</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content class="milestone-content">
+            <div class="grid-container">
+                <!-- Left side list -->
+                <div class="left-panel">
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let item of milestones; let i = index"
+                            [class.selected]="item == selected"
+                            [id]="'student-setting-device-support-' + i"
+                            (click)="setSelected(item)">
+                            <span matLine>{{item.title}} {{item.dateString}}</span>
+                        </mat-list-item>
+                        
+                        <mat-list-item *ngIf="administrator"
+                            [class.selected]="selected?.isNew"
+                            id="student-setting-device-support-new"
+                            (click)="create()">
+                            <mat-icon matListItemIcon>add</mat-icon>
+                            <span matLine>Add New Support Change</span>
+                        </mat-list-item>
+                    </mat-nav-list>
+                </div>
+
+                <!-- Right side details -->
+                <div class="right-panel" *ngIf="selected">
+                    <form #milestoneForm="ngForm">
+                        <div class="form-row">
+                            <!-- Name field -->
+                            <mat-form-field class="form-field">
+                                <mat-label>Name</mat-label>
+                                <input matInput
+                                    id="student-setting-device-support-name"
+                                    maxlength="20"
+                                    [(ngModel)]="selected.title"
+                                    name="title"
+                                    [readonly]="!administrator">
+                                <mat-hint align="end">{{selected.title?.length || 0}}/20</mat-hint>
+                            </mat-form-field>
+
+                            <!-- Date field -->
+                            <mat-form-field class="form-field">
+                                <mat-label>Date Started</mat-label>
+                                <input matInput
+                                    id="student-setting-device-support-date"
+                                    [matDatepicker]="picker"
+                                    [(ngModel)]="selectedDateHandler"
+                                    name="date"
+                                    [readonly]="!administrator">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Description field -->
+                        <mat-form-field class="description-field">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput
+                                id="student-setting-device-support-desc"
+                                rows="7"
+                                maxlength="200"
+                                [(ngModel)]="selected.description"
+                                name="description"
+                                [readonly]="!administrator">
+                            </textarea>
+                            <mat-hint align="end" id="student-setting-device-support-desc-len">
+                                {{selected.description?.length || 0}}/200
+                            </mat-hint>
+                        </mat-form-field>
+                    </form>
+
+                    <!-- Action buttons -->
+                    <div class="action-buttons" *ngIf="administrator">
+                        <button mat-raised-button
+                            color="primary"
+                            id="student-setting-device-support-save"
+                            (click)="save()">
+                            Save
+                        </button>
+                        
+                        <button mat-button
+                            id="student-setting-device-support-cancel"
+                            (click)="cancel()">
+                            Cancel
+                        </button>
+                        
+                        <button mat-raised-button
+                            color="warn"
+                            id="student-setting-device-support-remove"
+                            *ngIf="!isNew()"
+                            (click)="remove()">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-progress-spinner
+        *ngIf="loading"
+        mode="indeterminate"
+        diameter="50"
+        class="loading-spinner">
+    </mat-progress-spinner>
+</div>

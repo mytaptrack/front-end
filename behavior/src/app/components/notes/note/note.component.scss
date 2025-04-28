@@ -1,0 +1,81 @@
+.note {
+    background: var(--backgroundColorDarker);
+    border-radius: 7px;
+    margin: 5px 2px;
+}
+.note-body {
+    margin: -2px 2px;
+}
+
+.note-body textarea {
+    background: var(--backgroundColorDarker);
+    border: unset;
+    width: 100%;
+}
+
+.note-source {
+    margin: 2px 5px;
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+.note-source span {
+    display: inline-block;
+}
+
+.note-source mat-spinner {
+    display: inline-block;
+    margin-left: 10px;
+    max-height: 15px;
+    max-width: 15px;
+}
+
+.note-date {
+    margin-left: 5px;
+    font-size: 9pt;
+}
+
+.note-updated {
+    margin-right: 5px;
+    font-size: 9pt;
+    font-weight: lighter;
+    float: right;
+}
+
+.controls {
+    display:flex;
+    margin: 0px -2px;
+}
+.controls a {
+    font-size: 8pt;
+    flex: 1 1 auto;
+    text-align: center;
+}
+.controls a mat-icon {
+    transform: scale(0.5);
+    height: 15px;
+    width: 15px;
+    overflow: visible;
+    vertical-align: text-bottom;
+}
+
+.controls .error:hover {
+    background: var(--errorBackground);
+    color: var(--backgroundColor);
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+.controls .edit:hover {
+    background: var(--active-label-text-color);
+    color: var(--backgroundColor);
+    border-bottom-left-radius: 7px;
+}
+
+.fa-circle-o-notch {
+    max-width: 15px;
+    max-height: 15px;
+    font-size: 9pt;
+    float: right;
+    margin: 5px;
+}

@@ -1,0 +1,115 @@
+<div class="container-fluid" style="position: relative">
+    <app-loading *ngIf="loading" [absolute]="true" [text]="loadingText"></app-loading>
+    <div *ngIf="!loading">
+        <div class="row">
+            <div class="col-8" *ngIf="student && student.schedules.length > 0">
+                <label>Select a schedule</label>
+                <select class="form-control" 
+                        [(ngModel)]="categoryName"
+                        (change)="onCategorySelected($event.target.value)">
+                    <option *ngFor="let cat of student.schedules" [value]="cat.name">{{cat.name}}</option>
+                    <option *ngIf="!readOnly" [value]="">Create new schedule</option>
+                </select>
+            </div>
+            <div class="col-12 text-center" *ngIf="student && student.schedules.length == 0 && !schedule">
+                <div>
+                    <h2>There are currently no schedules for this student</h2>
+                </div>
+                <button class="btn btn-primary btn-lg" (click)="onCategorySelected('Create new schedule')">Create Schedule</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="schedule">
+            <div class="col-6">
+                <mat-form-field>
+                    <mat-label>Schedule Name:</mat-label>
+                    <input matInput type="text" [(ngModel)]="schedule.name" [readonly]="readOnly" />    
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <label>Start Date:</label>
+                <select class="form-control" (change)="onVersionChange($event.target.value)">
+                    <option *ngFor="let version of currentCategory.activeHistory" [value]="version.startDate">{{version.start.format('MM/DD/yyyy')}}</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label>Automatically add to days:</label>
+                <div>
+                    <button *ngFor="let day of daysOfWeek" 
+                                class="btn" 
+                                [class.btn-success]="daySelected(day)"
+                                [class.btn-info]="!daySelected(day) && isAvailable(day)"
+                                [class.btn-secondary]="!isAvailable(day)"
+                                [disabled]="readOnly"
+                                (click)="dayClicked(day)">
+                        <mat-icon *ngIf="daySelected(day)">check</mat-icon> {{day}}
+                    </button>
+                </div>
+            </div>
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <th>Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <td *ngIf="!readOnly"></td>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let activity of schedule.activities; index as i">
+                            <td>
+                                <mat-form-field>
+                                    <input matInput
+                                    [(ngModel)]="activity.title"
+                                    [readonly]="readOnly"
+                                    [class.validation-error]="errors[i].titleError"/>
+                                </mat-form-field>
+                                <div class="validation-error-text">{{errors[i].titleError}}</div>
+                            </td>
+                            <td>
+                                <app-time-input [(time)]="activity.startTime" [(error)]="errors[i].startError" [readonly]="readOnly"></app-time-input>
+                            </td>
+                            <td>
+                                <app-time-input [(time)]="activity.endTime" [lastTime]="activity.startTime" [(error)]="errors[i].endError" [readonly]="readOnly"></app-time-input>
+                            </td>
+                            <td *ngIf="!readOnly">
+                                <a (click)="deleteActivity(activity)"><mat-icon>delete</mat-icon></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <button class="btn btn-primary" (click)="addNewActivity()" *ngIf="!readOnly">Add to Schedule</button>
+                                <button class="btn btn-primary" (click)="showLoadSchedule = true" *ngIf="!readOnly">Load Schedule from File</button>
+                            </td>
+                        </tr>
+                    </tbody>        
+                </table>
+                <div class="col-4 text-center" *ngIf="showLoadSchedule">
+                    <div><label>Load Schedule:</label></div>
+                    <input #importFileElement type="file" class="form-control" [(ngModel)]="importFile" observeFiles/>
+                    <a href="assets/samples/SampleSchedule.xlsx">Sample Schedule</a>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="!readOnly">
+                <div class="dropup date-dropdown d-print-none">
+                    <button class="btn btn-primary" (click)="changeOnDate()">Save</button>
+                    <div class="dropdown-menu" style="display:inline-block" *ngIf="showDatePickerDropdown">
+                        <ngb-datepicker #dp [startDate]="fromDate" (dateSelect)="onDateSelection($event)" [displayMonths]="1" [dayTemplate]="t" outsideDays="show" firstDayOfWeek="7">
+                        </ngb-datepicker>
+                        
+                        <div class="text-center">
+                            <button class="btn btn-primary" (click)="saveOnDate()">Ok</button>
+                            <button class="btn btn-primary" (click)="showDatePickerDropdown = false">Cancel</button>    
+                        </div>
+
+                        <ng-template #t let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isDateSelected(date)" [class.outsideMonth]="isOutsideMonth(date)" [class.faded]="hoveredDate == date" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                            {{ date.day }}
+                            </span>
+                        </ng-template>
+                    </div>
+                </div>
+                <button class="btn btn-primary" (click)="cancel()">Cancel</button>
+                <button *ngIf="schedule" class="btn btn-primary" (click)="delete()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

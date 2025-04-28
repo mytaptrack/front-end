@@ -1,0 +1,65 @@
+.upload-section {
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.file-input-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+mat-card {
+    margin: 16px;
+}
+
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    padding: 32px;
+    text-align: center;
+    background: #fafafa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 300px;
+}
+
+.drop-zone.drag-over {
+    background: #f0f0f0;
+    border-color: #2196f3;
+}
+
+.upload-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.drop-zone p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.file-input-wrapper {
+    margin-top: 8px;
+}

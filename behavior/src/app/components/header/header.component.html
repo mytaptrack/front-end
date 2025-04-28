@@ -1,0 +1,134 @@
+<mat-toolbar class="header no-print">
+    <mat-toolbar-row class="mytaptrack-header">
+        <!-- Mobile View -->
+        <ng-container *ngIf="isMobile">
+            <div class="mobile-nav">
+                <ng-container *ngIf="user && features && features.dashboard">
+                    <a id="dashboardLink" *ngIf="features.dashboard" 
+                       mat-button
+                       [routerLink]="['']" 
+                       [queryParams]="{ studentId: studentId}">
+                        <mat-icon>bar_chart</mat-icon>
+                        <span>Dashboard</span>
+                    </a>
+                    <span class="separator">|</span>
+                </ng-container>
+
+                <ng-container *ngIf="user && features && features.browserTracking">
+                    <a *ngIf="features.dashboardTracking" 
+                       mat-button
+                       [routerLink]="['student/tracking']" 
+                       [queryParams]="{ studentId: studentId}">
+                        <mat-icon>bolt</mat-icon>
+                        <span>Tracking</span>
+                    </a>
+                </ng-container>
+
+                <a class="logo-link" 
+                   [routerLink]="['']" 
+                   queryParamsHandling="merge" 
+                   (click)="router.navigate([''])">
+                    <img src="assets/images/sm-text-logo.gif" alt="mytaptrack logo" />
+                </a>
+            </div>
+        </ng-container>
+
+        <!-- Desktop View -->
+        <ng-container *ngIf="!isMobile">
+            <a class="logo-link" 
+               [routerLink]="['']" 
+               queryParamsHandling="merge" 
+               (click)="router.navigate([''])">
+                <img src="assets/images/sm-text-logo.gif" alt="mytaptrack logo" />
+            </a>
+
+            <span class="nav-spacer"></span>
+
+            <!-- Main Navigation -->
+            <div class="desktop-nav" *ngIf="user && features">
+                <ng-container *ngIf="studentId && features.dashboard && canAccessDashboard">
+                    <a mat-button [routerLink]="['']" [queryParams]="{ studentId: studentId}">
+                        <mat-icon>bar_chart</mat-icon>
+                        <span>Dashboard</span>
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="reportAccess && studentId && features.snapshot">
+                    <a mat-button [routerLink]="['student/snapshot']" [queryParams]="{ studentId: studentId}">
+                        <mat-icon>mood</mat-icon>
+                        <span>Snapshot</span>
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="dataAdmin && studentId && features.browserTracking">
+                    <a mat-button [routerLink]="['student/tracking']" [queryParams]="{ studentId: studentId}">
+                        <mat-icon>bolt</mat-icon>
+                        <span>Tracking</span>
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="studentId">
+                    <a mat-button [routerLink]="['student/settings']" [queryParams]="{ studentId: studentId}">
+                        <mat-icon>settings</mat-icon>
+                        <span>Settings</span>
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="studentId && features.download && canAccessDashboard">
+                    <a mat-button [routerLink]="['student/download']" [queryParams]="{ studentId: studentId }">
+                        <mat-icon>download</mat-icon>
+                        <span>Download</span>
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="manageArea">
+                    <a mat-button href="/manage">
+                        <mat-icon>key</mat-icon>
+                        <span>Manage</span>
+                    </a>
+                </ng-container>
+
+                <a mat-button href="https://mytaptrack.helpjuice.com" target="blank">
+                    <mat-icon>help</mat-icon>
+                    <span>Help</span>
+                </a>
+            </div>
+
+            <!-- User Menu -->
+            <ng-container *ngIf="user">
+                <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+                    {{user.details.name}}
+                    <mat-icon>arrow_drop_down</mat-icon>
+                </button>
+                <mat-menu #userMenu="matMenu">
+                    <button mat-menu-item (click)="navigateToProfile()">
+                        <mat-icon>account_circle</mat-icon>
+                        <span>Profile</span>
+                    </button>
+                    <button mat-menu-item *ngIf="impersonating" (click)="exitImpersonate()">
+                        <mat-icon>swap_horiz</mat-icon>
+                        <span>Exit Impersonation</span>
+                    </button>
+                    <button mat-menu-item *ngIf="mytaptrackAdmin" 
+                            [routerLink]="['admin/licenses']" 
+                            [queryParams]="{ studentId: studentId }">
+                        <mat-icon>contacts</mat-icon>
+                        <span>Licenses</span>
+                    </button>
+                    <button mat-menu-item (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
+            </ng-container>
+
+            <!-- Login Button -->
+            <ng-container *ngIf="!user">
+                <button mat-button (click)="login()">
+                    <mat-icon>login</mat-icon>
+                    <span>Login</span>
+                </button>
+            </ng-container>
+        </ng-container>
+    </mat-toolbar-row>
+</mat-toolbar>

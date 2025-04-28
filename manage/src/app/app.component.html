@@ -1,0 +1,50 @@
+<amplify-authenticator [loginMechanisms]="['email']" [socialProviders]="['google']" [formFields]="formFields">
+  <ng-template amplifySlot="header">
+      <div style="padding: var(--amplify-space-large); text-align: center">
+        <img
+          class="amplify-image"
+          alt="mytaptrack&reg; logo"
+          src="/assets/images/sm-text-logo.gif"
+        />
+      </div>
+  </ng-template>
+  <ng-template
+    amplifySlot="authenticated"
+    let-user="user"
+    let-signOut="signOut">
+      <mat-sidenav-container class="sidenav-container">
+        <!-- Main Content -->
+        <mat-sidenav-content>
+          <!-- Header -->
+          <mat-toolbar color="primary" class="header">
+            <img src="../assets/images/sm-text-logo.gif" alt="mytaptrack® logo" class="logo"/>
+            <span class="title">Admin</span>
+            <span class="toolbar-spacer"></span>
+            <!-- User menu on the right -->
+            <div class="user-menu">
+              <button mat-icon-button [matMenuTriggerFor]="userMenu">
+                <mat-icon>account_circle</mat-icon>
+              </button>
+              <mat-menu #userMenu="matMenu">
+                <button mat-menu-item (click)="signOut()">
+                  <mat-icon>logout</mat-icon>
+                  <span>Sign Out</span>
+                </button>
+              </mat-menu>
+            </div>
+          </mat-toolbar>
+          
+      
+          <!-- Main Content Area -->
+          <div class="content-container">
+            <mat-card>
+              <mat-card-content>
+                <router-outlet></router-outlet>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>      
+  </ng-template>
+</amplify-authenticator>
+

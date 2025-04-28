@@ -1,0 +1,107 @@
+.registration-container {
+    padding: 24px;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.button-container {
+    margin: 16px 0 24px;
+}
+
+.guide-card {
+    margin-top: 24px;
+}
+
+.guide-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.verification-prompt {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 24px;
+    background-color: #fff;
+    border-radius: 4px;
+
+    mat-icon {
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    span {
+        flex: 1;
+    }
+}
+
+.wifi-guide {
+    .guide-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        h3 {
+            margin: 0;
+            font-weight: 500;
+        }
+    }
+
+    .setup-intro {
+        margin-bottom: 16px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .note-item {
+        color: rgba(0, 0, 0, 0.87);
+        background-color: rgba(0, 0, 0, 0.04);
+
+        mat-icon {
+            margin-right: 8px;
+        }
+    }
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+
+    .loading-text {
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
+
+::ng-deep {
+    .mat-list-item {
+        height: auto !important;
+        padding: 8px 0 !important;
+    }
+
+    .mat-list-item-content {
+        white-space: normal !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .registration-container {
+        padding: 16px;
+    }
+
+    .guide-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start !important;
+    }
+}
+
+mat-form-field {
+    width: 100%;
+}

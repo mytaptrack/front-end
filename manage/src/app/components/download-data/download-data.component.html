@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Download</h2>
+        </div>
+        <div class="col-12" *ngIf="false">
+            <label>Filter by tags:</label>
+            <app-mtt-tags [(tagField)]="tags"></app-mtt-tags>
+            <div>Students: {{students.length}}</div>
+        </div>
+
+        <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <div class="col-12">
+            <button class="btn btn-primary" (click)="downloadReport()"><mat-icon>download</mat-icon> Download</button>
+        </div>
+        <div *ngIf="completePercent > 0">
+            {{completePercentDisplay}} %
+        </div>
+    </div>
+</div>

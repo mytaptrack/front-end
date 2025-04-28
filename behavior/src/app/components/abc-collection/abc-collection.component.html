@@ -1,0 +1,76 @@
+<div class="abc-collection-container">
+  <mat-card>
+    <mat-card-content>
+      <!-- Name Input -->
+      <div *ngIf="!studentView">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="item.name">
+        </mat-form-field>
+      </div>
+
+      <!-- Tags Filter -->
+      <div *ngIf="!studentView">
+        <app-mtt-tags [(tagField)]="item.tags" title="Filter Students By Tags"></app-mtt-tags>
+      </div>
+
+      <!-- ABC Content Grid -->
+      <div class="abc-grid">
+        <!-- Antecedents -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Antecedents</mat-label>
+          <textarea matInput
+                    rows="6"
+                    [(ngModel)]="antecedents"
+                    [readonly]="readOnly">
+          </textarea>
+          <mat-hint>add one antecedent per line</mat-hint>
+        </mat-form-field>
+
+        <!-- Consequences -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Consequences</mat-label>
+          <textarea matInput
+                    rows="6"
+                    [(ngModel)]="consequences"
+                    [readonly]="readOnly">
+          </textarea>
+          <mat-hint>add one consequence per line</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons" *ngIf="!readOnly">
+        <!-- Save Button -->
+        <button mat-raised-button 
+                color="primary"
+                (click)="save()">
+          <mat-icon *ngIf="!isSaving">save</mat-icon>
+          <mat-progress-spinner *ngIf="isSaving"
+                              mode="indeterminate"
+                              diameter="20">
+          </mat-progress-spinner>
+          Save
+        </button>
+
+        <!-- Cancel Button -->
+        <button mat-button (click)="cancel()">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+
+        <!-- Delete Button -->
+        <button mat-raised-button 
+                color="warn"
+                (click)="delete()">
+          <mat-icon *ngIf="!isDeleting">delete</mat-icon>
+          <mat-progress-spinner *ngIf="isDeleting"
+                              mode="indeterminate"
+                              diameter="20">
+          </mat-progress-spinner>
+          Delete
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

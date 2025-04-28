@@ -1,0 +1,104 @@
+<div class="student-template-container">
+  <mat-card>
+    <mat-card-content>
+      <!-- Name Input -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="template.name">
+      </mat-form-field>
+
+      <!-- Tags Input -->
+      <div class="tags-section">
+        <mat-label>Tag</mat-label>
+        <app-mtt-tags [(tagField)]="template.tags" [edit]="false">
+        </app-mtt-tags>
+      </div>
+
+      <!-- Description Input -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="template.desc"></textarea>
+      </mat-form-field>
+
+      <!-- Tabs Section -->
+      <div class="tabs-section">
+        <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+          <mat-tab label="Behaviors">
+            <ng-template matTabContent>
+              <app-behaviors [student]="template"></app-behaviors>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Response Tracking" *ngIf="responseAccess">
+            <ng-template matTabContent>
+              <app-response-tracking [student]="template"></app-response-tracking>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="ABC" *ngIf="abcAccess">
+            <ng-template matTabContent>
+              <app-abc [student]="template"></app-abc>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Support Changes" *ngIf="milestoneAccess">
+            <ng-template matTabContent>
+              <app-milestones [student]="template"></app-milestones>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Schedule" *ngIf="scheduleAccess">
+            <ng-template matTabContent>
+              <app-schedule [student]="template"></app-schedule>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Devices" *ngIf="deviceAccess">
+            <ng-template matTabContent>
+              <app-devices [student]="template" [templatesOnly]="true"></app-devices>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Team" *ngIf="teamAccess">
+            <ng-template matTabContent>
+              <app-team [student]="template"></app-team>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab label="Notifications" *ngIf="notificationAccess">
+            <ng-template matTabContent>
+              <app-notifications [student]="template"></app-notifications>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button mat-raised-button 
+                color="primary" 
+                (click)="save()">
+          <mat-icon *ngIf="!saving">save</mat-icon>
+          <mat-progress-spinner *ngIf="saving"
+                              mode="indeterminate"
+                              diameter="20">
+          </mat-progress-spinner>
+          Save
+        </button>
+
+        <button mat-button (click)="cancel()">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+
+        <button mat-raised-button 
+                color="warn" 
+                *ngIf="template.name"
+                (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

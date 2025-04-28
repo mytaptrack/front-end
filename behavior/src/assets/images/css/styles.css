@@ -1,0 +1,852 @@
+@font-face {
+    font-family: avenir;
+    src: url('avenir.woff2');
+}
+
+:root {
+    --backgroundColor: #fff;
+    --headerBackgroundColor: #f0f8ff;
+    --headerBackgroundShaded: #CCC6;
+    --headerTextColor: #40435E;
+    --dropdownTextColor: #f0f8ff;
+    --bubblesHex: #e7feff;
+    --darkText: #40435E;
+    --realtimeBackgroundColor: #f8f4ff;
+    --actionOptionActiveColor: #0029AF;
+    --waitingColor: #FFDD1E;
+    --successColor: #4BB210;
+    --linkItemColor: #007bff;
+    --errorOutline: #F00;
+    --disabledGroup: #CCC6;
+}
+
+a {
+    cursor: pointer;
+}
+
+body {
+    color: var(--darkText);
+    background: var(--backgroundColor);
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+label {
+    font-weight: bold;
+}
+
+color-picker {
+    width: 230px;
+    height: 230px;
+}
+
+@media screen and (min-width: 840px) {
+    color-picker {
+        width: 350px;
+        height: 350px;
+    }
+}
+
+color-picker .color-palette {
+    /* color wheel animation */
+    transition-duration: .35s;
+}
+
+color-picker .color {
+    /* selector (middle button) pulse animation */
+    animation-duration: .28s;
+    /* selector (middle button) appear/disappear */
+    transition-duration: .49s;
+}
+
+color-picker .color-shadow-animate {
+    /* ripple animation */
+    animation-duration: .35s;
+}
+
+color-picker .knob {
+    /* first property is for knob shadow on drag */
+    /* second property is for knob appear/disappear */
+    transition-duration: .2s, .28s;
+}
+
+.content > div {
+    position: relative;
+}
+
+#activityRow {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#copyright {
+    font-size: 10pt;
+}
+
+#iotimage {
+    width: 80%;
+}
+
+#mainsubject {
+    padding-top: 60px;
+}
+
+#mainsubject h2 img {
+    height: 30px;
+    vertical-align: bottom;
+}
+
+#real-time-notifications {
+    margin-top: 40px;
+    background-color: var(--realtimeBackgroundColor);
+    padding: 10px;
+}
+
+#studentSummary {
+    margin-top: 20px;
+}
+
+.grey-out {
+    background-color: lightgray;
+    opacity: .8;
+}
+
+.line-on-side {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.line-on-side:before,
+.line-on-side:after {
+    position: absolute;
+    top: 51%;
+    overflow: hidden;
+    width: 50%;
+    height: 1px;
+    content: '\a0';
+    background-color: rgb(94, 94, 94);
+}
+
+.line-on-side:before {
+    margin-left: -50%;
+    text-align: right;
+}
+
+.line-on-side span {
+    padding: 0 10px;
+}
+
+.action-option {
+    border: var(--darkText) solid 1.5px;
+    padding: 4px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.action-option-selected {
+    border: var(--actionOptionActiveColor) solid 3px;
+    color: var(--actionOptionActiveColor) !important;
+    padding: 4px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.alert {
+    font-size: 20pt;
+    margin-top: 2px;
+    padding: 3px;
+    margin-bottom: 0px;
+}
+
+.alert-active {
+    color: var(--actionOptionActiveColor);
+}
+
+.behavior-action-selection {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.behavior-action-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.behavior-action-container label {
+    font-weight: bold;
+}
+
+.behavior-collapse {
+    max-height:180px;
+    overflow:hidden;
+}
+
+.bg-tt-primary {
+    background-color: var(--headerBackgroundColor);
+    color: var(--headerTextColor);
+}
+
+.big-symbol {
+    font-size: 120pt;
+    text-align: center;
+}
+
+.big-text {
+    font-size: 20pt;
+    margin-top: 30px;
+}
+
+.bubble {
+    display:inline-block;
+    position: absolute;
+    font-family: 'avenir';
+    font-weight: bold;
+    font-size: 12pt;
+    padding:10px;
+    border:3px solid var(--darkText);
+    background-color:var(--backgroundColor);
+    border-radius: 15px;
+    max-width: 300px;
+}
+
+.bubble h1 {
+    text-align: center;
+}
+
+.btn {
+    margin: 4px 2px;
+}
+
+.btn-menu {
+    background-color: var(--headerBackgroundColor);
+    color: var(--headerTextColor);
+}
+
+.btn-primary {
+    color: var(--backgroundColor) !important;
+}
+
+.btn-secondary {
+    color: var(--backgroundColor) !important;
+}
+
+.btn-success {
+    color: var(--backgroundColor) !important;
+}
+
+.call-to-action {
+    font-size: 20pt;
+}
+
+.closebox {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.colorbox {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    margin: 20px 10px 20px 10px;
+    padding: 10px 10px 0px 10px;
+    border: var(--darkText) solid 2px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.colorbox a {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: 0px;
+}
+
+.container img {
+    max-width:100%;
+}
+
+#dashboardStudents {
+    min-height:100px !important;
+}
+
+.dashboard-students-collapse {
+    max-height:120px;
+    overflow:hidden;
+}
+
+.dashboard-pannel {
+    margin-top: 60px !important;
+}
+
+.dialog {
+    margin-top: 200px;
+    padding: 20px;
+    background: var(--backgroundColor);
+    border: var(--darkText) solid 4px;
+    border-radius: 20px;
+    position: relative;
+    min-height: 430px;
+}
+
+.dialog .list {
+    max-height: 230px;
+    overflow-y: scroll;
+}
+
+.dialog-actions {
+    position: relative;
+    margin-top: 50px;
+    bottom: 10px;
+    left: 0px;
+    right: 0px;
+}
+
+.dialog-grey-out {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    background-color: var(--darkText);
+}
+
+.dialog-grey-out>a {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    cursor: default;
+}
+
+.dropdown {
+    display:inline-block;
+}
+
+.dropdown-menu {
+    background: var(--headerBackgroundColor);
+}
+
+.dropdown-item {
+    color: var(--dropdownTextColor);
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+    background: var(--headerBackgroundColor) !important;
+    border-color: var(--headerTextColor);
+}
+
+.footer {
+    margin-top: -160px;
+    padding-top: 20px;
+    background-color: var(--headerBackgroundColor);
+    min-height: 100px;
+}
+
+.footer a {
+    font: normal normal normal 14px/1.4em avenir,sans-serif;
+    color: #000000;
+}
+
+.footer>div>div {
+    margin-bottom: 20px;
+}
+
+.footer h2 {
+    font-size: 14pt;
+}
+
+.footer .social-icon {
+    font-size: 16pt;
+    margin-right: 7px;
+}
+
+.footer .seperator {
+    border-top: 5px solid #000;
+    margin-bottom: 30px;
+}
+
+.fullpage-dialog {
+    min-height: 50%;
+}
+
+.graph {
+    position: relative;
+    border: var(--darkText) solid 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.graph img {
+    max-width: 100%;
+}
+
+.fill {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.graph .options {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.graph .options > div {
+    position:relative;
+}
+
+.graph-new {
+    position: relative;
+    border: var(--darkText) dashed 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.graph-new a {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.graph-new canvas {
+    pointer-events: none;
+}
+
+.graph-title a {
+    margin-left: 5px;
+    margin-right: 5px;
+    display:inline-block;
+}
+
+.group-highlight {
+    border-radius: 10px;
+    border: solid 2px var(--disabledGroup);
+}
+
+.home-tagline-area {
+    margin-bottom: 30px;
+}
+
+.home-tagline-image {
+    height: 400px;
+    background: url(../images/teacherandkid.png) no-repeat right bottom;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: relative
+}
+
+.large-spinner {
+    font-size: 80pt;
+    margin-top: 30px;
+}
+
+.large-spinner .fa-circle-o-notch {
+    color: var(--waitingColor);
+}
+
+.large-spinner .fa-check {
+    color: var(--successColor);
+}
+
+.link-item {
+    color: var(--linkItemColor);
+}
+
+.loading {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 20px;
+    bottom: 0px;
+    padding-top: 200px;
+    background: var(--backgroundColor);
+}
+
+.invite-large {
+    margin-bottom: 20px;
+    border: var(--darkText) 2px solid;
+    border-radius: 10px;
+    max-width: 80%;
+    padding: 5px;
+    background-color: var(--headerBackgroundColor);
+}
+
+.item-selected {
+    border: var(--darkText) dashed 4px !important;
+}
+
+.mytaptrack-header .col-12 {
+    padding-right: 0px;
+}
+
+.navbar {
+    background: var(--headerBackgroundColor) !important;
+    color: var(--headerTextColor) !important;
+}
+
+.navbar-brand {
+    color: var(--headerTextColor) !important;
+    font-weight: 300;
+    min-width: 120px;
+}
+
+.navbar-brand :hover {
+    color: var(--headerTextColor) !important;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+}
+
+.navbar-brand img {
+    max-width: 30px;
+    min-width: 120px;
+}
+
+.nav-item a {
+    color: var(--headerTextColor) !important;
+    margin-right: 20px;
+}
+
+.nav-item a :hover {
+    color: var(--headerTextColor) !important;
+    font-size: 12pt;
+}
+
+.notification-item {
+    white-space: nowrap;
+    font-size: 15pt;
+    color: var(--headerTextColor);
+    margin: 2px 15px 2px 15px;
+}
+
+.notification-item .btn {
+    margin-right: 2px;
+    padding: 2px 5px;
+    vertical-align: text-top;
+}
+
+.progress {
+    margin-bottom: 20px;
+}
+
+.regular-dropdown .dropdown-menu {
+    background-color:var(--backgroundColor);
+}
+
+.regular-dropdown .dropdown-item-multi-option {
+    color: var(--headerTextColor);
+    cursor: pointer;
+}
+
+.dropdown-item-multi-option .primary-option {
+    width:80%;
+    display:inline-block;
+    position:relative;
+}
+
+.secondary-option a {
+    padding: 8px;
+    vertical-align: bottom;
+}
+
+.primary-option a {
+    display:block;
+    padding: 5px;
+}
+
+.highlight-hover:hover {
+    background-color: var(--headerBackgroundColor);
+}
+
+.report-options {
+    margin: 5px;
+}
+
+
+.section {
+    border: 2px solid var(--darkText);
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.section .header {
+    background-color: var(--darkText);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: var(--backgroundColor);
+}
+
+.selected {
+    text-decoration: underline !important;
+}
+
+.social-media {
+    font-size: 16pt;
+}
+
+.social-media a {
+    margin-right: 5px;
+}
+
+.social-media img {
+    height: 30px;
+}
+
+.spacer {
+    margin-top:5px;
+}
+
+.student-device {
+    position: relative;
+    border: var(--darkText) solid 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.student-device img {
+    max-width: 100%;
+}
+
+.student-device-action label {
+    font-weight: bold;
+}
+
+.student-device-action i {
+    font-size: 8pt;
+}
+
+.student-device-new {
+    position: relative;
+    border: var(--darkText) dashed 2px;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.student-device-new a {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.student-device-new img {
+    max-height: 150px;
+}
+
+.student-device-options {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.student-device-title {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.student-device-subtitle {
+    font-size: 10pt;
+}
+
+.student-icon-large {
+    font-size: 150px;
+}
+
+.student-new {
+    position: relative;
+    border: var(--darkText) dashed 2px;
+    border-radius: 10px;
+    margin: 20px 10px 20px 10px;
+    padding: 17px 10px 0px 10px;
+}
+
+.student-new a {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.student-new h3 {
+    margin-bottom: 17px;
+}
+
+.student-selector {
+    position: relative;
+    margin: 20px 10px 20px 10px;
+    padding: 10px 10px 0px 10px;
+    border: var(--darkText) solid 2px;
+    border-radius: 20px;
+    background-color: var(--headerBackgroundColor);
+    color: var(--darkText);
+    overflow: hidden;
+}
+
+.student-selector :hover {
+    background-color: var(--headerBackgroundShaded) !important;
+    color: var(--darkText);
+}
+
+.student-selector i {
+    font-size: 40pt;
+    vertical-align: sub;
+}
+
+.student-selector>div {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.student-selector>div h3 {
+    margin-bottom: 2px;
+}
+
+.student-selector .icon-image-area {
+    vertical-align: text-bottom;
+}
+
+.student-selector .remove {
+    position: absolute;
+    display: inline-block;
+    right: 5px;
+    top: 5px;
+    font-size: 15px;
+}
+
+.student-selector .remove i {
+    font-size: 15px;
+}
+
+.student-selector-link {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.subheading {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    color: var(--darkText);
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+43&0+0,1+51 */
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.84) 43%, var(--backgroundColor) 51%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.84) 43%, var(--backgroundColor) 51%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.84) 43%, var(--backgroundColor) 51%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr=var(--backgroundColor), GradientType=0);
+    /* IE6-9 */
+    padding-left: 40px;
+    padding-top: 20px;
+}
+
+.subheading h1 {
+    font-size: 40pt;
+}
+
+.subheading h1 img {
+    height: 50px;
+}
+
+.support-team-box {
+    border: 2px solid var(--darkText);
+    border-radius: 10px;
+    padding: 2px 10px;
+    margin: 10px;
+    display: inline-block;
+    font-size: 14pt;
+    width: 100px;
+}
+
+.support-team-box i {
+    font-size: 60px;
+}
+
+.team-collapse {
+    max-height: 220px;
+    overflow: hidden;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.validation-error {
+    border-color: var(--errorOutline);
+    border-width: 2px;
+}
+
+.validation-error-text {
+    color: var(--errorOutline);
+    font-size: 14px;
+}
+
+.walkthrough {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom:0px;
+    background:#0004
+}
+
+@media only screen and (max-width: 1024px) {
+    h1 {
+        font-size: 25pt !important;
+    }
+    h1 img {
+        height: 30px !important;
+    }
+    h2 {
+        font-size: 15pt !important;
+    }
+    h4 {
+        font-size: 12pt !important;
+    }
+    #mainsubject {
+        margin-top: 0px;
+    }
+    .big-text {
+        font-size: 12pt;
+    }
+    .iot-button-area {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.container-main {
+    min-height: 100%;
+}
+
+.container-inner {
+    position: relative;
+    padding-bottom: 180px;
+}
+
+.behavior-button-container {
+    padding: 0 15px;
+}

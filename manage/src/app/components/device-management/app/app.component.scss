@@ -1,0 +1,129 @@
+.device-app-container {
+  padding: 24px;
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .loading-text {
+    margin-top: 16px;
+  }
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.groups-section {
+  margin-bottom: 24px;
+}
+
+.warning-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: #fff3e0;
+  border-radius: 4px;
+  margin-bottom: 16px;
+
+  mat-icon {
+    color: #f57c00;
+  }
+}
+
+.behaviors-section, 
+.responses-section {
+  margin-bottom: 24px;
+
+  table {
+    width: 100%;
+  }
+
+  .order-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .response-item {
+    color: #1976d2;
+
+    .info-icon {
+      font-size: 16px;
+      height: 16px;
+      width: 16px;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.qr-code-section {
+  .print-content {
+    padding: 24px;
+
+    .header {
+      margin-bottom: 24px;
+
+      img {
+        vertical-align: middle;
+        margin-right: 16px;
+      }
+    }
+
+    .description {
+      margin: 24px 0;
+    }
+
+    .qr-code {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0;
+    }
+  }
+
+  .qr-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .device-app-container {
+    padding: 16px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}

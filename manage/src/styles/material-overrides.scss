@@ -1,0 +1,189 @@
+
+.mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: var(--actionOptionActiveColor);
+}
+
+.mat-toolbar.mat-primary {
+    background: var(--headerBackgroundColor);
+    color: var(--darkText);
+}
+
+.mat-toolbar.mat-white {
+    background: var(--backgroundColor);
+    color: var(--darkText);
+}
+
+.mat-mdc-list-base.mat-mdc-list-base .mdc-list-item--selected .mdc-list-item__primary-text, .mat-mdc-list-base.mat-mdc-list-base .mdc-list-item--activated .mdc-list-item__primary-text {
+    color: var(--active-label-text-color);
+}
+
+.mat-mdc-radio-button.mat-primary {
+    --mdc-radio-disabled-selected-icon-color: var(--table-line);
+    --mdc-radio-disabled-unselected-icon-color: var(--table-line);
+    --mdc-radio-unselected-hover-icon-color: var(--table-line);
+    --mdc-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
+    --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
+    --mdc-radio-selected-focus-icon-color: var(--actionOptionActiveColor);
+    --mdc-radio-selected-hover-icon-color: var(--actionOptionActiveColor);
+    --mdc-radio-selected-icon-color: var(--actionOptionActiveColor);
+    --mdc-radio-selected-pressed-icon-color: var(--actionOptionActiveColor);
+    --mat-radio-ripple-color: #000;
+    --mat-radio-checked-ripple-color: var(--actionOptionActiveColor);
+    --mat-radio-disabled-label-color: rgba(0, 0, 0, 0.38);
+}
+
+.mat-mdc-checkbox.mat-primary {
+    --mdc-checkbox-disabled-selected-icon-color: var(--dark);
+    --mdc-checkbox-disabled-unselected-icon-color: var(--dark);
+    --mdc-checkbox-selected-checkmark-color: #fff;
+    --mdc-checkbox-selected-focus-icon-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-selected-hover-icon-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-selected-icon-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-selected-pressed-icon-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-unselected-focus-icon-color: var(--border);
+    --mdc-checkbox-unselected-hover-icon-color: var(--border);
+    --mdc-checkbox-unselected-icon-color: var(--dark2);
+    --mdc-checkbox-unselected-pressed-icon-color: var(--dark);
+    --mdc-checkbox-selected-focus-state-layer-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-selected-hover-state-layer-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-selected-pressed-state-layer-color: var(--actionOptionActiveColor);
+    --mdc-checkbox-unselected-focus-state-layer-color: black;
+    --mdc-checkbox-unselected-hover-state-layer-color: black;
+    --mdc-checkbox-unselected-pressed-state-layer-color: black;
+}
+
+.mat-mdc-button.mat-primary {
+    --mdc-text-button-label-text-color: var(--actionOptionActiveColor);
+}
+
+.mat-mdc-button.mat-primary, .mat-mdc-outlined-button.mat-primary {
+    --mat-mdc-button-persistent-ripple-color: var(--actionOptionActiveColor);
+    --mat-mdc-button-ripple-color: var(--dark2);
+}
+
+.mat-mdc-raised-button.mat-primary {
+    --mdc-protected-button-container-color: var(--actionOptionActiveColor);
+    --mdc-protected-button-label-text-color: #fff;
+}
+
+
+.mat-mdc-unelevated-button.mat-primary {
+    --mdc-filled-button-container-color: #6aabe5;
+    --mdc-filled-button-label-text-color: var(--dark2);
+}
+
+$mtt-blue-palette: (
+    50: var(--headerBackgroundColor),
+    100: #badefd,
+    200: #a8d5fd,
+    300: #9acffe,
+    400: #89c7fd,
+    500: #6aabe5,
+    600: #559fe1,
+    700: #398bd3,
+    800: #217ed0,
+    900: #0029AF,
+    contrast: (50: var(--darkText),
+        100: var(--darkText),
+        200: var(--darkText),
+        300: var(--darkText),
+        400: var(--darkText),
+        500: var(--darkText),
+        600: var(--headerBackgroundColor),
+        700: var(--headerBackgroundColor),
+        800: var(--headerBackgroundColor),
+        900: var(--headerBackgroundColor),
+    )
+);
+
+$mtt-green-palette: (
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    50: var(--darkText),
+    100: var(--darkText),
+    200: var(--darkText),
+    300: var(--darkText),
+    400: var(--darkText),
+    500: var(--darkText),
+    600: var(--headerBackgroundColor),
+    700: var(--headerBackgroundColor),
+    800: var(--headerBackgroundColor),
+    900: var(--headerBackgroundColor),
+    A100: var(--darkText),
+    A200: var(--darkText),
+    A400: var(--darkText),
+    A700: var(--darkText),
+  )
+);
+
+mat-chip[color="primary"] {
+    background-color: #0029AF !important;
+}
+mat-chip[color="primary"] span {
+    color: var(--headerBackgroundColor) !important;
+}
+mat-chip[color="primary"] mat-icon {
+    color: var(--headerBackgroundColor) !important;
+}
+
+mat-chip[color="warn"] {
+    background-color: var(--warningColor) !important;
+}
+mat-chip[color="warn"] span {
+    color: var(--darkText) !important;
+}
+mat-chip[color="warn"] mat-icon {
+    color: var(--darkText) !important;
+}
+
+mat-chip[color="error"] {
+    background-color: var(--errorOutline) !important;
+}
+mat-chip[color="error"] span {
+    color: var(--headerBackgroundColor) !important;
+}
+mat-chip[color="error"] mat-icon {
+    color: var(--headerBackgroundColor) !important;
+}
+
+mat-chip[color="blue"] {
+    background-color: #badefd !important;
+}
+mat-chip[color="blue"] span {
+    color: var(--darkText) !important;
+}
+mat-chip[color="blue"] mat-icon {
+    color: var(--darkText) !important;
+}
+
+
+mat-chip[color="green"] {
+    background-color: #e8f5e9 !important;
+}
+mat-chip[color="green"] span {
+    color: var(--darkText) !important;
+}
+mat-chip[color="green"] mat-icon {
+    color: var(--darkText) !important;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.mat-mdc-menu-panel {
+    max-width: none !important;
+}

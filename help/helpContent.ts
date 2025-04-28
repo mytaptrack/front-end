@@ -1,0 +1,1 @@
+export const HELP_CONTENT = [\n  // Add your help content here\n];

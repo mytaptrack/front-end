@@ -1,0 +1,89 @@
+
+<div>
+    <div class="text-center">
+        <div class="btn-group">
+            <button class="btn" (click)="reportType = 'Data'" [class.btn-primary]="reportType == 'Data'" [class.btn-secondary]="reportType != 'Data'">All Data</button>
+            <button class="btn" (click)="reportType = 'Frequency'" [class.btn-primary]="reportType == 'Frequency'" [class.btn-secondary]="reportType != 'Frequency'">Interval</button>
+        </div>
+    </div>
+    
+    <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" [(ngModel)]="fromDate">
+            <input matEndDate placeholder="End date" [(ngModel)]="toDate">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+</div>
+<div *ngIf="reportType == 'Frequency'">
+    <label>Interval</label>
+</div>
+<div class="btn-group text-center minute-selection" *ngIf="reportType == 'Frequency'">
+    <button class="btn" (click)="minutesPerRange = 1" [class.btn-primary]="minutesPerRange == 1" [class.btn-secondary]="minutesPerRange != 1">1 minute</button>
+    <button class="btn" (click)="minutesPerRange = 5" [class.btn-primary]="minutesPerRange == 5" [class.btn-secondary]="minutesPerRange != 5">5 minutes</button>
+    <button class="btn" (click)="minutesPerRange = 10" [class.btn-primary]="minutesPerRange == 10" [class.btn-secondary]="minutesPerRange != 10">10 minutes</button>
+</div>
+<div *ngIf="reportType == 'Frequency'">
+    <label>Start</label>
+    <select class="selectpicker form-control" [class.has-error]="startHour &gt; endHour" [(ngModel)]="startHour">
+        <option value="4">4 am</option>
+        <option value="5">5 am</option>
+        <option value="6">6 am</option>
+        <option value="7">7 am</option>
+        <option value="8">8 am</option>
+        <option value="9">9 am</option>
+        <option value="10">10 am</option>
+        <option value="11">11 am</option>
+        <option value="12">12 pm</option>
+        <option value="13">1 pm</option>
+        <option value="14">2 pm</option>
+        <option value="15">3 pm</option>
+        <option value="16">4 pm</option>
+        <option value="17">5 pm</option>
+        <option value="18">6 pm</option>
+        <option value="19">7 pm</option>
+        <option value="20">8 pm</option>
+        <option vaule="21">9 pm</option>
+        <option value="22">10 pm</option>
+        <option value="23">11 pm</option>
+    </select>
+</div>
+<div *ngIf="reportType == 'Frequency'">
+    <div><label>End</label></div>
+    <select class="selectpicker form-control" [class.has-error]="startHour &gt; endHour" [(ngModel)]="endHour">
+        <option value="4">4 am</option>
+        <option value="5">5 am</option>
+        <option value="6">6 am</option>
+        <option value="7">7 am</option>
+        <option value="8">8 am</option>
+        <option value="9">9 am</option>
+        <option value="10">10 am</option>
+        <option value="11">11 am</option>
+        <option value="12">12 pm</option>
+        <option value="13">1 pm</option>
+        <option value="14">2 pm</option>
+        <option value="15">3 pm</option>
+        <option value="16">4 pm</option>
+        <option value="17">5 pm</option>
+        <option value="18">6 pm</option>
+        <option value="19">7 pm</option>
+        <option value="20">8 pm</option>
+        <option vaule="21">9 pm</option>
+        <option value="22">10 pm</option>
+        <option value="23">11 pm</option>
+    </select>
+</div>
+<div class="error-text" *ngIf="startHour &gt; endHour && reportType == 'Frequency'">
+    The time range provided is invalid.
+</div>
+<div class="text-center spacer">
+    <button class="btn btn-primary" (click)="downloadReport()"><i class="fa fa-download" aria-hidden="true"></i> Download</button>
+</div>
+<div *ngIf="completePercent &gt; -1" class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" [style.width]="completePercent + '%'">
+        {{completePercent}} %
+    </div>
+</div>

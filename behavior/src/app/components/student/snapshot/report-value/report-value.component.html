@@ -1,0 +1,37 @@
+<!-- Read-only display -->
+<div class="status-display" *ngIf="!allowSelection">
+    <span *ngIf="!isFace()" [style.color]="getFaceColor(behavior)">
+        {{getStatusName(behavior, weekdayOffset)}}
+    </span>
+    <mat-icon *ngIf="isFace()" 
+              [style.color]="getFaceColor(behavior)"
+              [class.large]="true">
+        {{getFaceIconName()}}
+    </mat-icon>
+</div>
+
+<!-- Selectable dropdown -->
+<mat-form-field *ngIf="allowSelection" appearance="fill" class="status-select">
+    <mat-select [value]="face" (selectionChange)="setFace($event.value)">
+        <mat-select-trigger>
+            <span *ngIf="!isFace()" [style.color]="getFaceColor(behavior)">
+                {{getStatusName(behavior)}}
+            </span>
+            <mat-icon *ngIf="isFace()" 
+                      [style.color]="getFaceColor(behavior)"
+                      [class.large]="true">
+                {{getFaceIconName()}}
+            </mat-icon>
+        </mat-select-trigger>
+        
+        <mat-option *ngFor="let item of snapshotConfig.measurements" 
+                   [value]="item.name"
+                   [style.color]="getStatusColor(item.name)">
+            <span *ngIf="!isTextFace(item.name)">{{item.name}}</span>
+            <mat-icon *ngIf="isTextFace(item.name)" 
+                      [class.large]="true">
+                {{getFaceIconNameFromText(item.name)}}
+            </mat-icon>
+        </mat-option>
+    </mat-select>
+</mat-form-field>

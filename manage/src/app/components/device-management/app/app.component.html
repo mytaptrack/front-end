@@ -1,0 +1,241 @@
+<div class="device-app-container">
+  <!-- Loading States -->
+  <div class="loading-overlay" *ngIf="selected && selected.saving">
+    <mat-progress-spinner mode="indeterminate" diameter="48">
+    </mat-progress-spinner>
+    <span class="loading-text">Saving</span>
+  </div>
+  
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="48">
+    </mat-progress-spinner>
+    <span class="loading-text">Loading</span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-container" *ngIf="!loading">
+    <div *ngIf="!selected.token">
+      <!-- Device Name -->
+      <mat-form-field appearance="outline" class="full-width" *ngIf="!hideName">
+        <mat-label>Phone or Tablet Name</mat-label>
+        <input matInput
+               id="student-setting-device-app-name"
+               [(ngModel)]="selected.deviceName"
+               [readonly]="!administrator">
+      </mat-form-field>
+
+      <!-- Student Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Student Display Name</mat-label>
+        <input matInput
+               id="student-setting-device-app-student-name"
+               [(ngModel)]="selected.studentName"
+               [readonly]="!administrator">
+      </mat-form-field>
+
+      <!-- Groups -->
+      <div *ngIf="groupsEnabled" class="groups-section">
+        <mat-label>Groups</mat-label>
+        <app-mtt-tags typeText="group" [(tagField)]="selected.groups">
+        </app-mtt-tags>
+      </div>
+
+      <!-- QR Code Section -->
+      <div *ngIf="!selected.validated && selected.dsn && !hideName">
+        <h2 class="mat-h2">The QR Code has not been claimed</h2>
+      </div>
+
+      <mat-form-field *ngIf="!selected.dsn" appearance="outline" class="full-width">
+        <mat-label>QRCode expires after the number of days specified</mat-label>
+        <input matInput
+               type="number"
+               id="student-setting-device-app-qr-expire"
+               [(ngModel)]="qrExpires">
+      </mat-form-field>
+
+      <!-- Text Alerts -->
+      <mat-checkbox [(ngModel)]="selected.textAlerts" class="text-alerts">
+        Allow note tagging notifications
+      </mat-checkbox>
+
+      <!-- Generate QR Code -->
+      <div *ngIf="selected.dsn" class="qr-section">
+        <button mat-button
+                color="primary"
+                id="student-setting-device-app-gen-qr"
+                (click)="generateQrCode()">
+          Show QRCode
+        </button>
+      </div>
+
+      <!-- Trackable Behaviors -->
+      <div class="behaviors-section">
+        <h2 class="mat-h2">Trackable Behaviors</h2>
+        
+        <div *ngIf="invalidAbc" class="warning-message">
+          <mat-icon color="warn">warning</mat-icon>
+          ABC Tracking has been enabled, but no antecedents or consequences have been defined on the ABC tab. 
+          ABC tracking will be not be visible on this device at this time.
+        </div>
+
+        <table mat-table [dataSource]="activeBehaviors" class="mat-elevation-z2">
+          <!-- Order Column -->
+          <ng-container matColumnDef="order">
+            <th mat-header-cell *matHeaderCellDef>Order</th>
+            <td mat-cell *matCellDef="let behavior; let i = index">
+              <div *ngIf="!readonly" class="order-buttons">
+                <button mat-icon-button [id]="'student-setting-device-app-bo-up-' + i"
+                        (click)="changeOrder(behavior, -1)">
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button mat-icon-button [id]="'student-setting-device-app-bo-down-' + i"
+                        (click)="changeOrder(behavior, 2)">
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Behavior Column -->
+          <ng-container matColumnDef="behavior">
+            <th mat-header-cell *matHeaderCellDef>Behavior</th>
+            <td mat-cell *matCellDef="let behavior" [class.response-item]="behavior.isResponse">
+              {{behavior.studentBehavior.name}}
+              <mat-icon *ngIf="behavior.isResponse" 
+                       class="info-icon"
+                       matTooltip="response">info</mat-icon>
+            </td>
+          </ng-container>
+
+          <!-- Track Column -->
+          <ng-container matColumnDef="track">
+            <th mat-header-cell *matHeaderCellDef>Track</th>
+            <td mat-cell *matCellDef="let behavior; let i = index">
+              <mat-checkbox [id]="'student-setting-device-app-track-' + i"
+                          [(ngModel)]="behavior.event.track"
+                          [disabled]="readonly">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- ABC Column -->
+          <ng-container matColumnDef="abc" *ngIf="abcEnabled">
+            <th mat-header-cell *matHeaderCellDef>ABC</th>
+            <td mat-cell *matCellDef="let behavior; let i = index">
+              <mat-checkbox [id]="'student-setting-device-app-abc-' + i"
+                          [(ngModel)]="behavior.event.abc"
+                          [disabled]="readonly">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+          <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
+        </table>
+      </div>
+
+      <!-- Trackable Responses -->
+      <div class="responses-section" *ngIf="responses && responses.length > 0">
+        <h2 class="mat-h2">Trackable Responses</h2>
+        
+        <table mat-table [dataSource]="responses" class="mat-elevation-z2">
+          <!-- Response Column -->
+          <ng-container matColumnDef="response">
+            <th mat-header-cell *matHeaderCellDef>Response</th>
+            <td mat-cell *matCellDef="let response">{{response.name}}</td>
+          </ng-container>
+
+          <!-- Track Column -->
+          <ng-container matColumnDef="track">
+            <th mat-header-cell *matHeaderCellDef>Track</th>
+            <td mat-cell *matCellDef="let response">
+              <mat-checkbox [checked]="isBehaviorCheckedForApp(response)"
+                          (change)="toggleBehaviorForApp(response)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['response', 'track']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['response', 'track'];"></tr>
+        </table>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons" *ngIf="!readonly">
+        <button mat-raised-button
+                color="primary"
+                id="student-setting-device-app-save"
+                (click)="save()">
+            <mat-icon>save</mat-icon> Save
+        </button>
+        
+        <button mat-button
+                id="student-setting-device-app-cancel"
+                (click)="cancel()"
+                *ngIf="!selected.isNew">
+          Cancel
+        </button>
+        
+        <button mat-raised-button
+                color="warn"
+                id="student-setting-device-app-remove"
+                (click)="remove()"
+                *ngIf="!selected.isNew">
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <!-- QR Code Display -->
+    <div *ngIf="selected.token" class="qr-code-section">
+      <div id="qrCodeArea">
+        <div id="printTarget" class="print-content">
+          <div class="header">
+            <h1 class="mat-headline-4">
+              <img id="setup-logo" height="45" src="/assets/images/logo-dark.gif"/> 
+              Setup Instructions
+            </h1>
+            <p>Mobile Device Name: {{selected.deviceName}}</p>
+          </div>
+
+          <p class="description">
+            The mytaptrack® mobile app is another convenient way to securely track
+            behaviors and durations.
+          </p>
+
+          <h2 class="mat-h2">Security</h2>
+          <p>
+            While mytaptrack® continually works to ensure that information is stored and communicated
+            securely, it is your responsibility to ensure that information displayed on the phone or tablet
+            is done in a secure manner.
+          </p>
+
+          <h2 class="mat-h2">Setting up the mobile device with the QR Code</h2>
+          <mat-list>
+            <mat-list-item>1. Download the mytaptrack® app from the Apple or Android App Store</mat-list-item>
+            <mat-list-item>2. Open the mytaptrack® app</mat-list-item>
+            <mat-list-item>3. On the navigation bar at the bottom of the screen click "Settings"</mat-list-item>
+            <mat-list-item>4. Click "Scan QR Code"</mat-list-item>
+            <mat-list-item>5. Use the app to scan the QR Code provided in this letter/document</mat-list-item>
+            <mat-list-item>6. The student to be tracked is now displayed at the bottom of the settings screen</mat-list-item>
+            <mat-list-item>7. Click "Home" from the navigation bar at the bottom of the screen</mat-list-item>
+            <mat-list-item>8. Select the student to be tracked from the scroll wheel and you are now ready to track for that student. To switch to another student, select from the scroll wheel.</mat-list-item>
+          </mat-list>
+
+          <div class="qr-code">
+            <img [attr.src]="selected.token"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-actions">
+        <button mat-raised-button color="primary" (click)="closeQrCode()">
+          Close
+        </button>
+        <button mat-raised-button color="primary" ngxPrint printSectionId="qrCodeArea">
+          Print with Instructions
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

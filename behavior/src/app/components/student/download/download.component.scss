@@ -1,0 +1,49 @@
+.date-group {
+    display: inline-block;
+}
+
+.input-group-append button {
+    margin: 0px;
+}
+
+.custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+}
+
+.custom-day.focused {
+    background-color: #fdf1f1;
+}
+
+.custom-day.range,
+.custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+}
+
+.custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+}
+
+.custom-day.outsideMonth {
+    color: #aaa;
+}
+
+.custom-day.outsideMonth.range {
+    color: #fff !important;
+}
+
+.has-error {
+    border: solid #c00;
+}
+
+.error-text {
+    color: #c00;
+}
+
+.minute-selection {
+    font-size:10pt;
+}

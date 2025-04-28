@@ -1,0 +1,163 @@
+<a href="/"><mat-icon>arrow_left</mat-icon> Back</a>
+<h1 class="mat-headline-4">Reporting</h1>
+
+  <!-- Loading Indicator -->
+  <mat-progress-spinner *ngIf="!showSettings && (!chart || loading)"></mat-progress-spinner>
+
+<div class="report-container">
+  <!-- Settings Panel -->
+  <mat-card *ngIf="showSettings" class="settings-card">
+    <mat-card-content>
+      <!-- Behaviors Section -->
+      <div class="section">
+        <h2 class="mat-h2">Behaviors</h2>
+        <div class="tag-container">
+          <mat-chip-list>
+            <mat-chip *ngFor="let item of selectedBehaviors" 
+                     (removed)="removeBehavior(item)">
+              {{item}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+          <div *ngIf="selectedBehaviors.length == 0" class="all-behaviors">
+            All Behaviors
+          </div>
+        </div>
+        
+        <div class="behavior-input">
+          <app-edit-dropdown [(value)]="behaviorEditVal" 
+                           [optionsEx]="behaviorNames" 
+                           [hintsMax]="behaviorNames.length">
+          </app-edit-dropdown>
+          <button mat-raised-button color="primary" (click)="addBehavior()">
+            Filter Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Report Types Section -->
+      <div class="section">
+        <h2 class="mat-h2">Report Types</h2>
+        
+        <div class="report-types-grid">
+          <!-- Date Range Report -->
+          <mat-card [class.not-selected]="program.reportType != 'beforeDate'" 
+                    class="report-type-card">
+            <mat-card-content>
+              <mat-radio-button name="reportType" 
+                               value="beforeDate"
+                               [(ngModel)]="program.reportType">
+                Date range report
+              </mat-radio-button>
+              
+              <p class="description">
+                This report type uses data from all students tracked during a specific date range.
+              </p>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startPicker" 
+                       [(ngModel)]="program.startDate">
+                <mat-datepicker-toggle matSuffix [for]="startPicker">
+                </mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Started before</mat-label>
+                <input matInput [matDatepicker]="endPicker" 
+                       [(ngModel)]="program.endDate">
+                <mat-datepicker-toggle matSuffix [for]="endPicker">
+                </mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Weeks on Program Report -->
+          <mat-card [class.not-selected]="program.reportType != 'weeksOn'" 
+                    class="report-type-card">
+            <mat-card-content>
+              <mat-radio-button name="reportType" 
+                               value="weeksOn"
+                               [(ngModel)]="program.reportType">
+                Tracking per week on program
+              </mat-radio-button>
+              
+              <p class="description">
+                This report type aligns student week by week tracking based on the first time the student
+                was tracked in the time frame specified, and can be tuned based on the minimum number of
+                weeks students are tracked, to eliminate students that have just started the program.
+              </p>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="weekStartPicker" 
+                       [(ngModel)]="program.startDate">
+                <mat-datepicker-toggle matSuffix [for]="weekStartPicker">
+                </mat-datepicker-toggle>
+                <mat-datepicker #weekStartPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Minimum Weeks on program</mat-label>
+                <input matInput type="number" [(ngModel)]="program.weeks">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Run Report Button -->
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" (click)="runReport()">
+            Run Report
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Report Results -->
+  <div class="report-results" *ngIf="chart && !loading">
+    <mat-card>
+      <mat-card-content>
+        <!-- Report Settings Button -->
+        <button mat-raised-button color="primary" (click)="showReportSettings()">
+          Report Settings
+        </button>
+
+        <!-- Chart -->
+        <h1 class="mat-h1">Tracking weeks on program</h1>
+        <canvas baseChart width="600" height="200"
+                [data]="chart.data" 
+                [options]="chart.options" 
+                [type]="chart.type"
+                [legend]="false">
+        </canvas>
+
+        <!-- Details Table -->
+        <div class="table-container">
+          <h1 class="mat-h1">Details</h1>
+          <table mat-table [dataSource]="tableData" class="mat-elevation-z2">
+            <!-- Student Column -->
+            <ng-container matColumnDef="student">
+              <th mat-header-cell *matHeaderCellDef>Student</th>
+              <td mat-cell *matCellDef="let row"> {{row[0]}} </td>
+            </ng-container>
+
+            <!-- Dynamic Columns -->
+            @for(label of labels; track label) {
+                <ng-container [matColumnDef]="'col'+ ($index)">
+                    <th mat-header-cell *matHeaderCellDef>{{label}}</th>
+                    <td mat-cell *matCellDef="let row">{{row[$index]}}</td>
+                </ng-container>
+            }
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

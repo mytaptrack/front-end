@@ -1,0 +1,63 @@
+
+.print-content {
+    display: none !important;
+}
+
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;
+    }
+    footer {
+        position: fixed;
+        bottom: 0;
+    }
+
+    .print-max {
+        max-width: 100% !important;
+        flex: inherit !important;
+        height: inherit !important;
+    }
+
+    .no-print,
+    .no-print * {
+        display: none !important;
+    }
+
+    .print-content {
+        display: block !important;
+        page-break-after: always !important;
+    }
+
+    .mat-drawer-container , .mat-drawer-content {
+        overflow: visible !important;
+        position:relative;
+        width: 100%;
+        background-color: var(--backgroundColor);
+        margin-left: 0px !important;
+    }
+
+    div {
+        break-inside: auto;
+    }
+    mat-card {
+        margin-bottom: 0px !important;
+        page-break-after: always !important;
+    }
+    .chart-container canvas {
+        width: 80% !important;
+    }
+
+    .page-break {
+        page-break-after: always !important;
+    }
+
+    .mat-mdc-card {
+        box-shadow: none !important;
+        border-style: none !important;
+        page-break-after: always !important;
+    }
+    .mat-mdc-card::after {
+
+    }
+}

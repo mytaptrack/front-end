@@ -1,0 +1,27 @@
+.header img {
+    max-height: 50px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    
+    .logo {
+      height: 40px;
+      margin-right: 16px;
+    }
+    
+    .title {
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+  }
+  
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+  
+  .user-menu {
+    margin-left: auto; // This ensures the menu stays on the right
+  }
+  

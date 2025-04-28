@@ -1,0 +1,49 @@
+.student-manager-container {
+  padding: 24px;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.chart-card, .import-card, .table-card {
+  width: 100%;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.file-name {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-mdc-table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 48px;
+  text-align: center;
+}
+
+.mat-mdc-radio-button {
+  margin: 0 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .student-manager-container {
+    padding: 16px;
+  }
+  
+  .mat-mdc-table {
+    display: block;
+    overflow-x: auto;
+  }
+}

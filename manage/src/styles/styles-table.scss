@@ -1,0 +1,70 @@
+
+.mtt-table {
+    border-collapse: collapse;
+}
+.mtt-table td {
+    height: 34px;
+}
+.mtt-table .light-main {
+    background-color: var(--mtt-table-light);
+}
+
+.mtt-table .light-alt {
+    background-color: var(--mtt-table-light-alt);
+}
+
+.mtt-table .dark-main {
+    background-color: var(--mtt-table-dark);
+}
+
+.mtt-table .dark-alt {
+    background-color: var(--mtt-table-dark-alt);
+}
+
+.mtt-table mat-icon-button {
+    padding: 2px;
+}
+
+.mtt-table mat-icon-button mat-icon {
+    vertical-align: top !important;
+}
+
+.mtt-table mat-form-field label {
+    margin-top: -5px;
+}
+
+.mtt-table mat-form-field .mat-mdc-form-field-infix {
+    padding-top: 14px !important;
+    min-height: 36px;
+}
+
+.mtt-table .mat-mdc-form-field-subscript-wrapper {
+    height: 0px;
+}
+
+.mtt-table .mdc-text-field--filled {
+    background-color: inherit;
+}
+
+.mtt-table .table-field .mdc-text-field--filled {
+    background-color: transparent !important;
+}
+
+.mtt-table .table-field .mat-mdc-form-field-infix {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    min-height: 10px;
+}
+
+.mtt-table .table-field .mat-mdc-form-field {
+    display: inline-block !important;
+}
+
+.mtt-table .table-field .mat-mdc-form-field-infix {
+    width: 70px !important;
+}
+
+.mtt-table .table-field mat-spinner {
+    width: 15px !important;
+    height: 15px !important;
+}

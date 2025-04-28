@@ -1,0 +1,67 @@
+<div class="row" *ngIf="restrictions">
+    <div class="col-12">
+        <h2>Responses</h2>
+    </div>
+    <div class="col-4">
+        <ul *ngIf="activeResponses">
+            <li class="list-item" [class.selected]="selected && item.id == selected.id" *ngFor="let item of activeResponses">
+                <a (click)="selected = item">
+                    {{item.name}}&nbsp;
+                    <i *ngIf="item.isDuration" class="fa fa-clock-o"></i>
+                </a>
+            </li>
+            <li class="list-item" [class.selected]="selected && !selected.id">
+                <a *ngIf="administrator"  title="Add new behavior" (click)="create()"><mat-icon>add</mat-icon> Add New Response</a>
+            </li>  
+        </ul>
+        <h4 *ngIf="archivedResponses.length > 0">Archived</h4>
+        <ul *ngIf="archivedResponses.length > 0">
+            <li class="list-item" [class.selected]="item.id == selected.id" *ngFor="let item of archivedResponses">
+                <a (click)="selected = item">
+                    {{item.name}}&nbsp;
+                    <i *ngIf="item.isDuration" class="fa fa-clock-o"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-8 details" *ngIf="selected">
+        <app-loading class="saving" *ngIf="loading" [absolute]="true" text="Saving"></app-loading>
+        <div class="accordion" id="settingsAccordion">
+            <div class="card">
+                <div class="card-header" id="headingGeneralSettings">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#generalSettings" aria-expanded="true" aria-controls="generalSettings">
+                            General Settings
+                        </button>
+                    </h2>
+                </div>
+                <div id="generalSettings" class="collapse show" aria-labelledby="headingGeneralSettings" data-parent="#settingsAccordion">
+                    <div class="card-body settings-accordian-body">
+                        <div class="form-group">
+                            <label>Name: </label>
+                            <input class="form-control" [(ngModel)]="selected.name" [readonly]="!administrator"/>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" [(ngModel)]="selected.isDuration" [readonly]="!administrator"/> Duration Tracking</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center" *ngIf="!isManaged">
+            <button class="btn btn-primary" [disabled]="!administrator" (click)="save()">Save</button>
+            <button class="btn btn-secondary" [disabled]="!administrator" (click)="cancel()">Cancel</button>
+            <button *ngIf="!selected.isArchived" class="btn btn-danger" [disabled]="!administrator" (click)="archive()">Archive</button>
+            <button *ngIf="selected.isArchived" class="btn btn-success" [disabled]="!administrator" (click)="reactivate()">Reactivate</button>
+        </div>
+        <div class="text-center" *ngIf="isManaged">
+            <button class="btn btn-secondary" [disabled]="!administrator" (click)="cancel()">Cancel</button>
+            <button *ngIf="!selected.isArchived" class="btn btn-danger" [disabled]="!administrator" (click)="archive()">Delete</button>
+        </div>
+        <div class="status">
+            {{status}}
+        </div>
+    </div>
+</div>
+<app-loading *ngIf="loading"></app-loading>
+<app-loading *ngIf="saving" text="Saving"></app-loading>

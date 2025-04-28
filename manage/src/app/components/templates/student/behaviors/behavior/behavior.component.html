@@ -1,0 +1,214 @@
+<div class="behavior-details" *ngIf="selected">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="48">
+    </mat-progress-spinner>
+    <span class="loading-text">Saving</span>
+  </div>
+
+  <mat-accordion>
+    <!-- General Settings Panel -->
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          General Settings
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="panel-content">
+        <!-- Name Input -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput
+                 id="student-setting-behavior-name"
+                 [(ngModel)]="selected.name"
+                 [readonly]="!administrator">
+        </mat-form-field>
+
+        <!-- Description Input -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput
+                    id="student-setting-behavior-desc"
+                    [(ngModel)]="selected.desc"
+                    [readonly]="!administrator"
+                    placeholder="What does the behavior look like?">
+          </textarea>
+        </mat-form-field>
+
+        <!-- Behavior Options -->
+        <div class="behavior-options">
+          <div class="option-row">
+            <div class="option-item">
+              <mat-checkbox id="student-setting-behavior-isDuration"
+                          [(ngModel)]="selected.isDuration"
+                          [disabled]="!administrator">
+                Duration
+              </mat-checkbox>
+            </div>
+
+            <div class="option-item" *ngIf="selected.isDuration">
+              <mat-checkbox id="student-setting-behavior-daytime"
+                          [(ngModel)]="selected.daytime"
+                          [disabled]="!administrator">
+                Daytime Tracking
+              </mat-checkbox>
+              
+              <mat-hint *ngIf="!selected.daytime" class="warning-hint">
+                Un-checking this box will allow overnight tracking, but can be hard to identify if you miss stopping the timer
+              </mat-hint>
+            </div>
+          </div>
+
+          <div class="option-row">
+            <div class="option-item" *ngIf="hasIntervalWCompare">
+              <mat-checkbox id="student-setting-behavior-baseline"
+                          [(ngModel)]="selected.baseline"
+                          [disabled]="!administrator">
+                Baseline Student
+              </mat-checkbox>
+            </div>
+
+            <div class="option-item" *ngIf="hasAbc">
+              <mat-checkbox id="student-setting-behavior-abc"
+                          [(ngModel)]="selected.trackAbc"
+                          [disabled]="!administrator">
+                Track ABC
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Targets and Goals Panel -->
+    <mat-expansion-panel *ngIf="features.behaviorTargets">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Targets and Goals
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="panel-content">
+        <mat-hint>Optional targets add to the dashboard information on goals</mat-hint>
+
+        <!-- Frequency Target -->
+        <div class="target-section">
+          <mat-checkbox id="FrequencyTarget"
+                      [(ngModel)]="frequencyTarget.show"
+                      [disabled]="!administrator">
+            Set Frequency Target
+          </mat-checkbox>
+
+          <div *ngIf="frequencyTarget.show" class="target-content">
+            <div class="objective-block" *ngFor="let category of targetCategories; let i = index">
+              <div *ngIf="i < targetCategories.length - 1">
+                <mat-label>{{category}}</mat-label>
+                <mat-form-field appearance="outline" *ngIf="frequencyTarget.getCategoryValue(category)">
+                  <mat-label>Events</mat-label>
+                  <input matInput
+                         type="number"
+                         [disabled]="!administrator"
+                         [(ngModel)]="frequencyTarget.getCategoryValue(category).frequency">
+                  <span matSuffix>Events</span>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="target-legend" *ngIf="frequencyTarget.showLegend && reportingOn">
+              <h3 class="mat-h3">Report Legend</h3>
+              <div class="legend-items">
+                <div class="legend-item" *ngFor="let item of targetCategories; let i = index">
+                  <app-report-value [faces]="[{ face: item }]"
+                                  [snapshotConfig]="snapshotConfig"
+                                  [dayOffset]="0"
+                                  [allowSelection]="false">
+                  </app-report-value>
+                  <div>{{getLegendMeasurement(i, true)}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duration Target -->
+        <div class="target-section" *ngIf="selected.isDuration">
+          <mat-checkbox id="DurationTarget"
+                      [(ngModel)]="durationTarget.show"
+                      [disabled]="!administrator">
+            Set Duration Target ([hh:]mm:ss)
+          </mat-checkbox>
+
+          <div *ngIf="durationTarget && durationTarget.show" class="target-content">
+            <div class="objective-block" *ngFor="let category of targetCategories; let i = index">
+              <div *ngIf="i < targetCategories.length - 1">
+                <mat-label>{{category}}</mat-label>
+                <mat-form-field appearance="outline" *ngIf="durationTarget.getCategoryValue(category)">
+                  <input matInput
+                         type="string"
+                         [disabled]="!administrator"
+                         [(ngModel)]="durationTarget.getCategoryValue(category).duration">
+                  <mat-select [value]="durationTarget.measurement" 
+                            (selectionChange)="durationTarget.measurement = $event.value"
+                            [disabled]="!administrator">
+                    <mat-option value="Avg">Avg</mat-option>
+                    <mat-option value="Sum">Sum</mat-option>
+                    <mat-option value="Max">Max</mat-option>
+                    <mat-option value="Min">Min</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="target-legend" *ngIf="durationTarget.showLegend && reportingOn">
+              <h3 class="mat-h3">Report Legend ([hh:]mm:ss)</h3>
+              <div class="legend-items">
+                <div class="legend-item" *ngFor="let item of targetCategories; let i = index">
+                  <app-report-value [faces]="[{ face: item }]"
+                                  [snapshotConfig]="snapshotConfig"
+                                  [dayOffset]="0"
+                                  [allowSelection]="false">
+                  </app-report-value>
+                  <div>{{getLegendMeasurement(i, false)}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons" *ngIf="administrator && !onlyShowDelete">
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button 
+            color="warn" 
+            *ngIf="!selected.isArchived"
+            (click)="archive()">
+      Archive
+    </button>
+    <button mat-raised-button 
+            color="accent" 
+            *ngIf="selected.isArchived"
+            (click)="reactivate()">
+      Reactivate
+    </button>
+  </div>
+
+  <div class="action-buttons" *ngIf="onlyShowDelete && selected && selected.id">
+    <button mat-raised-button 
+            color="warn" 
+            (click)="selected.delete()">
+      Delete
+    </button>
+  </div>
+
+  <!-- Status Message -->
+  <div class="status-message" *ngIf="status">
+    {{status}}
+  </div>
+</div>

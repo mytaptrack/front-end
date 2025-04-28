@@ -1,0 +1,19 @@
+<div class="edit-dropdown-container">
+  <mat-form-field appearance="outline" class="dropdown-field">
+    <input matInput
+           [attr.id]="id"
+           [(ngModel)]="value"
+           [matAutocomplete]="auto"
+           (keyup)="onKeyUp($event)"
+           [placeholder]="placeholder"
+           autocomplete="off">
+           
+    <mat-autocomplete #auto="matAutocomplete" 
+                     (optionSelected)="setValue($event.option.value)">
+      <mat-option *ngFor="let option of _hints" 
+                  [value]="option.value">
+        {{option.display}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

@@ -1,0 +1,95 @@
+<mat-card class="mat-elevation-z2">
+    <!-- Upload Section -->
+    <div *ngIf="!readonly">
+        <mat-card-header>
+            <mat-card-title>Documents</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+            <div class="upload-section">
+                <!-- Drop Zone -->
+                <div class="drop-zone" 
+                     (dragover)="onDragOver($event)"
+                     (dragleave)="onDragLeave($event)"
+                     (drop)="onDrop($event)"
+                     [class.drag-over]="isDragging">
+                    <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                    <p>Drag and drop files here</p>
+                    <p>or</p>
+                    <div class="file-input-wrapper">
+                        <input #importFileElement 
+                               (ngModel)="valid" 
+                               type="file" 
+                               observeFiles
+                               style="display: none"/>
+                        <button mat-stroked-button 
+                                (click)="importFileElement.click()">
+                            <mat-icon>attach_file</mat-icon>
+                            Choose File
+                        </button>
+                    </div>
+                </div>
+                
+                <button mat-raised-button 
+                        color="primary" 
+                        (click)="loadImportFile()" 
+                        [disabled]="!valid || saving">
+                    <mat-icon *ngIf="saving">sync</mat-icon>
+                    Upload
+                </button>
+
+                <mat-progress-spinner *ngIf="saving"
+                                    diameter="24"
+                                    mode="indeterminate">
+                </mat-progress-spinner>
+            </div>
+        </mat-card-content>
+    </div>
+
+    <!-- Documents Table -->
+    <mat-card-content *ngIf="documents">
+        <table mat-table [dataSource]="documents.documents" class="mat-elevation-z1">
+            <!-- Filename Column -->
+            <ng-container matColumnDef="fileName">
+                <th mat-header-cell *matHeaderCellDef> File Name </th>
+                <td mat-cell *matCellDef="let d">
+                    <a [download]="d.name" [href]="d.link" target="_blank">
+                        {{d.name}}
+                    </a>
+                </td>
+            </ng-container>
+
+            <!-- Upload Date Column -->
+            <ng-container matColumnDef="uploadDate">
+                <th mat-header-cell *matHeaderCellDef> Upload Date </th>
+                <td mat-cell *matCellDef="let d"> {{d.lastUpdated}} </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let d">
+                    <button mat-icon-button 
+                            *ngIf="!readonly"
+                            (click)="d.delete()"
+                            [disabled]="d.deleting">
+                        <mat-icon *ngIf="!d.deleting">delete</mat-icon>
+                        <mat-progress-spinner *ngIf="d.deleting"
+                                            diameter="24"
+                                            mode="indeterminate">
+                        </mat-progress-spinner>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['fileName', 'uploadDate', 'actions']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['fileName', 'uploadDate', 'actions'];"></tr>
+        </table>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" *ngIf="loading">
+            <mat-progress-spinner mode="indeterminate">
+            </mat-progress-spinner>
+        </div>
+    </mat-card-content>
+</mat-card>

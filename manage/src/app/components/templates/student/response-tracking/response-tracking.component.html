@@ -1,0 +1,148 @@
+<div class="response-tracking-container" *ngIf="restrictions">
+  <mat-sidenav-container>
+    <!-- Left Panel -->
+    <mat-sidenav mode="side" opened class="sidenav-panel">
+      <h2 class="mat-h2">Responses</h2>
+      
+      <!-- Active Responses List -->
+      <mat-nav-list *ngIf="activeResponses">
+        <mat-list-item *ngFor="let item of activeResponses"
+                      [class.selected]="selected && item.id === selected.id"
+                      (click)="selected = item">
+          <span matListItemTitle>{{item.name}}</span>
+          <mat-icon *ngIf="item.isDuration" matListItemIcon>schedule</mat-icon>
+        </mat-list-item>
+
+        <!-- Add New Response -->
+        <mat-list-item *ngIf="administrator"
+                      (click)="create()"
+                      class="add-new-item">
+          <mat-icon matListItemIcon>add</mat-icon>
+          <span matListItemTitle>Add New Response</span>
+        </mat-list-item>
+      </mat-nav-list>
+
+      <!-- Archived Responses -->
+      <ng-container *ngIf="archivedResponses.length > 0">
+        <h3 class="mat-h3 archived-header">Archived</h3>
+        <mat-nav-list>
+          <mat-list-item *ngFor="let item of archivedResponses"
+                        [class.selected]="selected && item.id === selected.id"
+                        (click)="selected = item">
+            <span matListItemTitle>{{item.name}}</span>
+            <mat-icon *ngIf="item.isDuration" matListItemIcon>schedule</mat-icon>
+          </mat-list-item>
+        </mat-nav-list>
+      </ng-container>
+    </mat-sidenav>
+
+    <!-- Main Content -->
+    <mat-sidenav-content class="main-content">
+      <div class="details-panel" *ngIf="selected">
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" *ngIf="loading">
+          <mat-progress-spinner mode="indeterminate" diameter="48">
+          </mat-progress-spinner>
+          <span class="loading-text">Saving</span>
+        </div>
+
+        <mat-card>
+          <mat-card-content>
+            <mat-accordion>
+              <!-- General Settings Panel -->
+              <mat-expansion-panel expanded="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    General Settings
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="panel-content">
+                  <!-- Name Input -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Name</mat-label>
+                    <input matInput 
+                           [(ngModel)]="selected.name"
+                           [readonly]="!administrator">
+                  </mat-form-field>
+
+                  <!-- Duration Tracking -->
+                  <mat-checkbox [(ngModel)]="selected.isDuration"
+                              [disabled]="!administrator">
+                    Duration Tracking
+                  </mat-checkbox>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" *ngIf="!isManaged">
+              <button mat-raised-button 
+                      color="primary"
+                      [disabled]="!administrator"
+                      (click)="save()">
+                Save
+              </button>
+
+              <button mat-button
+                      [disabled]="!administrator"
+                      (click)="cancel()">
+                Cancel
+              </button>
+
+              <button mat-raised-button
+                      color="warn"
+                      *ngIf="!selected.isArchived"
+                      [disabled]="!administrator"
+                      (click)="archive()">
+                Archive
+              </button>
+
+              <button mat-raised-button
+                      color="accent"
+                      *ngIf="selected.isArchived"
+                      [disabled]="!administrator"
+                      (click)="reactivate()">
+                Reactivate
+              </button>
+            </div>
+
+            <!-- Managed Actions -->
+            <div class="action-buttons" *ngIf="isManaged">
+              <button mat-button
+                      [disabled]="!administrator"
+                      (click)="cancel()">
+                Cancel
+              </button>
+
+              <button mat-raised-button
+                      color="warn"
+                      *ngIf="!selected.isArchived"
+                      [disabled]="!administrator"
+                      (click)="archive()">
+                Delete
+              </button>
+            </div>
+
+            <!-- Status Message -->
+            <div class="status-message" *ngIf="status">
+              {{status}}
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<!-- Global Loading States -->
+<div class="loading-overlay" *ngIf="loading">
+  <mat-progress-spinner mode="indeterminate" diameter="48">
+  </mat-progress-spinner>
+</div>
+
+<div class="loading-overlay" *ngIf="saving">
+  <mat-progress-spinner mode="indeterminate" diameter="48">
+  </mat-progress-spinner>
+  <span class="loading-text">Saving</span>
+</div>

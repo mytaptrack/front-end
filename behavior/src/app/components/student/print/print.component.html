@@ -1,0 +1,413 @@
+<div id="dashboardBody" *ngIf="selectedStudent" class="container-fluid">
+    <div class="row d-print-none"><div class="col-12"><a [routerLink]="['/dashboard']" [queryParams]="{ studentId: student.studentId, startDate: startDate.format('yyyy-MM-DD'), endDate: endDate.format('yyyy-MM-DD')}">Back to dashboard</a></div></div>
+    <div class="row d-print-none print-options text-center">
+        <div class="col-12">
+            <label><input type="checkbox" [(ngModel)]="showDayDetails" /> Show Day Details</label>
+            <label><input type="checkbox" [(ngModel)]="showNotes" /> Show Notes</label>
+            <label><input type="checkbox" [(ngModel)]="showDataSource" /> Tracking Sources</label>
+            <label *ngIf="features.abc"><input type="checkbox" [(ngModel)]="showAbc" /> Show ABC</label>
+            <label><input type="checkbox" [(ngModel)]="hideExcluded" /> Hide Excluded Days</label>
+        </div>
+    </div>
+    <div class="row cover-page">
+        <div class="col-12" *ngIf="showSettingsDropdown">
+            <app-dashboard-settings [student]="student" [(settings)]="settings" (close)="showSettingsDropdown = false" (apply)="selectStudent(selectedStudent)"></app-dashboard-settings>
+        </div>
+        <div class="col-4">
+            <button class="btn btn-primary d-print-none" (click)="print()"><mat-icon>print</mat-icon> Print</button>
+        </div>
+        <div *ngIf="student" class="col-md-12 text-center name-area">
+            <div *ngIf="student.license == '2022030410775b87a78d4df98b0026ec42fe1afd'">
+                <img id="logo2" src="assets/images/customers/logo-relife.png" />
+                <h3>
+                    Powered by <img id="logo2" style="width:200px; vertical-align:text-bottom; margin-bottom:-5px" src="assets/images/sm-text-logo.gif" alt="mytaptrack logo" />
+                </h3>
+            </div>
+            <img *ngIf="student.license != '2022030410775b87a78d4df98b0026ec42fe1afd'" id="logo" src="assets/images/sm-text-logo.gif" alt="mytaptrack logo" />
+            <h1>{{student.details.firstName}} {{student.details.lastName}} Overview</h1>
+        </div>
+        <div class="col-12 text-center">
+            <h3>Data From:</h3>
+            <h3>
+                <span>{{ getDateRange() }}</span>
+            </h3>
+        </div>
+    </div>
+    <div class="row charts new-page">
+        <div class="col-12 text-center page-title" *ngIf="student">
+            <h1>Observation Overview</h1>
+            <div *ngIf="student.license == '2022030410775b87a78d4df98b0026ec42fe1afd'">
+                <img id="logo2" class="footer-logo" src="assets/images/customers/logo-relife.png" />
+                <h5>
+                    Powered by <img id="logo2" class="footer-logo" src="assets/images/sm-text-logo.gif" alt="mytaptrack logo" />
+                </h5>
+            </div>
+            <div *ngIf="student.license != '2022030410775b87a78d4df98b0026ec42fe1afd'">  
+                Powered by <img class="footer-logo" src="assets/images/sm-text-logo.gif" alt="mytaptrack" />
+            </div>
+        </div>
+        <div class="col-12 text-center ">
+            <div class="legend-container">
+                <h5>Legend</h5>
+                <div class="legend" *ngFor="let b of displayBehaviors">
+                    <svg width="30" height="10">
+                        <rect width="30" height="10" style="stroke-width:1;stroke:rgb(0,0,0)" [style.fill]="b.color" />
+                    </svg>
+                    <span>&nbsp;{{b.name}}</span>
+                    <span *ngIf="b.metricType != 'occurence'">&nbsp;({{b.metricType}})</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 text-center" *ngIf="milestones && milestones.length > 0">
+            <h4>Support Change / Milestone</h4>
+            <div class="legend" *ngFor="let m of milestones">
+                <svg class="milestone" width="30" height="10">
+                    <rect width="30" height="10" style="stroke-width:1;stroke:rgb(0,0,0);" [style.fill]="m.color" />
+                </svg>
+                {{m.title}} - {{m.date}}
+            </div>
+        </div>
+        <div class="text-center chart-div col-12" *ngIf="frequencyChart">
+            <h2 class="text-center">Frequency</h2>
+            <div class="chart-container">
+                <canvas id="trendChart" class="limited-chart" baseChart width="600" height="160"
+                    [data]="frequencyChart.data"
+                    [options]="frequencyChart.options" 
+                    [type]="frequencyChart.type"
+                    [legend]="false"
+                    [plugins]="inlinePluginFrequency"></canvas>
+                <svg id="trendChartMilestones" class="milestone">
+                    <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+                </svg>
+            </div>
+        </div>
+        <div class="text-center chart-div col-12" *ngIf="durationChart">
+            <h2 class="text-center">Duration</h2>
+            <div class="chart-container">
+                <canvas id="durationChart" class="limited-chart" baseChart width="600" height="160" 
+                    [data]="durationChart.data"
+                    [options]="durationChart.options || {}" 
+                    [type]="durationChart.type"
+                    [legend]="false"
+                    [plugins]="inlinePluginDuration"></canvas>
+                <svg id="durationChartMilestones" class="milestone">
+                    <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+                </svg>
+            </div>
+        </div>
+        <div class="text-center chart-div col-12" *ngIf="dotChart">
+            <h2 class="text-center">Occurrences</h2>
+            <div class="chart-container">
+                <canvas id="dotChart" class="limited-chart" baseChart width="600" height="160" 
+                    [data]="dotChart.data"
+                    [options]="dotChart.options" 
+                    [type]="dotChart.type"
+                    [legend]="false"
+                    [plugins]="inlinePluginDot"></canvas>
+                <!-- <svg id="dotChartMilestones" class="milestone">
+                    <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+                </svg> -->
+            </div>
+        </div>
+    </div>
+    <div class="row new-page">
+        <div class="col-12 text-center">
+            <h1>Statistics</h1>
+        </div>
+        <div *ngIf="frequencyStats" class="stats-chart text-center" [class.col-6]="durationChart" [class.col-12]="!durationChart">
+            <canvas
+                baseChart
+                width="500" height="500"
+                [data]="frequencyStats.data"
+                [options]="frequencyStats.options"
+                [type]="frequencyStats.type"></canvas>
+        </div>
+        <div *ngIf="durationStats" class="col-6 text-center">
+            <canvas
+                baseChart
+                width="500" height="500"
+                [data]="durationStats.data"
+                [options]="durationStats.options"
+                [type]="durationStats.type"></canvas>
+        </div>
+    </div>
+    <div class="row" *ngIf="frequencyStatDetails">
+        <div class="col-12">
+            <h3>Frequency Breakdown</h3>
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Total Events</th>
+                    <th>Percent of Tracking</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of frequencyStatDetails">
+                        <td>{{row.behaviorName}}</td>
+                        <td>{{row.count}}</td>
+                        <td>{{row.percent}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="durationChart && durationStatDetails" class="col-12">
+            <h3>Duration Breakdown</h3>
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Total Time ({{durationMeasurement}})</th>
+                    <th>Average Time ({{durationMeasurement}})</th>
+                    <th>Average Per Day ({{durationMeasurement}})</th>
+                    <th>Percent of Time</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of durationStatDetails">
+                        <td>{{row.behaviorName}}</td>
+                        <td>{{row.count}}</td>
+                        <td>{{row.average}}</td>
+                        <td>{{row.dayAverage}}</td>
+                        <td>{{row.percent}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row new-page" *ngIf="showAbc && abcStats && abcStats.length > 0">
+        <div class="col-12 abc-summary">
+            <h3>ABC Breakdown</h3>
+            <div class="container-fluid">
+                <div class="row">
+                    <div *ngFor="let stat of abcBStats" class="col-3">
+                        <canvas class="limited-chart" baseChart width="400" height="300"
+                            [data]="stat.data" 
+                            [options]="stat.options" 
+                            [type]="stat.type"
+                            [plugins]="inlinePluginDot"></canvas>
+                    </div>
+                    <div class="col-12 chart-section" *ngIf="!loading">
+                        <canvas baseChart width="400" [height]="abcAChartHeight"
+                            [data]="abcAChart.data" 
+                            [options]="abcAChart.options" 
+                            [type]="abcAChart.type"
+                            [plugins]="inlinePluginDot"></canvas>
+                    </div>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <th>Antecedent</th>
+                    <th>Behavior</th>
+                    <th>Consequence</th>
+                    <th>Events</th>
+                    <th>Percentage</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stat of abcStats">
+                        <td>{{stat.a}}</td>
+                        <td>{{stat.b}}</td>
+                        <td>{{stat.c}}</td>
+                        <td>{{stat.events}}</td>
+                        <td>{{stat.percent}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="showDayDetails">
+        <div *ngFor="let day of days">
+            <div class="row new-page">
+                <div class="col-12">
+                    <div class="page-title" *ngIf="student">
+                        <h1>{{getDay(day.date)}} Details</h1>
+                        <div *ngIf="student.license == '2022030410775b87a78d4df98b0026ec42fe1afd'">
+                            <img id="logo2" class="footer-logo" src="assets/images/customers/logo-relife.png" />
+                            <h5>
+                                Powered by <img id="logo2" class="footer-logo" src="assets/images/sm-text-logo.gif" alt="mytaptrack logo" />
+                            </h5>
+                        </div>
+                        <div *ngIf="student.license != '2022030410775b87a78d4df98b0026ec42fe1afd'">
+                            Powered by <img class="footer-logo" src="assets/images/sm-text-logo.gif" alt="mytaptrack" />
+                        </div>
+                    </div>
+                    <div class="daily-start text-center" style="position:relative"  *ngIf="day.frequency.hasData">
+                        <h3>Frequency Details {{ getDay(day.date) }}</h3>
+                    </div>
+                    <div>
+                        <canvas class="daily-chart" 
+                            baseChart
+                            width="500" height="150"
+                            [data]="day.frequency.chart.data"
+                            [options]="day.frequency.chart.options" 
+                            [type]="day.frequency.chart.type"></canvas>
+                    </div>
+                    <div class="daily-start">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h3>Summary</h3>
+                                </div>
+                                <div class="col-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Behavior</th>
+                                                <th>Total Events</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of frequencyStatDetails">
+                                                <td>{{item.behaviorName}}</td>
+                                                <td>{{getDayCount(item, getDay(day.date))}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3>Details</h3>
+                                </div>
+                                <div class="col-12">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th *ngIf="day.scheduleName">Activity</th>
+                                                <th *ngIf="day.scheduleName">Start</th>
+                                                <th *ngIf="day.scheduleName">End</th>
+                                                <th>Time</th>
+                                                <th>Behavior</th>
+                                                <th *ngIf="showAbc && abcStatsChart">Antecedent</th>
+                                                <th *ngIf="showAbc && abcStatsChart">Consequence</th>
+                                                <th *ngIf="showDataSource">Source</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let data of day.frequency.dayDetails" [style.background-color]="data.color">
+                                                <td class="no-color" *ngIf="data.activity && day.scheduleName" [attr.rowspan]="data.rowSpan">{{data.activity}}</td>
+                                                <td class="no-color" *ngIf="data.activity && day.scheduleName" [attr.rowspan]="data.rowSpan">{{data.activityStart}}</td>
+                                                <td class="no-color" *ngIf="data.activity && day.scheduleName" [attr.rowspan]="data.rowSpan">{{data.activityEnd}}</td>
+                                                <td>{{data.time}}</td>
+                                                <td>
+                                                    <span [class.manual]="data.isManual" [title]="data.isManual? 'Manually Added Data' : ''">{{data.name}}</span>
+                                                    <span class="manual" *ngIf="data.isManual" title="Manually Added Data">&nbsp;<mat-icon>info</mat-icon></span>
+                                                </td>
+                                                <td *ngIf="dailyChartType == 'duration'">
+                                                    <span *ngIf="data.name">
+                                                        <i *ngIf="data.isStart" class="fa fa-play" aria-hidden="true"></i>
+                                                        <i *ngIf="!data.isStart" class="fa fa-stop" aria-hidden="true"></i>
+                                                    </span>
+                                                </td>
+                                                <td *ngIf="dailyChartType == 'duration'">{{data.occurance}}</td>
+                                                <td *ngIf="dailyChartType == 'duration'">{{!data.isStart? formatDuration(data.duration) : ''}}</td>
+                                                <td *ngIf="showAbc && abcStatsChart">{{getAntecedent(data)}}</td>
+                                                <td *ngIf="showAbc && abcStatsChart">{{getConsequence(data)}}</td>
+                                                <td *ngIf="showDataSource">{{getRaterName(data)}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="new-page" *ngIf="day.duration.hasData">
+                <div class="col-12 daily-start text-center new-page" style="position:relative">
+                    <h3>Duration Details {{ getDay(day.date) }}</h3>
+                </div>
+                <div class="col-12">
+                    <canvas class="daily-chart" 
+                        baseChart 
+                        width="500" height="150"
+                        (chartClick)="goToReportDetails($event)" 
+                        [data]="day.duration.chart.data"
+                        [options]="day.duration.chart.options" 
+                        [type]="day.duration.chart.type"></canvas>
+                </div>
+                <div class="col-12">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3>Summary</h3>
+                            </div>
+                            <div class="col-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Behavior</th>
+                                            <th>Total Events</th>
+                                            <th>Total Duration ({{durationMeasurement}})</th>
+                                            <th>Average Duration ({{durationMeasurement}})</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of durationStatDetails">
+                                            <td>{{item.behaviorName}}</td>
+                                            <td>{{item.days[getDay(day.date)].count}}</td>
+                                            <td>{{item.days[getDay(day.date)].sum}}</td>
+                                            <td>{{item.days[getDay(day.date)].avg}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h3>Details</h3>
+                            </div>
+                            <div class="col-12">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th *ngIf="day.scheduleName">Activity</th>
+                                            <th *ngIf="day.scheduleName">Start</th>
+                                            <th *ngIf="day.scheduleName">End</th>
+                                            <th>Time</th>
+                                            <th>Behavior</th>
+                                            <th>Start/Stop</th>
+                                            <th>Occurrence</th>
+                                            <th>Duration</th>
+                                            <th *ngIf="showDataSource">Source</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of day.duration.dayDetails" [style.background-color]="data.color">
+                                            <td class="no-color" *ngIf="data.activity && day.scheduleName" [attr.rowspan]="data.rowSpan">{{data.activity}}</td>
+                                            <td class="no-color" *ngIf="data.activity && day.scheduleName" [attr.rowspan]="data.rowSpan">{{data.activityStart}}</td>
+                                            <td class="no-color" *ngIf="data.activity && day.scheduleName" [attr.rowspan]="data.rowSpan">{{data.activityEnd}}</td>
+                                            <td>{{data.time}}</td>
+                                            <td>
+                                                <span [class.manual]="data.isManual" [title]="data.isManual? 'Manually Added Data' : ''">{{data.name}}</span>
+                                                <span class="manual" *ngIf="data.isManual" title="Manually Added Data">&nbsp;<mat-icon>info</mat-icon></span>
+                                            </td>
+                                            <td>
+                                                <span *ngIf="data.name">
+                                                    <i *ngIf="data.isStart" class="fa fa-play" aria-hidden="true"></i>
+                                                    <i *ngIf="!data.isStart" class="fa fa-stop" aria-hidden="true"></i>
+                                                </span>
+                                            </td>
+                                            <td>{{data.occurance}}</td>
+                                            <td>{{!data.isStart? formatDuration(data.duration) : ''}}</td>
+                                            <td *ngIf="showDataSource">{{getRaterName(data)}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row new-page" *ngIf="day.notes && showNotes">
+                <div class="col-12 daily-start text-center" style="position:relative">
+                    <h3>Notes {{ getDay(day.date) }}</h3>
+                </div>
+                <div class="col-12">
+                    <pre style="border:none">
+                        {{day.notes}}
+                    </pre>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-loading *ngIf="loading" [subtext]="loadPercent + '%'"></app-loading>

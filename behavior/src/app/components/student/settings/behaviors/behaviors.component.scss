@@ -1,0 +1,83 @@
+.mat-mdc-card-header {
+    padding: 0px;
+}
+
+.behaviors-container {
+    padding: 0px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 5px;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.list-item-content {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mat-list-item {
+    cursor: pointer;
+    position: relative;
+    margin-right: -50px; /* Extend items to the dividing line */
+}
+
+.mat-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Tab-like styling for selected item */
+.mat-list-item.selected {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mat-list-item.selected::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #3f51b5; /* Material primary color - adjust as needed */
+}
+
+.mat-subheader {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.54);
+    padding: 16px;
+    margin: 0;
+}
+
+.archived-section {
+    margin-top: 16px;
+}
+
+mat-nav-list {
+    padding-top: 0;
+    margin-right: -10px;
+}
+
+.left-panel {
+    min-width: 0;
+    border-right: 2px solid rgba(0, 0, 0, 0.12); /* Dividing line */
+    padding-right: -10px;
+}
+
+.right-panel {
+    min-width: 0;
+}
+
+/* Icon styles */
+mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+    margin-left: 8px;
+}

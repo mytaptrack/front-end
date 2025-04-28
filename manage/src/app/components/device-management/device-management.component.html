@@ -1,0 +1,158 @@
+<a href="/"><mat-icon>arrow_left</mat-icon> Back</a>
+<h1 class="mat-headline-4">Device Manager</h1>
+
+<mat-progress-spinner *ngIf="loading" mode="indeterminate" class="loading-spinner">
+</mat-progress-spinner>
+
+<div class="device-management-container" *ngIf="!loading">
+  <div class="content-grid">
+    <!-- Left Panel -->
+    <mat-card class="search-panel">
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="searchText">
+        </mat-form-field>
+
+        <!-- Search Results -->
+        <div *ngIf="searchText">
+          <h2 class="mat-h2">App Results:</h2>
+          <mat-nav-list>
+            <mat-list-item *ngFor="let item of searchResults" 
+                          [class.selected]="selected && item.id == selected.id && item.name == selected.name"
+                          (click)="setSelected(item)">
+              {{item.name}}
+            </mat-list-item>
+            <mat-list-item (click)="createApp()">
+              <mat-icon matListItemIcon>add</mat-icon>
+              Add new app
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+
+        <!-- Apps List -->
+        <div *ngIf="!searchText">
+          <h2 class="mat-h2">Apps:</h2>
+          <mat-nav-list>
+            <mat-list-item *ngFor="let item of activeApps" 
+                          [class.selected]="selected && item.device.id == selected.device.id && item.device.name == selected.device.name"
+                          (click)="setSelected(item)">
+              {{item.name ?? 'Un-named App'}}
+            </mat-list-item>
+            <mat-list-item (click)="createApp()">
+              <mat-icon matListItemIcon>add</mat-icon>
+              Add new app
+            </mat-list-item>
+          </mat-nav-list>
+
+          <h2 class="mat-h2">Apps without students:</h2>
+          <mat-nav-list>
+            <mat-list-item *ngFor="let item of emptyApps" 
+                          [class.selected]="selected && item.device.id == selected.device.id && item.device.name == selected.device.name"
+                          (click)="setSelected(item)">
+              {{item.name}}
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Right Panel -->
+    <mat-card class="details-panel" *ngIf="selected">
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mobile Device Name</mat-label>
+          <input matInput [(ngModel)]="selected.device.name">
+        </mat-form-field>
+
+        <app-mtt-tags [(tagField)]="selected.tags"></app-mtt-tags>
+
+        <div class="button-row">
+          <button mat-raised-button color="primary" (click)="updateAppName()">
+            <mat-icon>save</mat-icon>
+            Update
+          </button>
+          <button mat-raised-button color="primary" (click)="generateQrCode()">
+            <mat-icon *ngIf="!qrLoading">qr_code</mat-icon>
+            <mat-spinner *ngIf="qrLoading" diameter="20"></mat-spinner>
+            QR Code
+          </button>
+          <button mat-raised-button color="primary" (click)="reassign()">
+            <mat-spinner *ngIf="reassigning" diameter="20"></mat-spinner>
+            Re-assign to new device
+          </button>
+        </div>
+
+        <div *ngIf="selected.token">
+          <device-app [hideName]="true" 
+                     [administrator]="true" 
+                     [selected]="selected.assignments[0].app" 
+                     [student]="selected.assignments[0].student" 
+                     [groupsEnabled]="groupsEnabled">
+          </device-app>
+        </div>
+
+        <div *ngIf="!selected.token">
+          <h3 class="mat-h3">Students:</h3>
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let item of selected.assignments">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{item.name}}
+                  <mat-chip-list>
+                    <mat-chip *ngFor="let g of item.groups">{{g}}</mat-chip>
+                  </mat-chip-list>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <button mat-icon-button (click)="copyFrom(item); $event.stopPropagation()">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="item.delete(); $event.stopPropagation()">
+                    <mat-icon *ngIf="!item.deleting">delete</mat-icon>
+                    <mat-spinner *ngIf="item.deleting" diameter="20"></mat-spinner>
+                  </button>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <device-app [hideName]="true" 
+                         [administrator]="true" 
+                         [abcEnabled]="features?.abc" 
+                         [selected]="item.app" 
+                         [student]="item.student" 
+                         [groupsEnabled]="groupsEnabled">
+              </device-app>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <!-- Add Student Section -->
+          <div *ngIf="addStudent" class="add-student-section">
+            <h3 class="mat-h3">Adding student to app</h3>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Select a student</mat-label>
+              <mat-select [(ngModel)]="selectedStudentId">
+                <mat-option *ngFor="let student of nonSelectedStudents" 
+                           [value]="student.studentId">
+                  {{getStudentName(student)}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="button-row">
+              <button mat-raised-button color="primary" 
+                      (click)="addStudentToApp(selectedStudentId)">
+                Create
+              </button>
+              <button mat-raised-button (click)="addStudent = false">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <button mat-button *ngIf="!addStudent" (click)="showSelectStudent()">
+            <mat-icon>add</mat-icon>
+            Add student to app
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

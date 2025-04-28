@@ -1,0 +1,202 @@
+#notificationSpinner {
+    font-size: 24pt;
+    color: var(--waitingColor);
+}
+
+.abc-summary {
+    margin-top: 20px;
+}
+
+.daily-chart {
+    width: 100% !Important;
+    height: auto;
+}
+
+.daily-start {
+    border-top: solid 1px var(--border);
+    padding-top:20px;
+}
+
+.dropdown-item {
+    color: var(--linkItemColor);
+}
+
+
+@media print {
+    .charts canvas {
+        width: 100% !important;
+    }
+
+    @page {size: landscape}
+    .intervalView {
+        max-height: unset !important;
+        max-width: unset !important;
+        overflow-x: unset !important;
+        overflow-y: unset !important;
+        -webkit-scrollbar: unset !important;
+        border: solid 1px var(--headerTextColor);
+        font-size: 7pt;
+    }
+}
+
+.chart-div {
+    position:relative;
+}
+
+.chart-div svg {
+    position: absolute;
+    pointer-events: none;
+}
+
+.chart-div canvas {
+    z-index: 10;
+}
+
+.chart-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.daily-action i {
+    margin-right: 5px;
+    margin-top: 10px;
+}
+
+.clearAll {
+    margin-left: 35px;
+}
+
+.fixed {
+    position: relative;
+    height: 100%;
+}
+
+.fixed > .row {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 60px;
+}
+
+.getting-started {
+    margin: 40px;
+}
+
+.input-group-append .btn {
+    margin: 0px;
+}
+
+.intervalView {
+    max-height: 600px;
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    -webkit-scrollbar: visible;
+    border: solid 1px var(--headerTextColor);
+}
+
+.intervalView::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.intervalView::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.legend {
+    display: inline-block;
+    margin: 0px 10px;
+}
+
+.legend-container {
+    display:inline-block;
+    margin: 10px 0px;
+    padding: 10px 0px;
+    border-bottom: dashed 1px var(--border);
+    border-top: dashed 1px var(--border);
+    white-space: normal;
+}
+
+.lighten {
+    color: var(--lightText);
+}
+
+.limited-chart {
+    max-width: 500px;
+}
+
+.text-right .limited-chart {
+    float: right;
+}
+
+.manual {
+    color: var(--actionOptionActiveColor);
+    font-style: italic;
+}
+
+.max-height {
+    height:100%;
+}
+
+
+.nav-link {
+    cursor: pointer;
+    border-width: 2px;
+}
+
+.no-color {
+    background-color: var(--backgroundColor);
+}
+
+.notification i {
+    color: var(--warningColor);
+}
+.notification a {
+    color: var(--linkItemColor);
+}
+
+.refresh-button {
+    margin-left:20px;
+    margin-right:-50px;
+}
+
+.scrollable {
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    overflow: -moz-scrollbars-vertical;
+    -webkit-scrollbar: visible;
+    border: solid 1px var(--headerTextColor);
+}
+
+.selection-item {
+    position: relative;
+}
+
+
+.selection-item > a {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.tab-option {
+    border: solid 1px var(--border);
+    text-align: center;
+    padding: 5px;
+    font-size: 12pt;
+}
+
+.tab-option:hover {
+    background-color: var(--headerBackgroundShaded);
+}
+
+.tab-option.selected {
+    background-color: var(--headerBackgroundShaded);
+    font-weight: bold;
+}

@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "angularCompilerOptions": {
+    "enableIvy": false
+  },
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "strict": false,
+    "sourceMap": true,
+    "declaration": true,
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "types":[
+      "node",
+      "@types/jest"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

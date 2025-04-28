@@ -1,0 +1,62 @@
+.behavior {
+    border-bottom: var(--headerTextColor) 1px solid;
+}
+
+.behavior .title {
+    font-size: 16pt !important;
+    margin-top: 10px;
+}
+
+.check-option {
+    margin-right: 10px;
+}
+
+.description {
+    overflow: hidden;
+}
+
+.interval-counter {
+    font-size: 20pt;
+    border-top: solid 1px var(--darkText);
+    border-bottom: solid 3px var(--darkText);
+    margin: 10px 0px;
+    padding: 10px;
+}
+
+.interval-flash {
+    background-color: var(--headerBackgroundColor);
+}
+
+.interval-options {
+    border:solid 1px;
+    background-color: var(--headerBackgroundColor);
+}
+
+.input-align label {
+    margin-top: 35px;
+}
+
+.input-group-append button {
+    margin: 0px;
+}
+
+.main-tracking {
+    height: 60vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.notes-area {
+    height: 30vh;
+    border-top: var(--headerTextColor) 2px solid;
+}
+
+.notes-area textarea {
+    width:100%;
+    height: 20vh;
+}
+
+.notes-area .title {
+    font-size: 16pt;
+    margin-bottom: 5px;
+}

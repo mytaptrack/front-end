@@ -1,0 +1,127 @@
+.subscriptions-container {
+    padding: 24px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 5px;
+}
+
+.left-panel {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    margin-right: 0px;
+}
+
+.right-panel {
+    position: relative;
+    padding: 0 0px;
+}
+
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mat-list-item {
+    cursor: pointer;
+    position: relative;
+    margin-right: -24px;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    &.selected {
+        background-color: rgba(0, 0, 0, 0.04);
+
+        &::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #3f51b5;
+        }
+    }
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+
+    mat-label {
+        margin-bottom: 8px;
+        color: rgba(0, 0, 0, 0.6);
+    }
+}
+
+.notification-settings,
+.message-settings,
+.trigger-settings,
+.notify-until-settings {
+    padding: 16px 0;
+}
+
+mat-radio-group {
+    display: flex;
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.custom-messages {
+    > div {
+        margin: 16px 0;
+    }
+}
+
+.response-selection {
+    margin-top: 16px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+mat-expansion-panel {
+    margin-bottom: 16px;
+}
+
+.mat-table {
+    width: 100%;
+    margin: 16px 0;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        border-right: none;
+        margin-right: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        margin-bottom: 24px;
+    }
+
+    .right-panel {
+        padding: 0;
+    }
+}
+
+.mat-mdc-list-item {
+    width: auto;
+    margin-right: 0px;
+}

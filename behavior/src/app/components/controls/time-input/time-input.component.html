@@ -1,0 +1,9 @@
+<mat-form-field>
+        <input matInput placeholder="example: 11:00 am"
+                [readonly]="readonly"
+                [(ngModel)]="timeValue" 
+                (blur)="cleanDate()" 
+                [class.validation-error]="timeError"/>
+        <mat-hint>{{getTime(timeValue)}}</mat-hint>
+</mat-form-field>
+<div class="validation-error-text">{{timeError}}</div>

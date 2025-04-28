@@ -1,0 +1,212 @@
+<div class="container-fluid">
+    <div class="row" *ngIf="studentNotifications && studentNotifications.length > 0 || dataErrors.length > 0">
+        <div *ngIf="!alertsActionInProgress">
+            <div class="col-12">
+                <h4>Your Alerts: {{studentNotifications? studentNotifications.length : 0 + dataErrors.length}}</h4>
+            </div>
+            <div class="col-12 notification" *ngFor="let notification of getTopNotifications()">
+                <mat-icon>warning</mat-icon> 
+                <span>{{getNotificationText(notification)}}</span>
+                <a (click)="dismissNotification(notification)">Dismiss</a>
+            </div>
+            <div class="col-12 notification" *ngFor="let notification of dataErrors">
+                <mat-icon>warning</mat-icon> 
+                <span>{{notification}}</span>
+            </div>
+            <div>
+                <a class="link clearAll" *ngIf="studentNotifications && studentNotifications.length > 0" (click)="clearAllNotifications()">Clear All</a>
+            </div>
+        </div>
+        <div id="notificationSpinner" *ngIf="alertsActionInProgress">
+            <mat-progress-spinner></mat-progress-spinner>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <h2>Overview</h2>
+        </div>
+        <div class="col-12 text-center">
+            <h3>
+                <span>{{ getDateRange() }}</span>
+                <app-date-dropdown [startDate]="startDate" (selected)="setWeekStart($event)"></app-date-dropdown>
+            </h3>
+        </div>
+        <div class="col-12 text-center ">
+            <div class="legend-container">
+                <h5>Legend</h5>
+                <div class="legend" *ngFor="let b of displayBehaviors">
+                    <svg width="30" height="10">
+                        <rect width="30" height="10" style="stroke-width:1;stroke:rgb(0,0,0)" [style.fill]="b.color" />
+                    </svg>
+                    <span>&nbsp;{{b.name}}</span>
+                    <span *ngIf="b.metricType != 'occurence'">&nbsp;({{b.metricType}})</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-right chart-div col-12" *ngIf="frequencyChart">
+            <h5 class="text-center">Frequency</h5>
+            <canvas id="trendChart" class="limited-chart" baseChart width="400" height="300"
+                (chartClick)="goToReportDetailsFromLine($event, true)" 
+                [datasets]="(frequencyChart)? frequencyChart.data.datasets : []" 
+                [labels]="(frequencyChart)? frequencyChart.data.labels : []" 
+                [options]="(frequencyChart)? frequencyChart.options : {}" 
+                [type]="(frequencyChart)? frequencyChart.type : ''"
+                [legend]="false"
+                [plugins]="inlinePluginFrequency"></canvas>
+            <svg id="trendChartMilestones" class="milestone">
+                <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+            </svg>
+        </div>
+        <div class="text-right chart-div col-12" *ngIf="durationChart">
+            <h5 class="text-center">Duration</h5>
+            <canvas id="durationChart" class="limited-chart" baseChart width="400" height="300" 
+                (chartClick)="goToReportDetailsFromLine($event, true)" 
+                [datasets]="(durationChart)? durationChart.data.datasets : []" 
+                [labels]="(durationChart)? durationChart.data.labels : []" 
+                [options]="durationChart.options || {}" 
+                [type]="(durationChart)? durationChart.type : ''"
+                [legend]="false"
+                [plugins]="inlinePluginDuration"></canvas>
+            <svg id="durationChartMilestones" class="milestone">
+                <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+            </svg>
+        </div>
+        <div class="text-right chart-div col-12" *ngIf="dotChart">
+            <h5 class="text-center">Occurrences</h5>
+            <canvas id="dotChart" class="limited-chart" baseChart width="400" height="300" 
+                (chartClick)="goToReportDetailsFromDot($event)" 
+                [datasets]="(dotChart)? dotChart.data.datasets : []" 
+                [labels]="(dotChart)? dotChart.data.labels : []" 
+                [options]="(dotChart)? dotChart.options : {}" 
+                [type]="(dotChart)? dotChart.type : ''"
+                [legend]="false"
+                [plugins]="inlinePluginDot"></canvas>
+            <svg id="dotChartMilestones" class="milestone">
+                <line x1="10%" y1="0" x2="10%" y2="100%" style="stroke:rgb(255,0,0);stroke-width:2" />
+            </svg>
+        </div>
+        <div class="col-12 text-center" *ngIf="milestones && milestones.length > 0">
+            <h4>Support Change / Milestone</h4>
+            <div class="legend" *ngFor="let m of milestones">
+                <svg class="milestone" width="30" height="10">
+                    <rect width="30" height="10" style="stroke-width:1;stroke:rgb(0,0,0);" [style.fill]="m.color" />
+                </svg>
+                {{m.title}} - {{m.date}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 daily-start text-center" style="position:relative">
+            <h3>Daily Details</h3>
+            <h4>
+                <a class="d-print-none" (click)="addDays(-1)" title="Previous Week"><mat-icon>chevron_left</mat-icon></a>
+                <span>{{ getDay(currentDay) }}</span>
+                <a class="d-print-none" (click)="addDays(1)" title="Next Week"><mat-icon>chevron_right</mat-icon></a>
+            </h4>
+        </div>
+        <div class="col-12">
+            <select class="form-control" #t (change)="setDailyChart(t.value)" >
+                <option value="frequency" [selected]="isDailyChartActive('frequency')">Frequency</option>
+                <option value="duration" [selected]="isDailyChartActive('duration')">Duration</option>
+                <option value="interval" [selected]="isDailyChartActive('interval')">Interval</option>
+                <option value="notes" [selected]="isDailyChartActive('notes')" *ngIf="commentsRead">Notes</option>
+            </select>
+        </div>
+        <div class="col-12" *ngIf="dailyChartType == 'interval'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <div class="dropdown regular-dropdown">
+                            <button class="btn btn-primary dropdown-toggle" (click)="showFrequencyDropdown = !showFrequencyDropdown">Interval: {{intervalMinutes}} <span *ngIf="minutesPerRange == 1">minute</span><span *ngIf="minutesPerRange != 1">minutes</span></button>
+                            <div class="dropdown-menu" style="display:inline-block" *ngIf="showFrequencyDropdown">
+                                <div class="dropdown-item">
+                                    <a (click)="setFrequency(1)">1 minute <mat-icon *ngIf="intervalMinutes == 1">check</mat-icon></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a (click)="setFrequency(5)">5 minute <mat-icon *ngIf="intervalMinutes == 5">check</mat-icon></a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a (click)="setFrequency(10)">10 minute <mat-icon *ngIf="intervalMinutes == 10">check</mat-icon></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="intervalView">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Minutes:Seconds</th>
+                                        <th>Hours</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Start - Stop</th>
+                                        <th class="frequency-header" *ngFor="let hour of getHours()">{{hour}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dataRow of intervalData.data">
+                                        <td class="ensure-formatting" *ngFor="let dataCol of dataRow">
+                                            <pre>{{dataCol}}</pre>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center" *ngIf="intervalData.data.length == 0">
+                                <h1>No data collected</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12" *ngIf="dailyChartType == 'frequency' || dailyChartType == 'duration'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>Details</h3>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Behavior</th>
+                                    <th *ngIf="dailyChartType == 'duration'">Start/Stop</th>
+                                    <th *ngIf="dailyChartType == 'duration'">Occurrence</th>
+                                    <th *ngIf="dailyChartType == 'duration'">Duration</th>
+                                    <th style="width:30px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of dayDetails" [style.background-color]="data.color">
+                                    <td>{{data.time}}</td>
+                                    <td>
+                                        <span [class.manual]="data.isManual" [title]="data.isManual? 'Manually Added Data' : ''">{{data.name}}</span>
+                                        <span class="manual" *ngIf="data.isManual" title="Manually Added Data">&nbsp;<mat-icon>info</mat-icon></span>
+                                    </td>
+                                    <td *ngIf="dailyChartType == 'duration'">
+                                        <span *ngIf="data.name">
+                                            <i *ngIf="data.isStart" class="fa fa-play" aria-hidden="true"></i>
+                                            <i *ngIf="!data.isStart" class="fa fa-stop" aria-hidden="true"></i>
+                                        </span>
+                                    </td>
+                                    <td *ngIf="dailyChartType == 'duration'">{{data.occurance}}</td>
+                                    <td *ngIf="dailyChartType == 'duration'">{{!data.isStart? data.duration : ''}}</td>
+                                    <td><a (click)="deleteData(data)" *ngIf="dataAdmin"><mat-icon>delete</mat-icon></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="dailyChartType == 'notes' && commentsRead">
+            <app-notes [studentId]="student.studentId" [date]="currentDay" textHeight="300px"></app-notes>
+        </div>
+    </div>
+</div>
+
+<app-loading *ngIf="loading"></app-loading>

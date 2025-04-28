@@ -1,0 +1,8 @@
+<input class="form-control" 
+        placeholder="example: 11:00 am"
+        [readonly]="readonly"
+        [(ngModel)]="timeValue" 
+        (blur)="cleanDate()" 
+        [class.validation-error]="timeError"/>
+<span class="hint">{{getTime(timeValue)}}</span>
+<div class="validation-error-text">{{timeError}}</div>

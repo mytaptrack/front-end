@@ -1,0 +1,211 @@
+<div class="app-container">
+    <mat-progress-spinner *ngIf="selected && selected.saving"
+        mode="indeterminate"
+        diameter="50"
+        class="loading-spinner">
+    </mat-progress-spinner>
+
+    <mat-progress-spinner *ngIf="loading"
+        mode="indeterminate"
+        diameter="50"
+        class="loading-spinner">
+    </mat-progress-spinner>
+
+    <mat-card *ngIf="!loading">
+        <mat-card-content>
+            <div *ngIf="!selected.token">
+                <!-- Device Name -->
+                <mat-form-field *ngIf="!hideName" class="full-width">
+                    <mat-label>Phone or Tablet Name</mat-label>
+                    <input matInput
+                        id="student-setting-device-app-name"
+                        [(ngModel)]="selected.deviceName"
+                        [readonly]="!administrator">
+                </mat-form-field>
+
+                <!-- Student Name -->
+                <mat-form-field class="full-width">
+                    <mat-label>Student Display Name</mat-label>
+                    <input matInput
+                        id="student-setting-device-app-student-name"
+                        [(ngModel)]="selected.studentName"
+                        [readonly]="!administrator">
+                </mat-form-field>
+
+                <!-- Groups -->
+                <div *ngIf="groupsEnabled" class="groups-section">
+                    <mat-form-field class="full-width">
+                        <mat-label>Groups</mat-label>
+                        <app-mtt-tags typeText="group" [(tagField)]="selected.groups"></app-mtt-tags>
+                    </mat-form-field>
+                </div>
+
+                <!-- QR Code Status -->
+                <mat-card *ngIf="!selected.validated && selected.dsn && !hideName" class="warning-card">
+                    <mat-card-content>
+                        <h4>The QR Code has not been claimed</h4>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- QR Code Expiry -->
+                <mat-form-field *ngIf="!selected.dsn" class="full-width">
+                    <mat-label>QR Code expires after (days)</mat-label>
+                    <input matInput
+                        type="number"
+                        id="student-setting-device-app-qr-expire"
+                        [(ngModel)]="qrExpires">
+                </mat-form-field>
+
+                <!-- Text Alerts -->
+                <mat-checkbox [(ngModel)]="selected.textAlerts" class="text-alerts">
+                    Allow note tagging notifications
+                </mat-checkbox>
+
+                <!-- Generate QR Code -->
+                <div *ngIf="selected.dsn" class="button-section">
+                    <button mat-button
+                        color="primary"
+                        id="student-setting-device-app-gen-qr"
+                        (click)="generateQrCode()">
+                        Show QR Code
+                    </button>
+                </div>
+
+                <!-- Behaviors Section -->
+                <mat-card class="behaviors-card">
+                    <mat-card-header>
+                        <mat-card-title>Trackable Behaviors</mat-card-title>
+                    </mat-card-header>
+                    
+                    <mat-card-content>
+                        <!-- ABC Warning -->
+                        <div *ngIf="invalidAbc" class="warning-message">
+                            <mat-icon color="warn">warning</mat-icon>
+                            <span>ABC Tracking has been enabled, but no antecedents or consequences have been defined on the ABC tab. ABC tracking will not be visible on this device at this time.</span>
+                        </div>
+
+                        <div class="table-labels trackable-item">
+                            <div></div>
+                            <div>Behavior Name</div>
+                            <div>Track</div>
+                            <div>ABC</div>
+                        </div>
+                        <div cdkDropList (cdkDropListDropped)="drop($event)">
+                            @for(behavior of activeBehaviors; track behavior.id) {
+                                <div class="trackable-item" cdkDrag>
+                                    <mat-icon>drag_indicator</mat-icon>
+                                    <div>{{behavior.name}}</div>
+                                    <div>
+                                        <mat-checkbox [id]="'student-setting-device-app-track-' + i"
+                                            [(ngModel)]="behavior.event.track"
+                                            [disabled]="readonly" />
+                                    </div>
+                                    <div>
+                                        <mat-checkbox [id]="'student-setting-device-app-abc-' + i"
+                                            [(ngModel)]="behavior.event.abc"
+                                            [disabled]="readonly" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons" *ngIf="!readonly">
+                    <button mat-raised-button
+                        color="primary"
+                        id="student-setting-device-app-save"
+                        (click)="save()">
+                        Save
+                    </button>
+                    <button mat-button
+                        id="student-setting-device-app-cancel"
+                        *ngIf="!selected.isNew"
+                        (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button mat-raised-button
+                        color="warn"
+                        id="student-setting-device-app-remove"
+                        *ngIf="!selected.isNew"
+                        (click)="remove()">
+                        Remove
+                    </button>
+                </div>
+            </div>
+
+            <!-- QR Code Display -->
+            <div *ngIf="selected.token" class="qr-section">
+                <div id="qrCodeArea">
+                    <div id="printTarget" class="print-content">
+                        <div class="header">
+                            <h1 class="title-with-logo">
+                                <img id="setup-logo" height="45" src="/assets/images/logo-dark.gif"/>
+                                <span>Setup Instructions</span>
+                            </h1>
+                            <p class="device-name">Mobile Device Name: {{selected.deviceName}}</p>
+                            <p class="description">
+                                The mytaptrack® mobile app is another convenient way to securely track
+                                behaviors and durations.
+                            </p>
+                        </div>
+
+                        <mat-card class="security-section">
+                            <mat-card-header>
+                                <mat-card-title>Security</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p>
+                                    While mytaptrack® continually works to ensure that information is stored and communicated
+                                    securely, it is your responsibility to ensure that information displayed on the phone or tablet
+                                    is done in a secure manner.
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card class="setup-section">
+                            <mat-card-header>
+                                <mat-card-title>Setting up the mobile device with the QR Code</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <mat-list>
+                                    <mat-list-item>1. Download the mytaptrack® app from the Apple or Android App Store</mat-list-item>
+                                    <mat-list-item>2. Open the mytaptrack® app</mat-list-item>
+                                    <mat-list-item>3. On the navigation bar at the bottom of the screen click "Settings"</mat-list-item>
+                                    <mat-list-item>4. Click "Scan QR Code"</mat-list-item>
+                                    <mat-list-item>5. Use the app to scan the QR Code provided in this letter/document</mat-list-item>
+                                    <mat-list-item>6. The student to be tracked is now displayed at the bottom of the settings screen</mat-list-item>
+                                    <mat-list-item>7. Click "Home" from the navigation bar at the bottom of the screen</mat-list-item>
+                                    <mat-list-item>8. Select the student to be tracked from the scroll wheel and you are now ready to track for that student. To switch to another student, select from the scroll wheel.</mat-list-item>
+                                </mat-list>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <div class="qr-code-container">
+                            <qrcode [qrdata]="selected.token"
+                                [width]="200"
+                                [errorCorrectionLevel]="'M'"
+                                [elementType]="'svg'">
+                            </qrcode>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button mat-raised-button
+                        color="primary"
+                        (click)="closeQrCode()">
+                        Close
+                    </button>
+                    <button mat-raised-button
+                        color="primary"
+                        ngxPrint
+                        printSectionId="qrCodeArea">
+                        Print with Instructions
+                    </button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

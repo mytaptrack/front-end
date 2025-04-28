@@ -1,0 +1,122 @@
+<div class="scroll-header">
+    <h2>{{student?.displayName}} - Tracking {{date.format('MM/DD/yyyy')}}</h2>
+</div>
+<div class="print-content">
+    <div>
+        <label>Legend</label>
+    </div>
+    <span class="legend-print" *ngFor="let behavior of behaviors">
+        <span>{{behavior.abbreviation}}</span> - 
+        <span>{{behavior.name}}</span>
+    </span>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 print-max">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{{student?.displayName}}</th>
+                        <th>Baseline Student</th>
+                        <th>Exclude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let line of lines">
+                        <tr *ngIf="line.onTheHour">
+                            <td colspan="3" class="tracking-hour">
+                                <h2>{{line.displayTime}}</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{line.displayTime}}
+                            </td>
+                            <td class="tracking-area">
+                                <a class="tracking-behavior" 
+                                    *ngFor="let item of line.behaviors" 
+                                    [class.tracking-selected]="item?.tracked"
+                                    (click)="item.tracked = !item.tracked">{{item.behavior.abbreviation}}</a>
+                                &nbsp;
+                            </td>
+                            <td class="tracking-area">
+                                <a class="tracking-behavior" 
+                                    *ngFor="let item of line.baselines" 
+                                    [class.tracking-selected]="item?.tracked"
+                                    (click)="item.tracked = !item.tracked">{{item.behavior.abbreviation}}</a>
+                                &nbsp;
+                            </td>
+                            <td style="text-align:center;">
+                                <input type="checkbox" [(ngModel)]="line.exclude" />
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <h2>Statistics</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Behavior</th>
+                        <th>Tracked</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let stat of statistics">
+                        <td>{{stat.name}}</td>
+                        <td>{{stat.value}}</td>
+                        <td>{{stat.percent}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6 d-print-none">
+            <div class="scroll-sticky">
+                <div>
+                    <a class="link-item" (click)="print()"><mat-icon>print</mat-icon> Print</a>
+                </div>
+                <a class="link-item" *ngIf="!editTimeRange" (click)="beginEditTimeRange()"><mat-icon>edit</mat-icon> Edit Time &amp; Interval</a>
+                <div *ngIf="editTimeRange">
+                    <label>Date</label>
+                    <input class="form-control" type="date" [(ngModel)]="tempDate" />
+                    <label>Start Time</label>
+                    <input class="form-control" type="time" [(ngModel)]="tempStartTime" />
+                    <label>End Time</label>
+                    <input class="form-control" type="time" [(ngModel)]="tempEndTime" />
+                    <label>Interval</label>
+                    <div class="input-group">
+                        <input class="form-control" type="number" [(ngModel)]="tempInterval"/>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{tempIntervalType}}</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" (click)="tempIntervalType = 'minutes'">minutes</a>
+                                <a class="dropdown-item" (click)="tempIntervalType = 'seconds'">seconds</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" (click)="loadTimeRange()">Apply</button>
+                    <button class="btn btn-secondary" (click)="editTimeRange = false">Cancel</button>
+                </div>
+                <div>
+                    <label>Legend</label>
+                    <div *ngFor="let behavior of behaviors">
+                        <span>{{behavior.abbreviation}}</span> - 
+                        <span>{{behavior.name}}</span>
+                </div>
+                <div class="container-fluid" *ngIf="student">
+                    <app-interval-prompt 
+                        [student]="student" 
+                        [showInterval]="true" 
+                        [showDuration]="false"
+                        [intervalDuration]="interval"
+                        [intervalType]="intervalType"></app-interval-prompt>
+                </div>
+                <div *ngIf="student && date">
+                    <app-notes [studentId]="student.studentId" [date]="date?.toISOString()" textHeight="25vh"></app-notes>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

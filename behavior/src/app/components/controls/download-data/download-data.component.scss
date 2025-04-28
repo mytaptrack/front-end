@@ -1,0 +1,28 @@
+.container {
+  padding: 20px;
+}
+
+.mat-button-toggle-group {
+  margin: 0 auto;
+  display: block;
+}
+
+.time-range-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.progress-label {
+  text-align: center;
+  margin-top: 8px;
+}
+
+mat-calendar {
+  margin: 20px auto;
+}

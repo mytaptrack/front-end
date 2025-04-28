@@ -1,0 +1,147 @@
+input[type='checkbox'] {
+    margin-left: 15px;
+    margin-right: 5px;
+    margin-top: -2px;
+}
+
+#clickTheButton {
+    font-size: 20pt;
+}
+
+#noDevicesRegistered {
+    padding-top: 30px;
+}
+
+#setup-logo {
+    height: 45px;
+    vertical-align: bottom;
+}
+
+#wifiRegistrationConnectV1 {
+    margin-top:20px;
+}
+
+.print-only {
+    display: none;
+}
+
+@media print {
+    .print-only {
+        display: auto;
+    }
+    .no-print {
+        display:none !important;
+    }
+}
+
+.details {
+    background-color: var(--headerBackgroundColor);
+    border: solid 2px var(--headerTextColor);
+    min-height: 400px;
+}
+
+.device-behavior-order {
+    width:80px;
+}
+
+.code-word-setup {
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.fa-circle-o-notch {
+    color: var(--waitingColor);
+    z-index: 1;
+}
+
+.status {
+    color: var(--headerTextColor);
+    font-weight: lighter;
+}
+
+.instruction-steps li {
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.instruction-steps .hint {
+    margin-top: 0px;
+    font-weight: normal;
+    padding-left: 15px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 5px;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.list-item-content {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mat-list-item {
+    cursor: pointer;
+    position: relative;
+    margin-right: -50px; /* Extend items to the dividing line */
+}
+
+.mat-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Tab-like styling for selected item */
+.mat-list-item.selected {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mat-list-item.selected::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #3f51b5; /* Material primary color - adjust as needed */
+}
+
+.mat-subheader {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.54);
+    padding: 16px;
+    margin: 0;
+}
+
+.archived-section {
+    margin-top: 16px;
+}
+
+mat-nav-list {
+    padding-top: 0;
+    margin-right: -10px;
+}
+
+.left-panel {
+    min-width: 0;
+    border-right: 2px solid rgba(0, 0, 0, 0.12); /* Dividing line */
+    padding-right: -10px;
+}
+
+.right-panel {
+    min-width: 0;
+}
+
+/* Icon styles */
+mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+    margin-left: 8px;
+}

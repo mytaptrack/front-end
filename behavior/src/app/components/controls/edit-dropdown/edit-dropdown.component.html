@@ -1,0 +1,6 @@
+<span class="dropdown edit-area">
+    <input id="value-box" [(ngModel)]="value" class="form-control" data-toggle="dropdown" autocomplete="off"/>
+    <ul class="dropdown-menu" aria-labelledby="value-box">
+        <li *ngFor="let option of _hints"><a (click)="setValue(option.value)">{{option.display}}</a></li>
+    </ul>
+</span>

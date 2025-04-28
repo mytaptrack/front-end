@@ -1,0 +1,84 @@
+<mat-progress-spinner *ngIf="loading" mode="indeterminate" class="loading-spinner">
+</mat-progress-spinner>
+
+<div *ngIf="!loading" class="console-container">
+  <h1 class="mat-headline-4">Management Console</h1>
+
+  <div class="button-grid">
+    <button mat-raised-button color="primary" [routerLink]="['/students']">
+      <mat-icon>school</mat-icon>
+      <span>Students</span>
+    </button>
+
+    <button mat-raised-button color="primary" [routerLink]="['/apps']">
+      <mat-icon>smartphone</mat-icon>
+      <span>Mobile apps</span>
+    </button>
+
+    <!-- <button mat-raised-button color="primary" [routerLink]="['/templates']" 
+            *ngIf="license?.features.manageStudentTemplates || license?.features.manageAppTemplates">
+      <mat-icon>style</mat-icon>
+      <span>Templates <i>(beta)</i></span>
+    </button> -->
+
+    <button mat-raised-button color="primary" [routerLink]="['/abc']" 
+            *ngIf="license?.features.abc">
+      <mat-icon>extension</mat-icon>
+      <span>ABC</span>
+    </button>
+
+    <button mat-raised-button color="primary" [routerLink]="['download']">
+      <mat-icon>download</mat-icon>
+      <span>Download</span>
+    </button>
+
+    <button mat-raised-button color="primary" [routerLink]="['/tags']">
+        <mat-icon>local_offer</mat-icon>
+        <span>Tags</span>
+    </button>
+
+    <button mat-raised-button color="primary" [routerLink]="['/program/report']">
+        <mat-icon>assessment</mat-icon>
+        <span>Reports <i>(beta)</i></span>
+    </button>
+  </div>
+
+  <div class="license-info-container">
+    <mat-card class="license-details">
+      <mat-card-content>
+        <table mat-table [dataSource]="licenseDetails">
+          <ng-container matColumnDef="property">
+            <td mat-cell *matCellDef="let element">{{element.property}}</td>
+          </ng-container>
+          <ng-container matColumnDef="value">
+            <td mat-cell *matCellDef="let element">{{element.value}}</td>
+          </ng-container>
+          
+          <tr mat-row *matRowDef="let row; columns: ['property', 'value']"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="license-usage">
+      <mat-card-content>
+        <table mat-table [dataSource]="licenseUsage">
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let element">{{element.type}}</td>
+          </ng-container>
+          <ng-container matColumnDef="used">
+            <th mat-header-cell *matHeaderCellDef>Used</th>
+            <td mat-cell *matCellDef="let element">{{element.used}}</td>
+          </ng-container>
+          <ng-container matColumnDef="remaining">
+            <th mat-header-cell *matHeaderCellDef>Remaining</th>
+            <td mat-cell *matCellDef="let element">{{element.remaining}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['type', 'used', 'remaining']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['type', 'used', 'remaining']"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

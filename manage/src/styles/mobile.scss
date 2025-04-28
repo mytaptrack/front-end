@@ -1,0 +1,73 @@
+
+.mobile-menu {
+    display:none;
+}
+.mobile-only {
+    display: none;
+}
+
+@media only screen 
+    and (width: 390px) 
+    and (height: 844px) 
+    and (-webkit-device-pixel-ratio: 3) { 
+    
+    .header-logo {
+        display: none;
+    }
+
+    .tab-navigation {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: flex;
+    }
+
+    .non-mobile {
+        display: none !important;
+    }
+
+    .mobile-only {
+        display: block;
+    }
+
+    .mat-mdc-form-field-infix {
+        width: auto !important;
+    }
+    .overview-chart-area {
+        display: block !important;
+    }
+
+    .overview-chart-area .chart-div {
+        display: block;
+        max-width:100% !important;
+        margin: 0px 1%;
+    }
+
+    .mat-toolbar-single-row {
+        padding: 0px !important;
+    }
+
+    .content-body mat-card {
+        margin: 1px;
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+
+
+    .content-body mat-toolbar {
+        display: block;
+    }
+
+    mat-drawer-content {
+        position: relative;
+    }
+
+    .table {
+        font-size: 10pt;
+    }
+
+    .mobile-flex {
+        display:flex;
+    }
+}

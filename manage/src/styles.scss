@@ -1,0 +1,113 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+body {
+    max-width: 100vw;
+}
+
+:root {
+    --selectedColor: #99bad6
+    --backgroundColor: #fff;
+    --backgroundColorDarker: #ddd;
+    --overlayColor: #fffc;
+    --headerBackgroundColor: #f0f8ff;
+    --headerBackgroundColorDarker: #99bad6;
+    --headerBackgroundShaded: #CCC6;
+    --headerTextColor: #40435E;
+    --dropdownTextColor: #f0f8ff;
+    --bubblesHex: #e7feff;
+    --realtimeBackgroundColor: #f8f4ff;
+    --actionOptionActiveColor: #0029AF;
+    --waitingColor: #FFDD1E;
+    --warningColor: #FFDD1E;
+    --successColor: #4BB210;
+    --linkItemColor: #007bff;
+    --errorOutline: #F00;
+    --errorBackground: #A00;
+    --disabledGroup: #CCC6;
+    --selected: #007bff66;
+    --selectedHover: #007bffaa;
+    --active-label-text-color: #3562e9aa;
+    --mat-tab-header-active-label-text-color: #001effaa;
+    --lightText: #aaa;
+    --milestone-opacity: .5;
+    --border: #40435E;
+    --table-line: rgba(0, 0, 0, 0.12);
+    --darkText: #40435E;
+
+    --dark2: rgba(0, 0, 0, 0.6);
+    --dark: rgba(0, 0, 0, 0.12);
+
+    --mtt-table-light: #fff;
+    --mtt-table-light-alt: #efefef;
+
+    --mtt-table-dark: #f0f8ff;
+    --mtt-table-dark-alt: #d8eafa;
+
+    --mtt-green: #6c6;
+    --mtt-green-darker: rgb(49, 99, 49);
+}
+
+$m2-mytaptrack-palette: (
+    50: #f0f8ff,
+    100: #f8f4ff,
+    200: #99bad6,
+    300: #0029AF,
+    400: #0029AF,
+    500: #0029AF,
+    600: #40435E,
+    700: rgba(0, 0, 0, 0.6),
+    800: #40435E,
+    900: #40435E,
+    contrast: (
+        50: #40435E,
+        100: #40435E,
+        200: #40435E,
+        300: #f0f8ff,
+        400: #f0f8ff,
+        500: #f0f8ff,
+        600: #f0f8ff,
+        700: #f0f8ff,
+        800: #f0f8ff,
+        900: #f0f8ff
+    )
+);
+
+$m2-mytaptrack-accent: (
+    50: #f0f8ff,
+    100: #f8f4ff,
+    200: #99bad6,
+    300: #0029AF,
+    400: #0029AF,
+    500: #0029AF,
+    600: #40435E,
+    700: rgba(0, 0, 0, 0.6),
+    800: #40435E,
+    900: #40435E,
+    contrast: (50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white)
+);
+
+$myapp-theme-primary: mat.m2-define-palette($m2-mytaptrack-palette, 500);
+$myapp-theme-accent: mat.m2-define-palette(mat.$m2-green-palette);
+$myapp-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$myapp-theme: mat.m2-define-light-theme((color: (primary: $myapp-theme-primary,
+                accent: $myapp-theme-accent,
+                warn: $myapp-theme-warn,
+            )));
+
+.mat-toolbar.mat-primary {
+    background-color: #f0f8ff;
+    color: rgba(0, 0, 0, 0.87); // Dark text for better contrast on light background
+}
+
+@include mat.all-component-themes($myapp-theme);

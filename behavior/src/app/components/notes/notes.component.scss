@@ -1,0 +1,49 @@
+textarea {
+    width: 100%;
+}
+
+.outOfSync {
+    border: red 2px solid;
+}
+
+input[type='checkbox'] {
+    margin-left: 10px;
+}
+
+textarea {
+    width: 100%;
+}
+
+.notes-loading {
+    max-height: 150px;
+    width: 100% !important;
+    text-align: center;
+}
+
+h3 mat-icon {
+    vertical-align: text-bottom;
+    margin-right: 3px;
+}
+
+.add-note-area {
+    margin: 5px 0px;
+    padding: 5px 0px;
+    border-top: 1px solid var(--headerTextColor);
+    border-bottom: 1px solid var(--headerTextColor);
+}
+.add-note-area textarea {
+    width: 100%;
+}
+.add-note-area button {
+    margin: 5px;
+}
+
+mat-form-field {
+    display:block;
+    width: auto;
+}
+
+.message-area {
+    min-height: 400px;
+    overflow-y: scroll;
+}

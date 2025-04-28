@@ -1,0 +1,24 @@
+<div class="container-fluid text-container message-area">
+    <div class="row">
+        <div class="col-12">
+            <div class="title">Notes:</div>
+            <textarea *ngIf="!print" [(ngModel)]="newNote"></textarea>
+            <div *ngIf="errorSaving" class="amplify-text--error">
+                An error occurred while saving the note <a class="link-item" (click)="save()">click here to try again</a>.
+            </div>
+            <div class="col-12" *ngIf="!print">
+                <button class="btn btn-primary" (click)="endNote()">
+                    <i class="fa fa-arrow-down" aria-hidden="true" *ngIf="!saving"></i>
+                    <i class="fa fa-circle-o-notch fa-spin" *ngIf="saving"></i>
+                    &nbsp;End Note
+                </button>
+                <button class="btn btn-primary" (click)="notes = null; load()"><i class="fa fa-refresh" [class.fa-spin]="notes == null" aria-hidden="true"></i> Refresh</button>
+            </div>
+            <div *ngIf="showPrevNotes">
+                <div *ngFor="let note of notes">
+                    <app-note [note]="note" [student]="student" (onDelete)="deleteNote(note)"></app-note>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

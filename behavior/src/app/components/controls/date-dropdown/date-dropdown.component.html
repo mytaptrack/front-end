@@ -1,0 +1,11 @@
+<button mat-icon-button [matMenuTriggerFor]="menu" class="d-print-none">
+    <mat-icon>calendar_today</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" class="date-dropdown-menu">
+    <div (click)="$event.stopPropagation()" class="date-selection-container">
+        <app-date-selection
+            (selected)="selectedChanged($event)">
+        </app-date-selection>
+    </div>
+</mat-menu>

@@ -1,0 +1,17 @@
+
+.interval-counter {
+    font-size: 20pt;
+    border-top: solid 1px var(--darkText);
+    border-bottom: solid 3px var(--darkText);
+    margin: 10px 0px;
+    padding: 10px;
+}
+
+.interval-flash {
+    background-color: var(--headerBackgroundColor);
+}
+
+.interval-options {
+    border:solid 1px;
+    background-color: var(--headerBackgroundColor);
+}

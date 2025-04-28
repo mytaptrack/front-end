@@ -1,0 +1,17 @@
+.tag {
+    display: inline-block;
+    background-color: var(--lightText);
+    color: var(--dropdownTextColor);
+    padding: 3px 12px;
+    margin: 0px 5px 5px 0px;
+    border-radius: 20px;
+}
+
+.group {
+    background-color: var(--linkItemColor);
+    color: var(--dropdownTextColor);
+}
+
+.tag-input {
+    margin-top: 5px;
+}

@@ -1,0 +1,34 @@
+<div class="tags-container">
+    <div *ngIf="!edit">
+        <mat-chip-listbox>
+            @for (keyword of ngModel; track keyword) {
+                <mat-chip-row (removed)="removeKeyword(keyword)">
+                    {{keyword}}
+                </mat-chip-row>
+            }
+        </mat-chip-listbox>
+    </div>
+    <!-- Add New Tag -->
+    <div *ngIf="edit" class="input-container" [class.error]="error">
+        <mat-form-field class="form-field full-width">
+            <mat-label>{{typeText}}</mat-label>
+            <mat-chip-grid #chipGrid [formControl]="formControl">
+                @for (keyword of ngModel; track keyword) {
+                    <mat-chip-row (removed)="remove(keyword)">
+                        {{keyword}}
+                        <button matChipRemove aria-label="'remove ' + keyword">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                }
+            </mat-chip-grid>
+            <input matInput
+                [(ngModel)]="newTag"
+                [placeholder]="'Add ' + typeText"
+                [matChipInputFor]="chipGrid"
+                (matChipInputTokenEnd)="addTag($event)"
+                (blur)="addTag({ value: newTag })"/>
+            <mat-hint>{{error}}</mat-hint>
+        </mat-form-field>
+    </div>
+</div>

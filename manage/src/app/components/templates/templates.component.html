@@ -1,0 +1,43 @@
+<div class="templates-container" *ngIf="!loading">
+  <mat-sidenav-container>
+    <!-- Left Panel -->
+    <mat-sidenav mode="side" opened class="sidenav-panel">
+      <div *ngIf="features.manageStudentTemplates">
+        <h2 class="mat-h2">Templates</h2>
+        <mat-nav-list>
+          <mat-list-item *ngFor="let item of studentTemplates" 
+                        [class.selected]="item == selected && item.name"
+                        (click)="setSelected(item)">
+            <span matListItemTitle>{{item.name}}</span>
+          </mat-list-item>
+          
+          <mat-list-item (click)="createNewStudent()">
+            <mat-icon matListItemIcon>add</mat-icon>
+            <span matListItemTitle>Add Student Template</span>
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </mat-sidenav>
+
+    <!-- Main Content Area -->
+    <mat-sidenav-content class="main-content">
+      <mat-card>
+        <mat-card-content>
+          <app-manage-student 
+            [template]="selected" 
+            [features]="features" 
+            (deleted)="studentRemoved()">
+          </app-manage-student>
+        </mat-card-content>
+      </mat-card>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<!-- Loading Spinner -->
+<div *ngIf="loading" class="loading-container">
+  <mat-progress-spinner 
+    mode="indeterminate" 
+    diameter="48">
+  </mat-progress-spinner>
+</div>

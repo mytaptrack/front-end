@@ -1,0 +1,50 @@
+.details {
+    padding: 5px;
+    position: relative;
+}
+
+.action-buttons {
+    margin-top: 24px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.target-section {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.target-content {
+    margin-top: 16px;
+    margin-left: 32px;
+}
+
+.warning-text {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+.status-text {
+    margin-top: 16px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-hint {
+    margin-bottom: 16px;
+    display: block;
+}
+
+.target-item {
+    display:inline-block;
+    margin: 10px;
+}

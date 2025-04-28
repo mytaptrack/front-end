@@ -1,0 +1,259 @@
+<mat-toolbar class="scroll-header no-print">
+    <h2>{{student?.displayName}} - Snapshot</h2>
+</mat-toolbar>
+
+<div class="container">
+    <!-- Date and Days Selection Row -->
+    <div class="row" *ngIf="!preview">
+        <!-- Date Selection -->
+        <div class="date-selector" *ngIf="restrictions.reports == 'Admin'">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Select Date</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="currentDay">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <!-- Days of Week Options -->
+        <div class="days-toggle">
+            <mat-button-toggle-group>
+                <mat-button-toggle *ngFor="let day of displayDays" 
+                                 [checked]="displayDay == day.date"
+                                 (change)="currentDay = day.date">
+                    <mat-icon *ngIf="day.dataSaved == 'saved'" class="success-icon">check_circle</mat-icon>
+                    <mat-icon *ngIf="day.dataSaved == 'modified'" class="warning-icon">pending</mat-icon>
+                    {{day.text}}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+
+    <!-- Action Buttons Row -->
+    <div class="actions-row no-print">
+        <button mat-button [matMenuTriggerFor]="reportsMenu">
+            <mat-icon>list</mat-icon>
+            Saved Reports
+        </button>
+        <mat-menu #reportsMenu="matMenu">
+            <button mat-menu-item *ngFor="let r of reportList" (click)="currentDay = r">
+                {{r}}
+            </button>
+        </mat-menu>
+
+        <button mat-raised-button color="primary" (click)="print()">
+            <mat-icon>print</mat-icon> Print
+        </button>
+
+        <button mat-raised-button color="primary" *ngIf="!preview" (click)="preview = !preview">
+            Review
+        </button>
+
+        <button mat-raised-button color="primary" 
+                *ngIf="preview && restrictions.reports == 'Admin'" 
+                (click)="preview = !preview">
+            Edit
+        </button>
+
+        <button mat-raised-button color="primary" 
+                *ngIf="restrictions.reports == 'Admin'" 
+                (click)="save()">
+            <mat-icon>save</mat-icon> Save
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Behaviors Table Section -->
+        <div class="behaviors-section no-print" *ngIf="!preview">
+            <mat-card>
+                <mat-card-content>
+                    <mat-checkbox [(ngModel)]="showLegend" class="mb-3">
+                        Show Legend
+                    </mat-checkbox>
+
+                    <table mat-table [dataSource]="behaviors" class="full-width">
+                        <!-- Show Column -->
+                        <ng-container matColumnDef="show">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox [(ngModel)]="showAll">Show</mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let behavior">
+                                <mat-checkbox [(ngModel)]="behavior.show"></mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <!-- Display Name Column -->
+                        <ng-container matColumnDef="displayName">
+                            <th mat-header-cell *matHeaderCellDef>Display Name</th>
+                            <td mat-cell *matCellDef="let behavior">
+                                <mat-form-field class="full-width">
+                                    <input matInput [(ngModel)]="behavior.displayText">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Summary Column -->
+                        <ng-container matColumnDef="summary">
+                            <th mat-header-cell *matHeaderCellDef>Summary</th>
+                            <td mat-cell *matCellDef="let behavior">
+                                <app-report-value 
+                                    [faces]="behavior.faces"
+                                    [snapshotConfig]="snapshotConfig"
+                                    [dayOffset]="weekdayOffset"
+                                    [allowSelection]="!hasTargetEval(behavior)">
+                                </app-report-value>
+                            </td>
+                        </ng-container>
+
+                        <!-- Stats Columns -->
+                        <ng-container matColumnDef="dayStats" *ngIf="showStats">
+                            <th mat-header-cell *matHeaderCellDef>Day/Day</th>
+                            <td mat-cell *matCellDef="let behavior">
+                                <ng-container *ngIf="behavior?.stats">
+                                    <div class="stats-container">
+                                        <span class="main-number">
+                                            {{getStatDisplayValue(behavior, behavior.stats.day.count)}}
+                                        </span>
+                                        <span class="sub-number">
+                                            ({{behavior.stats.day.modifier}}{{getStatDisplayValue(behavior, behavior.stats.day.delta)}})
+                                        </span>
+                                    </div>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="weekStats" *ngIf="showStats">
+                            <th mat-header-cell *matHeaderCellDef>Week/Week</th>
+                            <td mat-cell *matCellDef="let behavior">
+                                <ng-container *ngIf="behavior?.stats">
+                                    <div class="stats-container">
+                                        <span class="main-number">
+                                            {{getStatDisplayValue(behavior, behavior.stats.week.count)}}
+                                        </span>
+                                        <span class="sub-number">
+                                            ({{behavior.stats.week.modifier}}{{getStatDisplayValue(behavior, behavior.stats.week.delta)}})
+                                        </span>
+                                    </div>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <!-- Observations Section -->
+        <div class="observations-section no-print" *ngIf="!preview">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Week's observations</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="editor-container">
+                        <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
+                        <ngx-editor
+                            [editor]="editor"
+                            [(ngModel)]="message"
+                            [disabled]="false"
+                            [placeholder]="'Type here...'">
+                        </ngx-editor>
+                    </div>
+
+                    <mat-card class="notes-card">
+                        <mat-card-header>
+                            <mat-card-title>Notes (Reference Only)</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="notes-area">
+                            <app-note *ngFor="let note of notes" [student]="student" [note]="note"></app-note>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+    <!-- Preview Section -->
+    <div class="preview-section hide-items show-items" *ngIf="preview">
+        <mat-card>
+            <mat-card-content>
+                <div class="print-header">
+                    <img *ngIf="student?.license == '2022030410775b87a78d4df98b0026ec42fe1afd'" 
+                         src="assets/images/customers/logo-relife.png"/>
+                    <h2>Weekly report</h2>
+                    <div *ngIf="student">
+                        <strong>Student:</strong> {{student.details.firstName}} {{student.details.lastName}}
+                    </div>
+                    <div>
+                        <strong>Date:</strong> {{displayDay}}
+                    </div>
+                </div>
+                <div class="snapshot-body">
+                    <div class="snapshot-scores">
+                        <table class="table week-report">
+                            <thead>
+                                <th>Summary</th>
+                                <th class="header-day" *ngFor="let day of displayDays">{{day.text}}</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let behavior of getShownBehaviors()">
+                                    <td class="week-name">
+                                        {{behavior.displayText}}
+                                    </td>
+                                    <td class="text-center" *ngFor="let day of displayDays; index as i">
+                                        <app-report-value [faces]="behavior.faces" [snapshotConfig]="snapshotConfig" [dayOffset]="day.offset" [allowSelection]="false"></app-report-value>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div *ngIf="showLegend" class="legend">
+                            <label>Legend</label>
+                            <table class="table week-report">
+                                <thead>
+                                    <tr>
+                                        <th>Legend</th>
+                                        <th *ngFor="let leg of snapshotConfig?.measurements">
+                                            <app-report-value [faces]="[{ face: leg.name }]" [snapshotConfig]="snapshotConfig" [dayOffset]="0" [allowSelection]="false"></app-report-value>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let leg of getLegend()">
+                                        <td>
+                                            {{getDisplayName(leg)}}
+                                            <span *ngIf="getTimeLegend(leg)">
+                                                <br/>
+                                                {{getTimeLegend(leg)}}
+                                            </span>
+                                        </td>
+                                        <td *ngFor="let item of leg?.measurements; let i = index">
+                                            {{getLegendSupplement(leg, item, i, 'goals')}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="snapshot-observations">
+                        <label>Observations</label>
+                        <div [innerHTML]="getMessage()"></div>
+                    </div>
+                </div>
+                <div class="col-12" style="margin-top:100px;border-top: solid #000 1px">
+                    powered by <img style="width:150px;vertical-align:bottom" src="assets/images/sm-text-logo.gif"/>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" *ngIf="saving || loading">
+    <mat-progress-spinner mode="indeterminate" diameter="50">
+    </mat-progress-spinner>
+    <span *ngIf="saving">Saving...</span>
+</div>

@@ -1,0 +1,85 @@
+<div class="behaviors-container" *ngIf="restrictions && selected">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Behaviors</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+            <div class="grid-container">
+                <!-- Left side list -->
+                <div class="left-panel">
+                    <!-- Active Behaviors -->
+                    <mat-nav-list>
+                        <mat-list-item *ngFor="let item of activeBehaviors; let i = index"
+                            [class.selected]="item.id === selected.id"
+                            [id]="'student-setting-behavior-' + i"
+                            (click)="selected = item">
+                            <div class="list-item-content">
+                                <span>{{item.name}}</span>
+                                <mat-icon *ngIf="item.isDuration">schedule</mat-icon>
+                            </div>
+                        </mat-list-item>
+
+                        <mat-list-item *ngIf="administrator"
+                            [class.selected]="!selected.id"
+                            (click)="create()">
+                            <div class="list-item-content">
+                                <mat-icon>add</mat-icon>
+                                <span>Add New Behavior</span>
+                            </div>
+                        </mat-list-item>
+                    </mat-nav-list>
+
+                    <!-- Baseline Behaviors -->
+                    <ng-container *ngIf="baselineBehaviors.length > 0">
+                        <h3 class="mat-subheader">Baseline</h3>
+                        <mat-nav-list>
+                            <mat-list-item *ngFor="let item of baselineBehaviors; let i = index"
+                                [class.selected]="item.id === selected.id"
+                                [id]="'student-setting-behavior-base-' + i"
+                                (click)="selected = item">
+                                <div class="list-item-content">
+                                    <span>{{item.name}}</span>
+                                    <mat-icon *ngIf="item.isDuration">schedule</mat-icon>
+                                </div>
+                            </mat-list-item>
+                        </mat-nav-list>
+                    </ng-container>
+
+                    <!-- Archived Behaviors -->
+                    <ng-container *ngIf="archivedBehaviors?.length">
+                        <div class="archived-section">
+                            <button mat-button (click)="showArchived = !showArchived">
+                                {{showArchived ? 'Hide' : 'Show'}} Archived Behaviors
+                            </button>
+
+                            <ng-container *ngIf="showArchived">
+                                <h3 class="mat-subheader">Archived</h3>
+                                <mat-nav-list>
+                                    <mat-list-item *ngFor="let item of archivedBehaviors; let i = index"
+                                        [class.selected]="item.id === selected.id"
+                                        [id]="'student-setting-behavior-arch-' + i"
+                                        (click)="selected = item">
+                                        <div class="list-item-content">
+                                            <span>{{item.name}}</span>
+                                            <mat-icon *ngIf="item.isDuration">schedule</mat-icon>
+                                        </div>
+                                    </mat-list-item>
+                                </mat-nav-list>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <!-- Right side details -->
+                <div class="right-panel">
+                    <app-behavior 
+                        [selected]="selected"
+                        [features]="features"
+                        [restrictions]="student.restrictions">
+                    </app-behavior>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,39 @@
+<div *ngIf="selected">
+    <div class="form-group">
+        <label>Name</label>
+        <input [(ngModel)]="selected.name" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label>Tags</label>
+        <app-mtt-tags [(tagField)]="selected.tags" [edit]="false"></app-mtt-tags>
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="selected.desc" class="form-control"></textarea>
+    </div>
+    <div>
+        <h2>Tracking</h2>
+    </div>
+    <table class="table">
+        <thead>
+            <th style="width:100px">Order</th>
+            <th>Behavior Name</th>
+            <th>Track</th>
+            <th *ngIf="features.abc">ABC</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let track of selected.behaviors">
+                <td><input type="number" class="form-control" [(ngModel)]="track.order"/></td>
+                <td>
+                    {{track.name}}
+                </td>
+                <td class="check-row"><input type="checkbox" [(ngModel)]="track.track"/></td>
+                <td *ngIf="features.abc" class="check-row"><input type="checkbox" [(ngModel)]="track.abc"/></td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <button class="btn btn-primary" (click)="save()"><mat-icon *ngIf="!saving">save</mat-icon><i class="fa" [class.fa-circle-o-notch]="saving" [class.fa-spin]="saving"></i> Save</button>
+        <button class="btn btn-secondary" (click)="cancel()"><mat-icon>close</mat-icon> Cancel</button>
+    </div>
+</div>
