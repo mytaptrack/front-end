@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -25,4 +26,11 @@ export class AppComponent {
       }
     },
   };
+
+  constructor() {
+    const base = window.document.getElementById('baseHref')
+      if(base) {
+        base.setAttribute('href', environment.routes.behavior);
+      }
+  }
 }
