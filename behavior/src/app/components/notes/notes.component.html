@@ -8,8 +8,8 @@
             </div>
             <div class="col-12" *ngIf="!print">
                 <button class="btn btn-primary" (click)="endNote()">
-                    <i class="fa fa-arrow-down" aria-hidden="true" *ngIf="!saving"></i>
-                    <i class="fa fa-circle-o-notch fa-spin" *ngIf="saving"></i>
+                    <mat-icon *ngIf="!saving">arrow_downward</mat-icon>
+                    <mat-spinner *ngIf="saving"></mat-spinner>
                     &nbsp;End Note
                 </button>
                 <button class="btn btn-primary" (click)="notes = null; load()"><i class="fa fa-refresh" [class.fa-spin]="notes == null" aria-hidden="true"></i> Refresh</button>

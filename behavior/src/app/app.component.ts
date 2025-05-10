@@ -7,6 +7,7 @@ import {
   StudentSummary, NotificationDetailsTeam, Notification,
   moment
 } from '.';
+import { environment } from '../environments/environment';
 
 declare let gtag: Function;
 
@@ -102,6 +103,11 @@ export class AppComponent {
         }
       });
       this.ngOnInit();
+
+      const base = window.document.getElementById('baseHref')
+      if(base) {
+        base.setAttribute('href', environment.routes.behavior);
+      }
     }
   
   ngOnInit() {

@@ -172,13 +172,13 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons" *ngIf="administrator && !onlyShowDelete">
-        <button mat-raised-button color="primary" (click)="save()">Save</button>
-        <button mat-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon> Save</button>
+        <button mat-button (click)="cancel()"><mat-icon>cancel</mat-icon> Cancel</button>
         <button mat-raised-button color="warn" *ngIf="!selected.isArchived" (click)="archive()">
-            Archive
+            <mat-icon>archive</mat-icon> Archive
         </button>
         <button mat-raised-button color="accent" *ngIf="selected.isArchived" (click)="reactivate()">
-            Reactivate
+            <mat-icon>unarchive</mat-icon> Reactivate
         </button>
     </div>
 

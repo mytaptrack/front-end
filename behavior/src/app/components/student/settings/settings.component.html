@@ -7,18 +7,18 @@
                         <mat-icon>arrow_back</mat-icon> <span>Back to Dashboard</span>
                     </a>
                 </div>
-                <div class="col-6">
-                    <h1>
-                        {{student.details.firstName}} {{student.details.lastName}}
-                    </h1>
+                <div class="col-12">
+                    <mat-toolbar class="scroll-header no-print">
+                        <h2>{{student?.displayName}} - Snapshot</h2>
+                    </mat-toolbar>
                     <div class="hint" *ngIf="student.details.nickname">
-                        Nickname: {{student.details.nickname}}
+                        Name: {{student.details.firstName}} {{student.details.lastName}}
                     </div>
                     <div *ngIf="student.license">
-                        <div class="hint" *ngIf="student.license">
+                        <div class="hint" *ngIf="student.license && licenseType != 'Dedicated License'">
                             License: {{licenseType}} <a class="hint a-link" *ngIf="allowLicenseUpgrade()" (click)="applyLicense(true)">(Convert to Dedicated License)</a>
                         </div>
-                        <div class="hint" *ngIf="student.license">
+                        <div class="hint" *ngIf="student.license && nearExpiration">
                             Expiration: {{student.licenseDetails.expiration}}
                         </div>
                     </div>

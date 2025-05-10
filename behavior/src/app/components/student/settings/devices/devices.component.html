@@ -20,14 +20,14 @@
                             </div>
                         </mat-list-item>
 
-                        <mat-list-item *ngIf="administrator"
+                        <!-- <mat-list-item *ngIf="administrator"
                             [class.selected]="selected && !selected.isApp && selected.isNew"
                             id="'student-setting-devices-track-new'"
                             (click)="create()">
                             <div class="list-item-content">
                                 <mat-icon>add</mat-icon> Register Track 2.0
                             </div>
-                        </mat-list-item>
+                        </mat-list-item> -->
 
                         <mat-list-item *ngIf="administrator"
                             id="student-setting-devices-app-new"
@@ -42,9 +42,6 @@
 
                 <!-- Right side details -->
                 <div class="right-panel">
-                    <div *ngIf="selected && !selected.isApp && !qrCode">
-                        <app-track-registration [selected]="selected" [administrator]="administrator" [activeBehaviors]="activeBehaviors"></app-track-registration>
-                    </div>
                     <div *ngIf="selected && selected.isApp">
                         <device-app *ngIf="!templatesOnly" [hideName]="false" [student]="student" [selected]="selected" [administrator]="administrator" [abcEnabled]="abcEnabled" [groupsEnabled]="false" (onSelectedChanged)="setSelection($event)" [readOnly]="readonly"></device-app>
                     </div>

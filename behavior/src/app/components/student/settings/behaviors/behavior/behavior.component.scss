@@ -3,6 +3,16 @@
     position: relative;
 }
 
+app-loading {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    background: #fff;
+    z-index: 200;
+}
+
 .action-buttons {
     margin-top: 24px;
     display: flex;

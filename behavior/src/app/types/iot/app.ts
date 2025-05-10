@@ -91,7 +91,7 @@ export class AppClass extends IoTDeviceClass {
     async getToken() {
         this.setLoading(true);
         try {
-            const result = await this.api.getStudentAppTokenV2(this.studentId, this.dsn);
+            const result = await this.api.getStudentAppQRCode(this.studentId, this.dsn);
             this.token = result.token;    
         } finally {
             this.setLoading(false);

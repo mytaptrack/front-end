@@ -40,6 +40,19 @@ export class SettingsComponent implements OnInit {
   public features: LicenseFeatures;
   public restrictions: UserSummaryRestrictions;
 
+  get nearExpiration() {
+    if(!this.student?.licenseDetails) {
+      return true;
+    }
+
+    const date = moment(this.student.licenseDetails.expiration);
+    const now = moment();
+    if(date.subtract(30, 'd').isBefore(now)) {
+      return true;
+    }
+    return false;
+  }
+
   public get licenseType() {
     if(!this.student?.licenseDetails || (
       this.student.licenseDetails &&

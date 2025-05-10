@@ -27,7 +27,6 @@ export class BehaviorsComponent implements OnInit {
   public currentResponse: StudentResponse;
   public currentResponseStopDur: boolean;
   public responseNew: boolean;
-  public reportingOn = environment.reporting;
   public features: LicenseFeatures;
   public snapshotConfig: SnapshotConfig;
   public administrator: boolean;

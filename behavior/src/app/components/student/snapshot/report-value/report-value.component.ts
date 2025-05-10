@@ -127,6 +127,8 @@ export class ReportValueComponent {
 
     return `fa-${face}-o`;
   }
+
+
   getFaceFromText(val: string) {
     if(!val) {
       return '';
@@ -134,7 +136,15 @@ export class ReportValueComponent {
     
     let face = val.slice(1);
 
-    return `fa-${face}-o`;
+    if(face == 'smile') {
+      return 'mood';
+    } else if(face == 'meh') {
+      return 'sentiment_neutral';
+    } else if(face == 'frown') {
+      return 'sentiment_dissatisfied';
+    }
+
+    return face;
   }
   setFace(value: string) {
     if(!this.faces) {

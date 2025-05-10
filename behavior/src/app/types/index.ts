@@ -30,7 +30,8 @@ export {
     DevicePutRequest, StudentNotesPut, PutSettingsRequest, SubscriptionPostRequest, UserPutRequest,
     TeamDeleteRequest, TeamPostRequest, TeamPutRequest, SubscriptionDeleteRequest, ActivityGroupSummary,
     StudentCreateRequest, UserSubscriptionResponse, LicenseFeatures, UserPreferences, StudentBehaviorEdit,
-    TrackedBehavior, IoTDeviceEventType, StudentSummaryReportLegend, StudentSummaryReportBehavior, NotificationDetails
+    TrackedBehavior, IoTDeviceEventType, StudentSummaryReportLegend, StudentSummaryReportBehavior, NotificationDetails,
+    QLServerSettings
 } from '@mytaptrack/types';
 
 import { default as momentFn } from 'moment-timezone';

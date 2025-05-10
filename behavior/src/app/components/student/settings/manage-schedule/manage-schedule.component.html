@@ -88,27 +88,18 @@
                     <a href="assets/samples/SampleSchedule.xlsx">Sample Schedule</a>
                 </div>
             </div>
+            <mat-form-field>
+                <label>Start Change On</label>
+                <input matInput type="date" [matDatepicker]="picker" [(ngModel)]="fromDate"/>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
             <div class="col-12" *ngIf="!readOnly">
                 <div class="dropup date-dropdown d-print-none">
-                    <button class="btn btn-primary" (click)="changeOnDate()">Save</button>
-                    <div class="dropdown-menu" style="display:inline-block" *ngIf="showDatePickerDropdown">
-                        <ngb-datepicker #dp [startDate]="fromDate" (dateSelect)="onDateSelection($event)" [displayMonths]="1" [dayTemplate]="t" outsideDays="show" firstDayOfWeek="7">
-                        </ngb-datepicker>
-                        
-                        <div class="text-center">
-                            <button class="btn btn-primary" (click)="saveOnDate()">Ok</button>
-                            <button class="btn btn-primary" (click)="showDatePickerDropdown = false">Cancel</button>    
-                        </div>
-
-                        <ng-template #t let-date let-focused="focused">
-                            <span class="custom-day" [class.focused]="focused" [class.range]="isDateSelected(date)" [class.outsideMonth]="isOutsideMonth(date)" [class.faded]="hoveredDate == date" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-                            {{ date.day }}
-                            </span>
-                        </ng-template>
-                    </div>
+                    <button mat-raised-button color="primary" (click)="saveOnDate()"><mat-icon>save</mat-icon> Save</button>
                 </div>
-                <button class="btn btn-primary" (click)="cancel()">Cancel</button>
-                <button *ngIf="schedule" class="btn btn-primary" (click)="delete()">Delete</button>
+                <button mat-raised-button color="secondary" (click)="cancel()"><mat-icon>cancel</mat-icon> Cancel</button>
+                <button mat-raised-button color="warn" *ngIf="schedule" (click)="delete()"><mat-icon>delete</mat-icon> Delete</button>
             </div>
         </div>
     </div>

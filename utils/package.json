@@ -1,0 +1,21 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "description": "Utilities used for setup of configurations",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "scripts": {
+    "test": "test",
+    "build": "npx ts-node src/build-config.ts"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.11.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.803.0"
+  }
+}

@@ -193,16 +193,19 @@
                                 <button mat-raised-button 
                                     color="primary"
                                     (click)="save()">
+                                    <mat-icon>save</mat-icon>
                                     Save
                                 </button>
                                 <button mat-button
                                     (click)="cancel()">
+                                    <mat-icon>cancel</mat-icon>
                                     Cancel
                                 </button>
                                 <button mat-raised-button
                                     color="warn"
                                     *ngIf="!isNew"
                                     (click)="remove()">
+                                    <mat-icon>delete</mat-icon>
                                     Remove
                                 </button>
                             </div>

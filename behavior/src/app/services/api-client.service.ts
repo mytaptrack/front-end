@@ -25,10 +25,7 @@ import { User, ReportDetails, ActivityGroupDetails, UserSubscriptionResponse,
   DeviceRegisterPutRequest, TrackDeviceActionRequest, StudentSubscriptions, 
   NotificationDetailsTeam, PutDocumentRequest, StudentBulkPut, StudentDocument, LicenseDisplayTagsPut, ManageAppRenamePostRequest,
   StudentExcludeIntervalPutRequest, moment,
-  QLStudentNote,
-  QLStudentNoteRequest,
-  QLStudentUpdateInput,
-  QLStudent
+  QLStudentNote, QLStudentNoteRequest, QLStudentUpdateInput, QLStudent, QLServerSettings
 } from '../types';
 import { del, generateClient, get, GraphQLQuery, GraphQLSubscription, post, put } from '@aws-amplify/api';
 
@@ -304,8 +301,8 @@ export class ApiClientService {
   async getStudentAppV2(studentId: string, dsn: string, deviceId?: string) {
     return (await this.get<IoTDevice>(`v2/student/devices/app?studentId=${studentId}&appId=${dsn}&deviceId=${deviceId}`));
   }
-  async getStudentAppTokenV2(studentId: string, dsn: string): Promise<{id: string; token: string;}> {
-    return (await this.get<{id: string; token: string;}>(`v2/student/devices/app/token?studentId=${studentId}&appId=${dsn}`));
+  async getStudentAppQRCode(studentId: string, dsn: string): Promise<{id: string; token: string;}> {
+    return (await this.get<{id: string; token: string;}>(`v2/student/devices/app/qrcode?studentId=${studentId}&appId=${dsn}`));
   }
   async deleteStudentAppV2(studentId: string, dsn: string) {
     await this.delete('v2/student/devices/app', { studentId, dsn, isApp: true } as DeleteDeviceRequest);
@@ -529,7 +526,8 @@ export class ApiClientService {
           path: subpath,
           options: {
             headers: {
-              Authorization: 'Bearer ' + this.auth.token
+              Authorization: 'Bearer ' + this.auth.token,
+              origin: window.location.origin
             }
           }
         });
@@ -560,9 +558,9 @@ export class ApiClientService {
         subpath = this.processImpersonate(subpath);
 
         const putResult = put({
-          apiName: 'api', 
-          path: subpath, 
-          options: { 
+          apiName: 'api',
+          path: subpath,
+          options: {
             body: content,
             headers: {
               Authorization: 'Bearer ' + this.auth.token
@@ -844,6 +842,15 @@ export class ApiClientService {
     return null;
   }
 
+  getServerSettings() {
+    return this.gqlQuery<QLServerSettings>(`query getServerSettings {
+      getServerSettings {
+        token
+      }
+    }`, undefined, 'getServerSettings');
+  
+  }
+
   private async gqlQuery<T>(query: string, params: any, resultField: string): Promise<T> {
     let retry = 0;
     let error;
@@ -918,12 +925,15 @@ function throwError(err: ErrorMessage, client: ApiClientService) {
     });
   }
   if(err.message) {
+    console.log('message', err);
     throw new WebError(err.message, err.stack);
   }
   if(err.statusText) {
+    console.log('status text', err);
     throw new WebError(err.statusText, err.stack);
   }
   if(typeof err.error == 'string') {
+    console.log('error', err);
     throw new WebError(err.error as string, err.stack);
   }
 

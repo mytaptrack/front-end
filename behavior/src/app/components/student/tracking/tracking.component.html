@@ -70,7 +70,7 @@
                                 <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!behavior.isDuration">
                                     <button class="btn btn-large btn-primary" (click)="behavior.trackEvent()">
                                         <mat-icon *ngIf="!behavior.saving">bolt</mat-icon>
-                                        <i class="fa fa-circle-o-notch fa-spin" *ngIf="behavior.saving"></i>
+                                        <mat-spinner *ngIf="behavior.saving"></mat-spinner>
                                         &nbsp;Track
                                     </button>
                                 </div>
@@ -91,7 +91,7 @@
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!behavior.isDuration">
                         <button class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">bolt</mat-icon>
-                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="behavior.saving"></i>
+                            <mat-spinner *ngIf="behavior.saving"></mat-spinner>
                             &nbsp;Track
                         </button>
                     </div>

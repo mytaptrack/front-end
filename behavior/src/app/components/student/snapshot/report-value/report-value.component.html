@@ -6,7 +6,7 @@
     <mat-icon *ngIf="isFace()" 
               [style.color]="getFaceColor(behavior)"
               [class.large]="true">
-        {{getFaceIconName()}}
+        {{getFaceFromText(face)}}
     </mat-icon>
 </div>
 
@@ -19,9 +19,7 @@
             </span>
             <mat-icon *ngIf="isFace()" 
                       [style.color]="getFaceColor(behavior)"
-                      [class.large]="true">
-                {{getFaceIconName()}}
-            </mat-icon>
+                      [class.large]="true">{{getFaceFromText(face)}}</mat-icon>
         </mat-select-trigger>
         
         <mat-option *ngFor="let item of snapshotConfig.measurements" 
@@ -30,7 +28,7 @@
             <span *ngIf="!isTextFace(item.name)">{{item.name}}</span>
             <mat-icon *ngIf="isTextFace(item.name)" 
                       [class.large]="true">
-                {{getFaceIconNameFromText(item.name)}}
+                {{getFaceFromText(item.name)}}
             </mat-icon>
         </mat-option>
     </mat-select>

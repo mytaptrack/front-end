@@ -79,12 +79,18 @@
                             color="primary"
                             id="student-setting-device-support-save"
                             (click)="save()">
+                            <mat-icon *ngIf="!isSaving">save</mat-icon>
+                            <mat-progress-spinner *ngIf="isSaving"
+                              mode="indeterminate"
+                              class="save-spinner"
+                              diameter="20"></mat-progress-spinner>
                             Save
                         </button>
                         
                         <button mat-button
                             id="student-setting-device-support-cancel"
                             (click)="cancel()">
+                            <mat-icon>cancel</mat-icon>
                             Cancel
                         </button>
                         
@@ -93,6 +99,7 @@
                             id="student-setting-device-support-remove"
                             *ngIf="!isNew()"
                             (click)="remove()">
+                            <mat-icon>delete</mat-icon>
                             Remove
                         </button>
                     </div>

@@ -1,7 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { 
   AppClass, IoTDeviceClass, IoTDeviceCollection, IoTDeviceEvent, 
-  StudentBehavior, StudentResponse, StudentClass 
+  StudentBehavior, StudentResponse, StudentClass, 
+  ApiClientService
 } from '../../../../..';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -47,6 +48,7 @@ export class DeviceAppComponent implements OnInit {
   public selected: AppClass;
   public loading: boolean = true;
   public qrToken: string;
+  public systemQr: string;
   public qrExpires: number = 1;
   @Output('onSelectedChanged') onSelectedChange = new EventEmitter<IoTDeviceClass>();
   @Input() public hideName: boolean;
@@ -73,7 +75,7 @@ export class DeviceAppComponent implements OnInit {
     return columns;
   }
 
-  constructor() { }
+  constructor(private api: ApiClientService) { }
 
   ngOnInit(): void {
     console.log('Loading app');
@@ -198,8 +200,11 @@ export class DeviceAppComponent implements OnInit {
   async generateQrCode() {
     this.setLoading(true);
     try {
+      const settings = await this.api.getServerSettings();
+      this.systemQr = settings.token;
       await this.selected.getToken();
     } catch (err) {
+      console.error(err);
       alert(err.message);
     }
     this.setLoading(false);

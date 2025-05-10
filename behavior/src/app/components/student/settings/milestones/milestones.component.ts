@@ -62,15 +62,20 @@ export class MilestonesComponent implements OnInit {
     return this.selected.isNew;
   }
 
+  isSaving = false;
+  async setSaving(val: boolean) {
+    this.isSaving = val;
+  }
+
   async save() {
-    this.setLoading(true);
+    this.setSaving(true);
     try {
       await this.selected.save();
     } catch(err) {
       console.log(err);
       alert(err.message);
     }
-    this.setLoading(false);
+    this.setSaving(false);
   }
 
   cancel() {

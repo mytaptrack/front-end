@@ -111,7 +111,8 @@
   },
   "dependencies": {
     "@angular/material-moment-adapter": "^19.1.2",
-    "@mytaptrack/types": "^2.0.41",
+    "@mytaptrack/types": "^2.0.46",
+    "angularx-qrcode": "^19.0.0",
     "npm": "^11.1.0"
   }
 }

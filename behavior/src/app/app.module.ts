@@ -44,14 +44,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { AbcCollectionComponent } from './components/abc-collection/abc-collection.component';
 import { DownloadComponent } from './components/student/download/download.component';
 
-import { MatMomentDateModule, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatMomentDateModule, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
@@ -78,8 +78,22 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NotesComponent } from './components/notes/notes.component';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 AuthClientService.setEnvironment(environment);
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 const providers: Provider[] = [ CookieService ];
 providers.push({provide: ErrorHandler, useClass: ErrorHandlingService },
@@ -114,6 +128,7 @@ providers.push({provide: ErrorHandler, useClass: ErrorHandlingService },
     ReportValueComponent,
     TimeInputComponent,
     NoteComponent,
+    NotesComponent,
     EditDropdownComponent,
     DateDropdownComponent,
     DateSelectionComponent,
@@ -167,10 +182,11 @@ providers.push({provide: ErrorHandler, useClass: ErrorHandlingService },
     MatButtonToggleModule,
     MatDialogModule,
     DragDropModule,
+    QRCodeComponent
   ],
   exports: [
   ],
-  providers,
+  providers: [provideMomentDateAdapter(MY_FORMATS)],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

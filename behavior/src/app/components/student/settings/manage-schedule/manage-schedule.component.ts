@@ -123,7 +123,7 @@ export class ManageScheduleComponent implements OnInit {
     } else {
       this.currentCategory = this.scheduleCategories.find(x => x.name === this.categoryName);
       this.version = this.version? this.version : this.currentCategory.history[0].start;
-      const versionString = this.version.format('yyyy-MM-DD');
+      const versionString = (this.version ?? moment()).format('yyyy-MM-DD');
       this.onScheduleSelected(versionString);
     }
   }

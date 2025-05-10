@@ -102,6 +102,7 @@
                                     </div>
                                     <div>
                                         <mat-checkbox [id]="'student-setting-device-app-abc-' + i"
+                                            *ngIf="behavior.event.track"
                                             [(ngModel)]="behavior.event.abc"
                                             [disabled]="readonly" />
                                     </div>
@@ -117,12 +118,14 @@
                         color="primary"
                         id="student-setting-device-app-save"
                         (click)="save()">
+                        <mat-icon>save</mat-icon>
                         Save
                     </button>
                     <button mat-button
                         id="student-setting-device-app-cancel"
                         *ngIf="!selected.isNew"
                         (click)="cancel()">
+                        <mat-icon>cancel</mat-icon>
                         Cancel
                     </button>
                     <button mat-raised-button
@@ -130,6 +133,7 @@
                         id="student-setting-device-app-remove"
                         *ngIf="!selected.isNew"
                         (click)="remove()">
+                        <mat-icon>delete</mat-icon>
                         Remove
                     </button>
                 </div>
@@ -138,7 +142,7 @@
             <!-- QR Code Display -->
             <div *ngIf="selected.token" class="qr-section">
                 <div id="qrCodeArea">
-                    <div id="printTarget" class="print-content">
+                    <div id="printTarget">
                         <div class="header">
                             <h1 class="title-with-logo">
                                 <img id="setup-logo" height="45" src="/assets/images/logo-dark.gif"/>
@@ -183,6 +187,15 @@
                         </mat-card>
 
                         <div class="qr-code-container">
+                            <h2>App Configuration QR Code</h2>
+                            <qrcode [qrdata]="systemQr"
+                                [width]="200"
+                                [errorCorrectionLevel]="'M'"
+                                [elementType]="'svg'">
+                            </qrcode>
+                        </div>
+                        <div class="qr-code-container">
+                            <h2>Student QR Code</h2>
                             <qrcode [qrdata]="selected.token"
                                 [width]="200"
                                 [errorCorrectionLevel]="'M'"

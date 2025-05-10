@@ -5005,3 +5005,22 @@ $myapp-theme: mat.m2-define-light-theme((color: (primary: $myapp-theme-primary,
   background-color: var(--headerBackgroundColor);
   border: solid 1px var(--actionOptionActiveColor);
 }
+
+
+button mat-progress-spinner {
+  margin: 0px;
+  display: inline-block !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
+// style for a button with an attribute color=primary
+button[color="primary"] mat-icon {
+  color: #fff;
+  stroke: #fff;
+}
+
+.save-spinner circle {
+  padding-top: 2px;
+  stroke: #fff !important;
+}
