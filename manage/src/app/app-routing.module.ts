@@ -10,6 +10,7 @@ import { ManageStudentsComponent } from './components/students/students.componen
 import { TagManagementComponent } from './components/tag-management/tag-management.component';
 import { AuthClientService } from './services';
 import { environment } from 'src/environments/environment';
+import { LicenseComponent } from './components/license/license.component';
 
 AuthClientService.setEnvironment(environment);
 
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'abc', component: AbcManagerComponent },
   { path: 'students', component: ManageStudentsComponent },
   { path: 'tags', component: TagManagementComponent },
+  { path: 'license', component: LicenseComponent },
   { path: '**', component: ConsoleComponent },
 ];
 

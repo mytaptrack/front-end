@@ -209,7 +209,6 @@ export class BehaviorComponent implements OnInit {
   public frequencyTarget: TargetProperty;
   public durationTarget: TargetProperty;
   public administrator: boolean;
-  public reportingOn = environment.reporting;
   public loading: boolean;
   public get onlyShowDelete() { return this.selected instanceof StudentTemplateBehaviorClass; }
   private _selected: StudentBehaviorClass | StudentTemplateBehaviorClass;

@@ -47,6 +47,7 @@ import { BehaviorsComponent } from './components/templates/student/behaviors/beh
 import { BehaviorComponent } from './components/templates/student/behaviors/behavior/behavior.component';
 import { ResponseTrackingComponent } from './components/templates/student/response-tracking/response-tracking.component';
 import { AbcComponent } from './components/templates/student/abc/abc.component';
+import { LicenseComponent } from './components/license/license.component';
 
 @NgModule({ 
     declarations: [
@@ -69,6 +70,7 @@ import { AbcComponent } from './components/templates/student/abc/abc.component';
         BehaviorsComponent,
         BehaviorComponent,
         ResponseTrackingComponent,
+        LicenseComponent
     ],
     bootstrap: [
         AppComponent

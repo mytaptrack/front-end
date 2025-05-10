@@ -1,0 +1,57 @@
+<div *ngIf="license">
+    <div>
+        <mat-form-field>
+            <label>License</label>
+            <input matInput [ngModel]="license.license"/>
+        </mat-form-field>
+
+        <mat-form-field>
+            <label>Expiration</label>
+            <input matInput type="date" [ngModel]="expiration"/>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.abc"> ABC</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.appGroups"> App Groups</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.manageAppTemplates"> App Templates</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.browserTracking"> Browser Tracking</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.behaviorTargets"> Behavior Targets</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.dashboard"> Dashboard</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.devices"> Devices</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.documents"> Documents</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.download"> Download</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.emailTextNotifications"> Email/Text/Dashboard Notifications</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.intervalWBaseline"> Interval Tracking w/ Baseline</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.manage"> Manage</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.manageResponses"> Manage Responses</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.notifications"> Notifications</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.response"> Response Tracking</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.schedule"> Schedule</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.snapshot"> Snapshot</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.manageStudentTemplates"> Student Templates</mat-checkbox>
+        <mat-checkbox color="primary" [(ngModel)]="license.features.supportChanges"> Support Changes</mat-checkbox>
+    </div>
+    <div>
+        <mat-form-field class="col-static">
+            <mat-label>Intensity: &nbsp;</mat-label>
+            <input matInput type="number" [(ngModel)]="license.features.intensity"/>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field class="col-static  ">
+            <mat-label>Snapshot Measurements</mat-label>
+            <textarea matInput class="form-control" [(ngModel)]="license.snapshotConfigNames" rows="4"></textarea>
+        </mat-form-field>
+    </div>
+    <div>
+        <button mat-raised-button color="primary">
+            <mat-icon>save</mat-icon>
+            Save
+        </button>
+        <a mat-raised-button color="secondary" routerLink="/">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+        </a>
+    </div>
+</div>

@@ -33,6 +33,12 @@ export class UserClass {
     get licenseDetails(): LicenseDetails {
         return this.data.licenseDetails;
     }
+    set licenseDetails(val: LicenseDetails) {
+        this.data.licenseDetails = val;
+    }
+    set LicenseDetails(val: LicenseDetails) {
+        this.data.licenseDetails = val;
+    }
     get students(): StudentSummary[] { 
         if (moment().isAfter(this._teamInviteTimeout)) {
             this.reloadInvites(null);
