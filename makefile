@@ -18,8 +18,8 @@ docker:
 deploy-s3:
 	cp ./behavior/src/environments/environment_s3_sample.ts ./behavior/src/environments/environment.ts
 	cd behavior && npm ci && npm run build
-	cd behavior/dist/website && aws s3 sync . s3://${WEBSITE_BUCKET}/behavior
+	cd behavior/dist/website/browser && aws s3 sync . s3://${WEBSITE_BUCKET}/behavior
 	
-	cp manage/src/environments/environment_s3_example.ts ./manage/src/environments/environment.ts
+	cp ./manage/src/environments/environment_s3_sample.ts ./manage/src/environments/environment.ts
 	cd manage && npm ci && npm run build
-	cd manage/dist/website && aws s3 sync . s3://${WEBSITE_BUCKET}/manage
+	cd manage/dist/website/browser && aws s3 sync . s3://${WEBSITE_BUCKET}/manage
