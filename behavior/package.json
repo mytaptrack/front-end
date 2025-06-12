@@ -7,7 +7,7 @@
     "start-st": "ng serve --port 8000 --ssl --host 0.0.0.0 --project service-tracking",
     "start-wc": "ng build --watch --project web-common",
     "start-mg": "ng serve --port 8001 --ssl --host 0.0.0.0 --project management",
-    "build": "npx ng build --output-hashing all --configuration $STAGE",
+    "build": "npx ng build --output-hashing all",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

@@ -10,7 +10,6 @@ export const amplifyConfig = {
     oauth: {
         domain: environment.cognitoLoginDomain,
         scope: [
-            'phone',
             'email',
             'profile',
             'openid',
