@@ -18,7 +18,6 @@ import { SettingsComponent as DashboardSettings } from './components/student/das
 import { BehaviorsComponent } from './components/student/settings/behaviors/behaviors.component';
 import { DevicesComponent } from './components/student/settings/devices/devices.component';
 import { TeamComponent } from './components/student/settings/team/team.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TrackingComponent } from './components/student/tracking/tracking.component';
 import { DashboardMobileComponent } from './components/student/dashboard-mobile/dashboard-mobile.component';
 import { NgxPrintModule } from 'ngx-print';
@@ -154,7 +153,6 @@ providers.push({provide: ErrorHandler, useClass: ErrorHandlingService },
     ReactiveFormsModule,
     NgChartsModule,
     BrowserAnimationsModule,
-    FontAwesomeModule,
     NgxPrintModule,
     NgxEditorModule,
     AmplifyAuthenticatorModule,

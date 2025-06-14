@@ -5,12 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { Amplify } from 'aws-amplify';
 import { 
   AuthSession,
-  confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signOut, signUp
+  confirmSignUp, fetchAuthSession, fetchUserAttributes, getCurrentUser, resendSignUpCode, signOut, signUp
 } from 'aws-amplify/auth';
 import { amplifyConfig } from '../config/aws-exports';
 import { MytaptrackEnvironment } from '../config/environment';
-declare const gapi: any;
-declare const launchUri: any;
+
 
 @Injectable({
   providedIn: 'root'
@@ -77,11 +76,14 @@ export class AuthClientService {
 
   async processUserSession() {
     try {
-      this.cognitoUser = (await getCurrentUser()).signInDetails;
+      const user = await getCurrentUser();
+      this.cognitoUser = user.signInDetails;
       if(this.session.getValue()) {
         return;
       }
-      const session = await fetchAuthSession();
+      const session: AuthSession = await fetchAuthSession();
+
+      const jwt = session.tokens.accessToken
 
       if(!session.credentials.sessionToken) {
         this.session.next(null);

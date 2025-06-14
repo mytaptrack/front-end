@@ -8,11 +8,14 @@
     "outDir": "./dist/out-tsc",
     "strict": false,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "declaration": true,
-    "module": "ES6",
+    "module": "es6",
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "target": "ES2022",
     "lib": [
@@ -20,8 +23,7 @@
       "dom"
     ],
     "types": [
-      "node",
-      "@types/jest"
+      "node"
     ]
   },
   "exclude": [

@@ -9,8 +9,8 @@ export const environment = {
   IdentityAppId: process.env.COGNITO_CLIENT_ID, /* The Cognito User Pool App Id */
   Region: process.env.AWS_REGION, /* The AWS Region where the Cognito and API is deployed */
   IdentityAppDomain: process.env.BEHAVIOR_DOMAIN, /* The domain name for the app (include port number for localhost) */
-  apiRoot: process.env.API_DOMAIN, /* The root of the mytaptrack api (example: https://api.mytaptrack-test.com/api/) */
-  apiRootCloudfront: process.env.API_DOMAIN, /* The path off of the cdn to use if leveraging a cdn passthrough */
+  apiRoot: `${process.env.API_DOMAIN}api/`, /* The root of the mytaptrack api (example: https://api.mytaptrack-test.com/api/) */
+  apiRootCloudfront: `${process.env.API_DOMAIN}api/`, /* The path off of the cdn to use if leveraging a cdn passthrough */
   graphqlEndpoint: process.env.GRAPH_DOMAIN, /* The graphql endpoint for the appsync api */
   forgotPasswordUrl: `https://${process.env.COGNITO_DOMAIN}/forgotPassword?response_type=token&client_id=${process.env.COGNITO_CLIENT_ID}&redirect_uri=https://${process.env.BEHAVIOR_DOMAIN}/dashboard&state=STATE&scope=openid+profile+aws.cognito.signin.user.admin+email`,
   signUpUrl: '', /* The url to redirect to when signing up */
