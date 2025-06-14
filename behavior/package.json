@@ -113,7 +113,7 @@
     "@angular/material-moment-adapter": "^20.0.3",
     "@aws-amplify/core": "^6.12.0",
     "@mytaptrack/types": "^2.0.46",
-    "angularx-qrcode": "^19.0.0",
+    "angularx-qrcode": "^20.0.0",
     "npm": "^11.1.0"
   }
 }
