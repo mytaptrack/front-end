@@ -31,7 +31,7 @@ import { AbcComponent } from './components/student/settings/abc/abc.component';
 import { SubscriptionsComponent } from './components/student/settings/subscriptions/subscriptions.component';
 import { BehaviorComponent } from './components/student/settings/behaviors/behavior/behavior.component';
 import { DocumentsComponent } from './components/student/settings/documents/documents.component';
-import { AmplifyAuthenticatorModule, AuthenticatorComponent } from '@aws-amplify/ui-angular';
+import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { CompareTrackingComponent } from './components/student/tracking/compare-tracking/compare-tracking.component';
 import { IntervalPromptComponent } from './components/student/tracking/interval-prompt/interval-prompt.component';
 import { SnapshotComponent } from './components/student/snapshot/snapshot.component';

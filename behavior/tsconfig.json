@@ -7,11 +7,11 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "strict": false,
+    "esModuleInterop": true,
     "sourceMap": true,
     "declaration": true,
     "module": "ES6",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
@@ -19,7 +19,7 @@
       "ES2022",
       "dom"
     ],
-    "types":[
+    "types": [
       "node",
       "@types/jest"
     ]
