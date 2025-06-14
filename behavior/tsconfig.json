@@ -11,7 +11,7 @@
     "sourceMap": true,
     "declaration": true,
     "module": "ES6",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
