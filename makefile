@@ -16,10 +16,10 @@ docker:
 	docker build -t mtt-front-end:latest .
 
 deploy-s3:
-	cp ./behavior/src/environments/environment_s3_sample.ts ./behavior/src/environments/environment.ts
-	cp ./behavior/src/environments/environment_s3_sample.ts ./behavior/src/environments/environment.prod.ts
-	cp ./manage/src/environments/environment_s3_sample.ts ./manage/src/environments/environment.ts
-	cp ./manage/src/environments/environment_s3_sample.ts ./manage/src/environments/environment.prod.ts
+	cp ./behavior/src/environments/environment_s3_sample.ts.example ./behavior/src/environments/environment.ts
+	cp ./behavior/src/environments/environment_s3_sample.ts.example ./behavior/src/environments/environment.prod.ts
+	cp ./manage/src/environments/environment_s3_sample.ts.example ./manage/src/environments/environment.ts
+	cp ./manage/src/environments/environment_s3_sample.ts.example ./manage/src/environments/environment.prod.ts
 
 	cd utils && npm ci && npm run env-build
 
