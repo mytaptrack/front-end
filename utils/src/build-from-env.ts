@@ -18,4 +18,6 @@ function processEnvFile(path: string) {
 }
 
 processEnvFile('../behavior/src/environments/environment.ts');
+processEnvFile('../behavior/src/environments/environment.prod.ts');
 processEnvFile('../manage/src/environments/environment.ts');
+processEnvFile('../manage/src/environments/environment.prod.ts');
