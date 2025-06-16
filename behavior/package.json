@@ -51,7 +51,7 @@
     "angularx-qrcode": "^20.0.0",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.1231.0",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.0.0",
     "buffer": "^5.7.1",
     "chart.js": "^3.7.0",
     "codelyzer": "^6.0.0",
