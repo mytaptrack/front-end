@@ -100,10 +100,7 @@
     "uninstall": "^0.0.0",
     "util": "^0.12.4",
     "uuid": "^3.3.2",
-    "webpack": "^5.68.0",
-    "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-dev-middleware": "^3.7.2",
-    "xlsx": "^0.17.0",
+    "xlsx": "^0.18.5",
     "xml-js": "^1.6.11",
     "zone.js": "~0.15.0"
   },
