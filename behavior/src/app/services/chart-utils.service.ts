@@ -5,7 +5,6 @@ import {
 import * as typesV2 from '../types';
 import { ChartDataset, ChartData, ChartConfiguration, Chart, TooltipModel, BubbleDataPoint } from 'chart.js';
 import { DateTimeService } from './date-time.service';
-import { borderWidths } from '@aws-amplify/ui/dist/types/theme/tokens/borderWidths';
 
 const defaultShapes = [
   { shape: 'circle', radius: 5}, 

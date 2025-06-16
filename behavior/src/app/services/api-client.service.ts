@@ -526,7 +526,7 @@ export class ApiClientService {
           path: subpath,
           options: {
             headers: {
-              Authorization: 'Bearer ' + this.auth.token,
+              Authorization: `Bearer ${this.auth.token}`,
               origin: window.location.origin
             }
           }
@@ -535,7 +535,7 @@ export class ApiClientService {
 
         return (await response.body.json()) as T;
       } catch (err) {
-        if(err.status == 0) {
+        if(err.status == 0 || err.name == 'NetworkError') {
           this.hitErrorCode0 = true;
         } else if(err.status != 500) {
           throwError(err, this);

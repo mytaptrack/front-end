@@ -6,7 +6,7 @@ describe('StringUtilsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: StringUtilsService = TestBed.get(StringUtilsService);
+    const service: StringUtilsService = TestBed.inject(StringUtilsService);
     expect(service).toBeTruthy();
   });
 });

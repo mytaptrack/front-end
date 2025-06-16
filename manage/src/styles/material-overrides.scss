@@ -1,6 +1,6 @@
 
 .mat-mdc-progress-spinner {
-    --mdc-circular-progress-active-indicator-color: var(--actionOptionActiveColor);
+    --mat-progress-spinner-active-indicator-color: var(--actionOptionActiveColor);
 }
 
 .mat-toolbar.mat-primary {
@@ -18,42 +18,42 @@
 }
 
 .mat-mdc-radio-button.mat-primary {
-    --mdc-radio-disabled-selected-icon-color: var(--table-line);
-    --mdc-radio-disabled-unselected-icon-color: var(--table-line);
-    --mdc-radio-unselected-hover-icon-color: var(--table-line);
-    --mdc-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
-    --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
-    --mdc-radio-selected-focus-icon-color: var(--actionOptionActiveColor);
-    --mdc-radio-selected-hover-icon-color: var(--actionOptionActiveColor);
-    --mdc-radio-selected-icon-color: var(--actionOptionActiveColor);
-    --mdc-radio-selected-pressed-icon-color: var(--actionOptionActiveColor);
+    --mat-radio-disabled-selected-icon-color: var(--table-line);
+    --mat-radio-disabled-unselected-icon-color: var(--table-line);
+    --mat-radio-unselected-hover-icon-color: var(--table-line);
+    --mat-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
+    --mat-radio-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
+    --mat-radio-selected-focus-icon-color: var(--actionOptionActiveColor);
+    --mat-radio-selected-hover-icon-color: var(--actionOptionActiveColor);
+    --mat-radio-selected-icon-color: var(--actionOptionActiveColor);
+    --mat-radio-selected-pressed-icon-color: var(--actionOptionActiveColor);
     --mat-radio-ripple-color: #000;
     --mat-radio-checked-ripple-color: var(--actionOptionActiveColor);
     --mat-radio-disabled-label-color: rgba(0, 0, 0, 0.38);
 }
 
 .mat-mdc-checkbox.mat-primary {
-    --mdc-checkbox-disabled-selected-icon-color: var(--dark);
-    --mdc-checkbox-disabled-unselected-icon-color: var(--dark);
-    --mdc-checkbox-selected-checkmark-color: #fff;
-    --mdc-checkbox-selected-focus-icon-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-selected-hover-icon-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-selected-icon-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-selected-pressed-icon-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-unselected-focus-icon-color: var(--border);
-    --mdc-checkbox-unselected-hover-icon-color: var(--border);
-    --mdc-checkbox-unselected-icon-color: var(--dark2);
-    --mdc-checkbox-unselected-pressed-icon-color: var(--dark);
-    --mdc-checkbox-selected-focus-state-layer-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-selected-hover-state-layer-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-selected-pressed-state-layer-color: var(--actionOptionActiveColor);
-    --mdc-checkbox-unselected-focus-state-layer-color: black;
-    --mdc-checkbox-unselected-hover-state-layer-color: black;
-    --mdc-checkbox-unselected-pressed-state-layer-color: black;
+    --mat-checkbox-disabled-selected-icon-color: var(--dark);
+    --mat-checkbox-disabled-unselected-icon-color: var(--dark);
+    --mat-checkbox-selected-checkmark-color: #fff;
+    --mat-checkbox-selected-focus-icon-color: var(--actionOptionActiveColor);
+    --mat-checkbox-selected-hover-icon-color: var(--actionOptionActiveColor);
+    --mat-checkbox-selected-icon-color: var(--actionOptionActiveColor);
+    --mat-checkbox-selected-pressed-icon-color: var(--actionOptionActiveColor);
+    --mat-checkbox-unselected-focus-icon-color: var(--border);
+    --mat-checkbox-unselected-hover-icon-color: var(--border);
+    --mat-checkbox-unselected-icon-color: var(--dark2);
+    --mat-checkbox-unselected-pressed-icon-color: var(--dark);
+    --mat-checkbox-selected-focus-state-layer-color: var(--actionOptionActiveColor);
+    --mat-checkbox-selected-hover-state-layer-color: var(--actionOptionActiveColor);
+    --mat-checkbox-selected-pressed-state-layer-color: var(--actionOptionActiveColor);
+    --mat-checkbox-unselected-focus-state-layer-color: black;
+    --mat-checkbox-unselected-hover-state-layer-color: black;
+    --mat-checkbox-unselected-pressed-state-layer-color: black;
 }
 
 .mat-mdc-button.mat-primary {
-    --mdc-text-button-label-text-color: var(--actionOptionActiveColor);
+    --mat-button-text-label-text-color: var(--actionOptionActiveColor);
 }
 
 .mat-mdc-button.mat-primary, .mat-mdc-outlined-button.mat-primary {
@@ -62,14 +62,14 @@
 }
 
 .mat-mdc-raised-button.mat-primary {
-    --mdc-protected-button-container-color: var(--actionOptionActiveColor);
-    --mdc-protected-button-label-text-color: #fff;
+    --mat-button-protected-container-color: var(--actionOptionActiveColor);
+    --mat-button-protected-label-text-color: #fff;
 }
 
 
 .mat-mdc-unelevated-button.mat-primary {
-    --mdc-filled-button-container-color: #6aabe5;
-    --mdc-filled-button-label-text-color: var(--dark2);
+    --mat-button-filled-container-color: #6aabe5;
+    --mat-button-filled-label-text-color: var(--dark2);
 }
 
 $mtt-blue-palette: (
