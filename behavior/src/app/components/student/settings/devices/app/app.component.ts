@@ -263,6 +263,8 @@ export class DeviceAppComponent implements OnInit {
       this.selected = null;
       this.setSelected = selected;
       if(isNew) {
+        const settings = await this.api.getServerSettings();
+        this.systemQr = settings.token;
         await this.selected.getToken();
       }
     } catch (err) {
