@@ -119,17 +119,17 @@ export class CreateComponent implements OnInit {
   }
 
   async load() {
-    this.userService.user.subscribe(user => {
+    this.userService.user.subscribe(async user => {
       this.user = user;
       if(!user) {
         return;
       }
 
-      const params = this.route.snapshot.queryParams;
-      if (!params.studentId) {
+      if (!this.studentObject) {
         this.studentObject = this.user.createStudent();
+        this.studentObject.licenseDetails.fullYear = true;
       }
-      this._licenseType = '';
+      this._licenseType = this.licenseType;
       this.setLoading(false);
 
       user.loadLicense();
@@ -165,11 +165,6 @@ export class CreateComponent implements OnInit {
     } else if (!/.*\w.*/.test(studentItem.lastName)) {
       error = true;
       this.lastNameError = 'Last Name should only contain alphanumeric characters';
-    }
-
-    if (this.role.trim() == '') {
-      error = true;
-      this.roleError = 'Role should not be empty';
     }
 
     if(!this.studentObject.studentId &&
@@ -283,6 +278,7 @@ export class CreateComponent implements OnInit {
           resultSubs.save();
         }
       }
+
       await student.applyLicense(this.licenseType);
 
       await this.user.loadStudent(this.studentObject.studentId);
@@ -323,5 +319,9 @@ export class CreateComponent implements OnInit {
     return this.user.license && this.user.licenseDetails &&
       this.user.licenseDetails.multiCount > 0 &&
       moment().isBefore(moment(this.user.licenseDetails.expiration));
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }
