@@ -1,4 +1,4 @@
-<div class="dialog-view" *ngIf="studentObject && student">
+<div class="dialog-view" *ngIf="studentObject && student && !loading">
     <mat-card class="create-student-card">
         <mat-card-header>
             <mat-card-title *ngIf="!studentObject.studentId">
@@ -50,7 +50,7 @@
                 </div>
 
                 <!-- Copy Behaviors Section -->
-                <div *ngIf="userStudents" class="copy-behaviors-section">
+                <div *ngIf="userStudents && copyOtherBehaviors" class="copy-behaviors-section">
                     <mat-checkbox id="create-student-copy-student-check"
                                 [(ngModel)]="copyOtherBehaviors"
                                 name="copyBehaviors">
@@ -101,22 +101,12 @@
                         <mat-button-toggle value="Single"
                                          [disabled]="!hasSingleLicense()"
                                          id="create-student-license2-annual">
-                            Annual Dedicated License
-                        </mat-button-toggle>
-                        <mat-button-toggle value="Multi"
-                                         [disabled]="!hasMultiLicense()"
-                                         id="create-student-license2-flexible">
-                            Flexible Student License
+                            Active
                         </mat-button-toggle>
                         <mat-button-toggle value="No License"
                                          [disabled]="licenseType === 'Other'"
                                          id="create-student-license2-no">
-                            No License
-                        </mat-button-toggle>
-                        <mat-button-toggle value="Other"
-                                         disabled
-                                         id="create-student-license2-other">
-                            Other License
+                            Disabled
                         </mat-button-toggle>
                     </mat-button-toggle-group>
                 </div>
@@ -128,15 +118,14 @@
                     color="basic"
                     id="create-student-cancel"
                     *ngIf="!studentObject.studentId"
-                    routerLink="/">
+                    (click)="close()">
                 Cancel
             </button>
             <button mat-button
                     color="basic"
                     id="create-student-cancel2"
                     *ngIf="studentObject.studentId"
-                    [routerLink]="['/student/settings']"
-                    [queryParams]="{studentId:studentObject.studentId}">
+                    (click)="close()">
                 Cancel
             </button>
             <button mat-raised-button

@@ -60,7 +60,7 @@ export class StudentSchedulesClass {
     async load() {
         const schedules = this.student.studentId && this.student.restrictions?.schedules != AccessLevel.none? await this.api.getSchedules(this.student.studentId) : [];
         
-        schedules.forEach(item => {
+        schedules?.forEach(item => {
             let cat = this.find(s => s.name === item.name);
             if(!cat) {
                 cat = new ScheduleCategoryClass(item.name, 

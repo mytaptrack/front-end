@@ -113,8 +113,9 @@
     }
 
     .qr-code-container {
-        display: flex;
+        display: Block;
         justify-content: center;
+        text-align: center;
         margin: 24px 0;
     }
 }

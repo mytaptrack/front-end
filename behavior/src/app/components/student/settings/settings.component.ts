@@ -8,6 +8,8 @@ import {
   LicenseFeatures, UserSummaryRestrictions, StudentBehaviorClass,
   ApiClientService, moment
 } from '../../..';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateComponent } from '../create/create.component';
 
 @Component({
   selector: 'app-settings',
@@ -71,7 +73,8 @@ export class SettingsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private stringUtils: StringUtilsService) { }
+    private stringUtils: StringUtilsService, 
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -261,13 +264,14 @@ export class SettingsComponent implements OnInit {
     this.setLoading(false);
   }
 
-  editStudent() {
-    this.user.loadStudent(this.student.studentId);
-    this.router.navigate(['student/create'], {
-      queryParams: {
-        studentId: this.student.studentId
-      }
-    });
+  async editStudent() {
+    const student = await this.user.loadStudent(this.student.studentId);
+    this.dialog.open(CreateComponent, {
+        data: {
+          user: this.user,
+          student
+        }
+      });
   }
 
   cancelEdit(item: StudentBehaviorEdit) {

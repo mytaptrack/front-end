@@ -55,7 +55,7 @@ export class AppClass extends IoTDeviceClass {
                 groups: this.groups ?? [],
                 events: this.events.map(x => ({
                     eventId: x.eventId,
-                    abc: x.abc,
+                    abc: x.abc ?? undefined,
                     alert: x.alert,
                     track: x.track,
                     order: x.order
