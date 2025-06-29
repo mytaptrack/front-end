@@ -8,9 +8,9 @@
                 <div class="row">        
                     <div class="col-12">
                         <div class="form-group">
-                            <label class="check-option"><input type="checkbox" [(ngModel)]="showDescription"/> Show Descriptions</label>
-                            <label class="check-option"><input type="checkbox" [(ngModel)]="showInterval"/> Interval Prompts</label>
-                            <a *ngIf="hasIntervalWCompare" [routerLink]="['/student/tracking/compare']" queryParamsHandling="merge">Use interval tracking w/ baseline</a>
+                            <label class="check-option"><input id="show-descriptions-checkbox" type="checkbox" [(ngModel)]="showDescription"/> Show Descriptions</label>
+                            <label class="check-option"><input id="show-interval-checkbox" type="checkbox" [(ngModel)]="showInterval"/> Interval Prompts</label>
+                            <a id="interval-tracking-baseline-link" *ngIf="hasIntervalWCompare" [routerLink]="['/student/tracking/compare']" queryParamsHandling="merge">Use interval tracking w/ baseline</a>
                         </div>
                     </div>
                 </div>
@@ -20,42 +20,42 @@
                             <label>Interval Duration:</label>
                         </div>
                         <div class="input-group">
-                            <input type="number" class="form-control" [(ngModel)]="intervalDuration" />
+                            <input id="interval-duration-input" type="number" class="form-control" [(ngModel)]="intervalDuration" />
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{intervalType}}</button>
+                                <button id="interval-type-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{intervalType}}</button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" (click)="intervalType = 'seconds'">seconds</a>
-                                    <a class="dropdown-item" (click)="intervalType = 'minutes'">minutes</a>
+                                    <a id="interval-type-seconds" class="dropdown-item" (click)="intervalType = 'seconds'">seconds</a>
+                                    <a id="interval-type-minutes" class="dropdown-item" (click)="intervalType = 'minutes'">minutes</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-2 input-align">
-                        <label><input type="checkbox" [(ngModel)]="intervalAlign" /> Align with clock</label>
+                        <label><input id="interval-align-checkbox" type="checkbox" [(ngModel)]="intervalAlign" /> Align with clock</label>
                     </div>
                     <div class="col-2 input-align">
-                        <label><input type="checkbox" [(ngModel)]="intervalFlash" /> Visual Alert</label>
+                        <label><input id="interval-flash-checkbox" type="checkbox" [(ngModel)]="intervalFlash" /> Visual Alert</label>
                     </div>
                     <div class="col-2 input-align">
-                        <label><input type="checkbox" [(ngModel)]="intervalPlaySound" /> Audible Alert</label>
+                        <label><input id="interval-sound-checkbox" type="checkbox" [(ngModel)]="intervalPlaySound" /> Audible Alert</label>
                     </div>
                     <div class="col-12">
-                        <label><input type="checkbox" [(ngModel)]="intervalTrackSpecific" /> For specific behaviors</label>
+                        <label><input id="interval-specific-checkbox" type="checkbox" [(ngModel)]="intervalTrackSpecific" /> For specific behaviors</label>
 
                         <div *ngIf="intervalTrackSpecific">
                             <div *ngFor="let behavior of eventBehaviors">
-                                <label><input type="checkbox" [checked]="isIntervalTracked(behavior)" (click)="toggleIntervalTracked(behavior)" /> {{behavior.name}}</label>
+                                <label><input [id]="'interval-behavior-' + behavior.id" type="checkbox" [checked]="isIntervalTracked(behavior)" (click)="toggleIntervalTracked(behavior)" /> {{behavior.name}}</label>
                             </div>
                         </div>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-primary" (click)="startInterval()"><mat-icon>play_arrow</mat-icon> Start</button>
+                        <button id="start-interval-button" class="btn btn-primary" (click)="startInterval()"><mat-icon>play_arrow</mat-icon> Start</button>
                     </div>
                 </div>
                 <div calss="row" *ngIf="intervalStart">
                     <div class="col-12 text-center interval-counter" [class.interval-flash]="intervalFlashOn">
                         {{intervalDisplayTime}}
-                        <button class="btn btn-primary" (click)="stopInterval()"><mat-icon>stop</mat-icon> Stop</button>
+                        <button id="stop-interval-button" class="btn btn-primary" (click)="stopInterval()"><mat-icon>stop</mat-icon> Stop</button>
                         <div *ngIf="intervalBehaviors">
                             <div class="row behavior" *ngFor="let behavior of intervalBehaviors">
                                 <div [class.col-6]="!isMobile" [class.col-12]="isMobile" [class.text-center]="isMobile">
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                                 <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!behavior.isDuration">
-                                    <button class="btn btn-large btn-primary" (click)="behavior.trackEvent()">
+                                    <button [id]="'interval-track-' + behavior.id" class="btn btn-large btn-primary" (click)="behavior.trackEvent()">
                                         <mat-icon *ngIf="!behavior.saving">bolt</mat-icon>
                                         <mat-spinner *ngIf="behavior.saving"></mat-spinner>
                                         &nbsp;Track
@@ -89,21 +89,21 @@
                         </div>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!behavior.isDuration">
-                        <button class="btn btn-large btn-primary" (click)="track(behavior)">
+                        <button [id]="'track-behavior-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">bolt</mat-icon>
                             <mat-spinner *ngIf="behavior.saving"></mat-spinner>
                             &nbsp;Track
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="behavior.isDuration && !behavior.durationStarted">
-                        <button class="btn btn-large btn-primary" (click)="track(behavior)">
+                        <button [id]="'start-behavior-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">play_arrow</mat-icon>
                             <i class="fa fa-circle-o-notch fa-spin" *ngIf="behavior.saving"></i>
                             &nbsp;Start
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="behavior.durationStarted">
-                        <button class="btn btn-large btn-primary" (click)="track(behavior)">
+                        <button [id]="'stop-behavior-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">stop</mat-icon>
                             <i class="fa fa-circle-o-notch fa-spin" *ngIf="behavior.saving"></i>
                             Stop
@@ -125,21 +125,21 @@
                         </div>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!response.isDuration">
-                        <button class="btn btn-large btn-primary" (click)="track(response)">
+                        <button [id]="'track-response-' + response.id" class="btn btn-large btn-primary" (click)="track(response)">
                             <mat-icon *ngIf="!response.saving">bolt</mat-icon>
                             <i class="fa fa-circle-o-notch fa-spin" *ngIf="response.saving"></i>
                             &nbsp;Respond
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="response.isDuration && !response.durationStarted">
-                        <button class="btn btn-large btn-primary" (click)="response.trackEvent()">
+                        <button [id]="'start-response-' + response.id" class="btn btn-large btn-primary" (click)="response.trackEvent()">
                             <mat-icon *ngIf="!response.saving">play_arrow</mat-icon>
                             <i class="fa fa-circle-o-notch fa-spin" *ngIf="response.saving"></i>
                             &nbsp;Responding
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="response.durationStarted">
-                        <button class="btn btn-large btn-primary" (click)="response.trackEvent()">
+                        <button [id]="'stop-response-' + response.id" class="btn btn-large btn-primary" (click)="response.trackEvent()">
                             <mat-icon *ngIf="!response.saving">stop</mat-icon>
                             <i class="fa fa-circle-o-notch fa-spin" *ngIf="response.saving"></i>
                             &nbsp;Complete

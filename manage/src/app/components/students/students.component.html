@@ -20,11 +20,11 @@
       <mat-card-content>
         <mat-label>Import Students</mat-label>
         <div class="file-input-container">
-          <button mat-raised-button (click)="fileInput.click()">
+          <button id="choose-file-button" mat-raised-button (click)="fileInput.click()">
             <mat-icon>upload_file</mat-icon>
             Choose File
           </button>
-          <input #fileInput type="file" 
+          <input id="file-input" #fileInput type="file" 
                  [hidden]="true"
                  [(ngModel)]="importFile" 
                  observeFiles
@@ -61,7 +61,7 @@
           <ng-container matColumnDef="dedicated">
             <th mat-header-cell *matHeaderCellDef>Dedicated ({{remainingDedicated}})</th>
             <td mat-cell *matCellDef="let student">
-              <mat-radio-button *ngIf="!student.deleted"
+              <mat-radio-button [id]="'dedicated-license-' + student.studentId" *ngIf="!student.deleted"
                                [name]="student.studentId"
                                [checked]="student.licenseDetails?.fullYear"
                                (change)="student.applyLicense('Single')"
@@ -74,7 +74,7 @@
           <ng-container matColumnDef="flexible">
             <th mat-header-cell *matHeaderCellDef>Flexible</th>
             <td mat-cell *matCellDef="let student">
-              <mat-radio-button *ngIf="!student.deleted"
+              <mat-radio-button [id]="'flexible-license-' + student.studentId" *ngIf="!student.deleted"
                                [name]="student.studentId"
                                [checked]="student.licenseDetails?.flexible"
                                (change)="student.applyLicense('Multi')">
@@ -86,7 +86,7 @@
           <ng-container matColumnDef="none">
             <th mat-header-cell *matHeaderCellDef>None</th>
             <td mat-cell *matCellDef="let student">
-              <mat-radio-button *ngIf="!student.deleted"
+              <mat-radio-button [id]="'no-license-' + student.studentId" *ngIf="!student.deleted"
                                [name]="student.studentId"
                                [checked]="!student.licenseDetails?.fullYear && 
                                         !student.licenseDetails?.flexible && 
@@ -101,7 +101,7 @@
           <ng-container matColumnDef="archive">
             <th mat-header-cell *matHeaderCellDef>Archive</th>
             <td mat-cell *matCellDef="let student">
-              <mat-radio-button *ngIf="!student.deleted"
+              <mat-radio-button [id]="'archive-license-' + student.studentId" *ngIf="!student.deleted"
                                [name]="student.studentId"
                                [checked]="student.archived"
                                (change)="student.applyLicense('Archive')">
@@ -113,7 +113,7 @@
           <ng-container matColumnDef="transfer">
             <th mat-header-cell *matHeaderCellDef>Transfer</th>
             <td mat-cell *matCellDef="let student">
-              <mat-radio-button *ngIf="!student.deleted"
+              <mat-radio-button [id]="'transfer-license-' + student.studentId" *ngIf="!student.deleted"
                                [name]="student.studentId"
                                [checked]="student.licenseDetails?.transferable"
                                (change)="student.applyLicense('Other')">
@@ -126,12 +126,12 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let student">
               <div *ngIf="!student.saving">
-                <button mat-icon-button color="warn" *ngIf="!showAdminButton"
+                <button [id]="'remove-student-' + student.studentId" mat-icon-button color="warn" *ngIf="!showAdminButton"
                         (click)="remove(student)"
                         matTooltip="Remove">
                   <mat-icon>delete</mat-icon>
                 </button>
-                <button mat-icon-button color="primary" *ngIf="showAdminButton"
+                <button [id]="'add-admin-' + student.studentId" mat-icon-button color="primary" *ngIf="showAdminButton"
                         (click)="addAdmin(student)"
                         matTooltip="Add Admin">
                   <mat-icon>person_add</mat-icon>

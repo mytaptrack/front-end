@@ -6,13 +6,13 @@
     </div>
 </div>
 <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" aria-describedby="basic-addon2">
+    <input id="student-search-input" type="text" class="form-control" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" aria-describedby="basic-addon2">
     <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="searchText = ''">Clear</button>
+        <button id="student-search-clear" class="btn btn-outline-secondary" type="button" (click)="searchText = ''">Clear</button>
     </div>
 </div>
 <div class="invite-all text-right" *ngIf="user.teamInvites.length > 1">
-    <a *ngIf="!acceptingAll" (click)="acceptAllInvites()">Accept All</a>
+    <a id="accept-all-invites" *ngIf="!acceptingAll" (click)="acceptAllInvites()">Accept All</a>
     <span *ngIf="acceptingAll">
         <mat-progress-spinner></mat-progress-spinner>
     </span>
@@ -36,9 +36,9 @@
         <div *ngIf="!showRecentlyActive" class="hint">
             Last Active: {{getDate(student.lastTracked)}}
         </div>
-        <a class="student-selector-link" (click)="selectedStudent = student"></a>
+        <a class="student-selector-link" [id]="'student-selector-' + student.studentId" (click)="selectedStudent = student"></a>
     </div>
 </div>
 <div class="text-center no-student-option" *ngIf="!user || !user.details || !user.students || user.students.length == 0">
-    <a class="btn btn-primary" (click)="createStudent()"><mat-icon>add</mat-icon> Create Student</a>
+    <a id="create-first-student" class="btn btn-primary" (click)="createStudent()"><mat-icon>add</mat-icon> Create Student</a>
 </div>

@@ -20,7 +20,7 @@
                             </div>
                         </mat-list-item>
 
-                        <mat-list-item *ngIf="administrator"
+                        <mat-list-item id="add-new-behavior-button" *ngIf="administrator"
                             [class.selected]="!selected.id"
                             (click)="create()">
                             <div class="list-item-content">
@@ -49,7 +49,7 @@
                     <!-- Archived Behaviors -->
                     <ng-container *ngIf="archivedBehaviors?.length">
                         <div class="archived-section">
-                            <button mat-button (click)="showArchived = !showArchived">
+                            <button id="toggle-archived-behaviors" mat-button (click)="showArchived = !showArchived">
                                 {{showArchived ? 'Hide' : 'Show'}} Archived Behaviors
                             </button>
 
