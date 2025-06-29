@@ -2,17 +2,17 @@
     <div class="row">
         <div class="col-12">
             <div class="title">Notes:</div>
-            <textarea *ngIf="!print" [(ngModel)]="newNote"></textarea>
+            <textarea id="notes-textarea" *ngIf="!print" [(ngModel)]="newNote"></textarea>
             <div *ngIf="errorSaving" class="amplify-text--error">
-                An error occurred while saving the note <a class="link-item" (click)="save()">click here to try again</a>.
+                An error occurred while saving the note <a id="notes-retry-save" class="link-item" (click)="save()">click here to try again</a>.
             </div>
             <div class="col-12" *ngIf="!print">
-                <button class="btn btn-primary" (click)="endNote()">
+                <button id="notes-end-note" class="btn btn-primary" (click)="endNote()">
                     <mat-icon *ngIf="!saving">arrow_downward</mat-icon>
                     <mat-spinner *ngIf="saving"></mat-spinner>
                     &nbsp;End Note
                 </button>
-                <button class="btn btn-primary" (click)="notes = null; load()"><i class="fa fa-refresh" [class.fa-spin]="notes == null" aria-hidden="true"></i> Refresh</button>
+                <button id="notes-refresh" class="btn btn-primary" (click)="notes = null; load()"><i class="fa fa-refresh" [class.fa-spin]="notes == null" aria-hidden="true"></i> Refresh</button>
             </div>
             <div *ngIf="showPrevNotes">
                 <div *ngFor="let note of notes">

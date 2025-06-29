@@ -22,7 +22,7 @@
                                 <div *ngIf="user && isMobile" class="row">
                                     <div class="col-12">
                                         <label>Student:</label>
-                                        <select class="form-control" [(ngModel)]="studentId" #t>
+                                        <select id="mobile-student-select" class="form-control" [(ngModel)]="studentId" #t>
                                             <option *ngFor="let student of students" [value]="student?.studentId">{{student.firstName}} {{student.lastName}}</option>
                                         </select>
                                         <div *ngFor="let invite of teamInvites">
@@ -36,7 +36,7 @@
                                     </div>
                                     <div id="route-container" class="main-area" [class.col-12]="!collapseStudents || isMobile" [class.col-9]="!collapseStudents && !isMobile" [class.col-12]="(collapseStudents || !showStudents()) && !isMobile">
                                         <div *ngIf="user && !isMobile">
-                                            <a class="no-print" (click)="collapseStudents = !collapseStudents">
+                                            <a id="toggle-students-panel" class="no-print" (click)="collapseStudents = !collapseStudents">
                                                 <span *ngIf="!collapseStudents"><mat-icon>chevron_left</mat-icon> Hide Students</span>
                                                 <span *ngIf="collapseStudents"><mat-icon>chevron_right</mat-icon> Show Students</span>
                                             </a>

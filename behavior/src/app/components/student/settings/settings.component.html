@@ -3,7 +3,7 @@
         <div>
             <div class="row" *ngIf="student">
                 <div class="col-12">
-                    <a class="help-button" [routerLink]="['']" [queryParams]="{ studentId: id}">
+                    <a id="back-to-dashboard" class="help-button" [routerLink]="['']" [queryParams]="{ studentId: id}">
                         <mat-icon>arrow_back</mat-icon> <span>Back to Dashboard</span>
                     </a>
                 </div>
@@ -16,7 +16,7 @@
                     </div>
                     <div *ngIf="student.license">
                         <div class="hint" *ngIf="student.license && licenseType != 'Dedicated License'">
-                            License: {{licenseType}} <a class="hint a-link" *ngIf="allowLicenseUpgrade()" (click)="applyLicense(true)">(Convert to Dedicated License)</a>
+                            License: {{licenseType}} <a id="convert-to-dedicated-license" class="hint a-link" *ngIf="allowLicenseUpgrade()" (click)="applyLicense(true)">(Convert to Dedicated License)</a>
                         </div>
                         <div class="hint" *ngIf="student.license && nearExpiration">
                             Expiration: {{student.licenseDetails.expiration}}
@@ -26,40 +26,40 @@
                         Student license is expired
                     </div>
                     <div *ngIf="!student.license || isLicenseExpired()">
-                        <button *ngIf="hasSingleUserLicenses()" (click)="applyLicense(true)" class="btn btn-primary">Apply Annual Dedicated License</button>
-                        <button *ngIf="hasMultiUserLicense()" (click)="applyLicense(false)" class="btn btn-primary">Apply Annual Flexible License</button>
+                        <button id="apply-dedicated-license" *ngIf="hasSingleUserLicenses()" (click)="applyLicense(true)" class="btn btn-primary">Apply Annual Dedicated License</button>
+                        <button id="apply-flexible-license" *ngIf="hasMultiUserLicense()" (click)="applyLicense(false)" class="btn btn-primary">Apply Annual Flexible License</button>
                     </div>
-                    <a class="btn btn-primary" (click)="editStudent()"><mat-icon>edit</mat-icon> Edit</a>
-                    <button *ngIf="canDeleteStudent" (click)="deleteStudent()" class="btn btn-danger">Delete Student</button>
+                    <a id="edit-student-button" class="btn btn-primary" (click)="editStudent()"><mat-icon>edit</mat-icon> Edit</a>
+                    <button id="delete-student-button" *ngIf="canDeleteStudent" (click)="deleteStudent()" class="btn btn-danger">Delete Student</button>
                 </div>
                 <div *ngIf="hasLicense && !isLicenseExpired()" class="col-12">
                     <ul class="nav nav-tabs">
                         <li class="nav-item" *ngIf="behaviorAccess">
-                          <a class="nav-link" [class.active]="selectedTab == 'behaviors'" [routerLink]="['/student/settings/behaviors']" queryParamsHandling="merge">Behaviors</a>
+                          <a id="settings-tab-behaviors" class="nav-link" [class.active]="selectedTab == 'behaviors'" [routerLink]="['/student/settings/behaviors']" queryParamsHandling="merge">Behaviors</a>
                         </li>
                         <li class="nav-item" *ngIf="responseAccess">
-                            <a class="nav-link" [class.active]="selectedTab == 'responseTracking'" [routerLink]="['/student/settings/responseTracking']" queryParamsHandling="merge">Response Tracking</a>
+                            <a id="settings-tab-response-tracking" class="nav-link" [class.active]="selectedTab == 'responseTracking'" [routerLink]="['/student/settings/responseTracking']" queryParamsHandling="merge">Response Tracking</a>
                         </li>
                         <li class="nav-item" *ngIf="abcAccess">
-                            <a class="nav-link" [class.active]="selectedTab == 'abc'" [routerLink]="['/student/settings/abc']" queryParamsHandling="merge">ABC <span style="font-style:italic">(beta)</span></a>
+                            <a id="settings-tab-abc" class="nav-link" [class.active]="selectedTab == 'abc'" [routerLink]="['/student/settings/abc']" queryParamsHandling="merge">ABC <span style="font-style:italic">(beta)</span></a>
                         </li>
                         <li class="nav-item" *ngIf="milestoneAccess">
-                          <a class="nav-link"  [class.active]="selectedTab == 'milestones'" [routerLink]="['/student/settings/milestones']" queryParamsHandling="merge">Support Changes</a>
+                          <a id="settings-tab-milestones" class="nav-link"  [class.active]="selectedTab == 'milestones'" [routerLink]="['/student/settings/milestones']" queryParamsHandling="merge">Support Changes</a>
                         </li>
                         <li class="nav-item" *ngIf="scheduleAccess">
-                          <a class="nav-link"  [class.active]="selectedTab == 'schedule'" [routerLink]="['/student/settings/schedule']" queryParamsHandling="merge">Schedule</a>
+                          <a id="settings-tab-schedule" class="nav-link"  [class.active]="selectedTab == 'schedule'" [routerLink]="['/student/settings/schedule']" queryParamsHandling="merge">Schedule</a>
                         </li>
                         <li class="nav-item" *ngIf="deviceAccess">
-                          <a class="nav-link"  [class.active]="selectedTab == 'devices'" [routerLink]="['/student/settings/devices']" queryParamsHandling="merge">Devices</a>
+                          <a id="settings-tab-devices" class="nav-link"  [class.active]="selectedTab == 'devices'" [routerLink]="['/student/settings/devices']" queryParamsHandling="merge">Devices</a>
                         </li>
                         <li class="nav-item" *ngIf="teamAccess">
-                          <a class="nav-link"  [class.active]="selectedTab == 'team'" [routerLink]="['/student/settings/team']" queryParamsHandling="merge">Team</a>
+                          <a id="settings-tab-team" class="nav-link"  [class.active]="selectedTab == 'team'" [routerLink]="['/student/settings/team']" queryParamsHandling="merge">Team</a>
                         </li>
                         <li class="nav-item" *ngIf="notificationAccess">
-                          <a class="nav-link"  [class.active]="selectedTab == 'notifications'" [routerLink]="['/student/settings/notifications']" queryParamsHandling="merge">Notifications</a>
+                          <a id="settings-tab-notifications" class="nav-link"  [class.active]="selectedTab == 'notifications'" [routerLink]="['/student/settings/notifications']" queryParamsHandling="merge">Notifications</a>
                         </li>
                         <li class="nav-item" *ngIf="documentsAccess">
-                          <a class="nav-link"  [class.active]="selectedTab == 'documents'" [routerLink]="['/student/settings/documents']" queryParamsHandling="merge">Documents</a>
+                          <a id="settings-tab-documents" class="nav-link"  [class.active]="selectedTab == 'documents'" [routerLink]="['/student/settings/documents']" queryParamsHandling="merge">Documents</a>
                         </li>
                       </ul>
                 </div>

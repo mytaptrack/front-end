@@ -94,7 +94,7 @@
 
             <!-- Frequency Target Section -->
             <div class="target-section">
-                <mat-checkbox [(ngModel)]="frequencyTarget.show"
+                <mat-checkbox id="frequency-target-checkbox" [(ngModel)]="frequencyTarget.show"
                             [disabled]="!administrator">
                     Set Frequency Target
                 </mat-checkbox>
@@ -129,7 +129,7 @@
 
             <!-- Duration Target Section -->
             <div class="target-section" *ngIf="selected.isDuration">
-                <mat-checkbox [(ngModel)]="durationTarget.show"
+                <mat-checkbox id="duration-target-checkbox" [(ngModel)]="durationTarget.show"
                             [disabled]="!administrator">
                     Set Duration Target ([hh:]mm:ss)
                 </mat-checkbox>
@@ -142,7 +142,7 @@
                                 <input matInput
                                        [(ngModel)]="durationTarget.getCategoryValue(category).duration"
                                        [disabled]="!administrator">
-                                <mat-select matSuffix #measurementSelect
+                                <mat-select id="duration-measurement-select" matSuffix #measurementSelect
                                           [(ngModel)]="durationTarget.measurement"
                                           [disabled]="!administrator">
                                     <mat-option value="Avg">Avg</mat-option>
@@ -172,18 +172,18 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons" *ngIf="administrator && !onlyShowDelete">
-        <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon> Save</button>
-        <button mat-button (click)="cancel()"><mat-icon>cancel</mat-icon> Cancel</button>
-        <button mat-raised-button color="warn" *ngIf="!selected.isArchived" (click)="archive()">
+        <button id="behavior-save-button" mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon> Save</button>
+        <button id="behavior-cancel-button" mat-button (click)="cancel()"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button id="behavior-archive-button" mat-raised-button color="warn" *ngIf="!selected.isArchived" (click)="archive()">
             <mat-icon>archive</mat-icon> Archive
         </button>
-        <button mat-raised-button color="accent" *ngIf="selected.isArchived" (click)="reactivate()">
+        <button id="behavior-reactivate-button" mat-raised-button color="accent" *ngIf="selected.isArchived" (click)="reactivate()">
             <mat-icon>unarchive</mat-icon> Reactivate
         </button>
     </div>
 
     <div class="action-buttons" *ngIf="onlyShowDelete && selected && selected.id">
-        <button mat-raised-button color="warn" (click)="selected.delete()">Delete</button>
+        <button id="behavior-delete-button" mat-raised-button color="warn" (click)="selected.delete()">Delete</button>
     </div>
 
     <div class="status-text" *ngIf="status">{{status}}</div>

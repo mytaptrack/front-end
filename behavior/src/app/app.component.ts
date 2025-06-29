@@ -48,9 +48,11 @@ export class AppComponent {
     if(val && (!this._selectedStudent || this._selectedStudent.studentId !== val.studentId)) {
       this._selectedStudent = val;
       if(!this.isStudentCreate) {
+        // Use replaceUrl instead of navigate to avoid History API issues
         this.router.navigate([], {
           queryParams: { studentId: val.studentId },
-          queryParamsHandling: 'merge'
+          queryParamsHandling: 'merge',
+          replaceUrl: true
         });
       }
     }
@@ -104,10 +106,13 @@ export class AppComponent {
       });
       this.ngOnInit();
 
-      const base = window.document.getElementById('baseHref')
-      if(base) {
-        base.setAttribute('href', environment.routes.behavior);
-      }
+      // Remove dynamic base href manipulation to prevent History API SecurityError
+      // The base href should be set statically in index.html or through Angular's APP_BASE_HREF
+      // Commenting out the problematic code:
+      // const base = window.document.getElementById('baseHref')
+      // if(base) {
+      //   base.setAttribute('href', environment.routes.behavior);
+      // }
     }
   
   ngOnInit() {
