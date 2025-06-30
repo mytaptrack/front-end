@@ -109,10 +109,10 @@ export class AppComponent {
       // Remove dynamic base href manipulation to prevent History API SecurityError
       // The base href should be set statically in index.html or through Angular's APP_BASE_HREF
       // Commenting out the problematic code:
-      const base = window.document.getElementById('baseHref')
-      if(base) {
-        base.setAttribute('href', `${environment.routes.behavior}/`);
-      }
+      // const base = window.document.getElementById('baseHref')
+      // if(base) {
+      //   base.setAttribute('href', `${environment.routes.behavior}/`);
+      // }
     }
   
   ngOnInit() {
