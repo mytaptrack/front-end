@@ -111,7 +111,7 @@ export class AppComponent {
       // Commenting out the problematic code:
       const base = window.document.getElementById('baseHref')
       if(base) {
-        base.setAttribute('href', environment.routes.behavior);
+        base.setAttribute('href', `${environment.routes.behavior}/`);
       }
     }
   
