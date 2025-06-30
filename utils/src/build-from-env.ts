@@ -26,7 +26,7 @@ processEnvFile('../manage/src/environments/environment.prod.ts');
 let behaviorIndexHtml = readFileSync('../behavior/src/index.html').toString();
 
 // Replace <base id="baseHref" href="/" /> with the href being BEHAVIOR_DOMAIN
-behaviorIndexHtml = behaviorIndexHtml.replace(/<base id="baseHref" href="\/" \>/g, `<base id="baseHref" href="${process.env.BEHAVIOR_DOMAIN}/" >`);
+behaviorIndexHtml = behaviorIndexHtml.replace(/<base id="baseHref" href="\/" \>/g, `<base id="baseHref" href="https://${process.env.BEHAVIOR_DOMAIN}/" >`);
 
 // Write the update back to the original file
 writeFileSync('../behavior/src/index.html', behaviorIndexHtml);
