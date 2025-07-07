@@ -80,7 +80,7 @@ export class ApiClientService {
     return await this.put('v2/manage/app', request);
   }
   async deleteManagedApp(request: DeleteDeviceRequest): Promise<void> {
-   await this.delete('v2/manage/app', request);
+   await this.delete(`v2/manage/app?studentId=${request.studentId}&dsn=${request.dsn}&isApp=1&dsn=${request.dsn}`);
   }
 
   async getManagedTemplates() {
@@ -90,7 +90,7 @@ export class ApiClientService {
     return await this.put('v2/manage/template', template)
   }
   async deleteManagedTemplate(template: LicenseStudentTemplateDelete) {
-    return await this.delete('v2/manage/template', template);
+    return await this.delete(`v2/manage/template?license=${template.license}&name=${template.name}`);
   }
 
   async putUserProfile(user: User, acceptTerms: boolean): Promise<User> {
@@ -139,7 +139,7 @@ export class ApiClientService {
   };
 
   async deleteUserSubscription(request: SubscriptionDeleteRequest) {
-    return await this.delete('user/subscription', request);
+    return await this.delete(`user/subscription?studentId=${request.studentId}&behaviorId=${request.behaviorId}`);
   };
 
   async dashboardSummaryGet() : Promise<User> {
@@ -247,7 +247,7 @@ export class ApiClientService {
         userId: userId
     } as TeamDeleteRequest;
 
-    return await this.delete('v2/student/team', content);
+    return await this.delete(`v2/student/team?userId=${userId}&studentId=${studentId}`);
   }
 
   async createStudent(student: StudentCreateRequest) : Promise<Student> {
@@ -276,12 +276,7 @@ export class ApiClientService {
   }
 
   async removeStudentData(studentId: string, data: ReportData) {
-    let content = {
-        studentId: studentId,
-        behaviorId: data.behavior,
-        date: moment(data.dateEpoc).toISOString()
-    } as StudentTrackPut;
-    return await this.delete('v2/reports/data', content);
+    return await this.delete(`v2/reports/data?studentId=${studentId}&behaviorId=${data.behavior}&date=${moment(data.dateEpoc).toISOString()}`);
   }
 
   async putStudentResponse(studentId: string, response: StudentResponse): Promise<StudentResponse> {
@@ -305,7 +300,7 @@ export class ApiClientService {
     return (await this.get<{id: string; token: string;}>(`v2/student/devices/app/qrcode?studentId=${studentId}&appId=${dsn}`));
   }
   async deleteStudentAppV2(studentId: string, dsn: string) {
-    await this.delete('v2/student/devices/app', { studentId, dsn, isApp: true } as DeleteDeviceRequest);
+    await this.delete(`v2/student/devices/app?studentId=${studentId}&dsn=${dsn}&isApp=true`);
   }
 
   async getTrackDeviceV2(studentId: string, dsn: string): Promise<IoTDevice> {
@@ -315,7 +310,7 @@ export class ApiClientService {
     return this.put('v2/student/devices/track', request);
   }
   async deleteTrackDeviceV2(request: DeleteDeviceRequest) {
-    return this.delete('v2/student/devices/track', request);
+    return this.delete(`v2/student/devices/track?studentId=${request.studentId}&dsn=${request.dsn}&isApp=0&dsn=${request.dsn}`);
   }
   async putTrackRegistrationV2(request: DeviceRegisterPutRequest) {
     return this.put('v2/student/devices/track/register', request);
@@ -360,12 +355,7 @@ export class ApiClientService {
     return await this.put('v2/student/behavior', content) as StudentBehavior;
   };
   async deleteStudentBehaviorV2(studentId: string, itemToDelete: StudentBehavior) {
-    let content = {
-        studentId: studentId,
-        behavior: itemToDelete.name,
-        id: itemToDelete.id
-    };
-    return await this.delete('v2/student/behavior', content);
+    return await this.delete(`v2/student/behavior?studentId=${studentId}&behavior=${itemToDelete.name}&id=${itemToDelete.id}`);
   };
 
   async putStudentResponseV2(studentId: string, response: StudentResponse): Promise<StudentResponse> {
@@ -376,11 +366,7 @@ export class ApiClientService {
     return await this.put('v2/student/response', content) as StudentResponse;
   };
   async deleteStudentResponseV2(studentId: string, itemToDelete: StudentBehavior) {
-    let content = {
-        studentId: studentId,
-        id: itemToDelete.id
-    };
-    return await this.delete('v2/student/response', content);
+    return await this.delete(`v2/student/response?studentId=${studentId}&id=${itemToDelete.id}`);
   };
   
   async putStudentAbcV2(studentId: string, abc: AbcCollection): Promise<AbcCollection> {
@@ -392,10 +378,7 @@ export class ApiClientService {
     return await this.put('v2/student/abc', content);
   }
   async deleteStudentAbcV2(studentId: string): Promise<void> {
-    let content = {
-      studentId
-    };
-    await this.delete('v2/student/abc', content);
+    await this.delete(`v2/student/abc?studentId=${studentId}`);
   }
 
   async deviceRegisterVerify(dsn: string, studentId: string) : Promise<IoTDevice> {
@@ -412,29 +395,15 @@ export class ApiClientService {
     return this.get<{ invites: Notification<NotificationDetailsTeam>[], stats: StudentSummaryStats[] }>('v2/user/alerts');
   }
   async ignoreNotification(notification: Notification<any>) {
-    return await this.delete('v2/student/notification', notification);
+    return await this.delete(`v2/student/notification?date=${notification.date}&studentId=${notification.details.studentId}&behaviorId=${notification.details.behaviorId}&type=${notification.details.type}`);
   }
 
   async ignoreNotificationsForStudent(studentId: string) {
-    return this.delete('v2/student/notification', {
-      date: 0,
-      details: {
-        studentId,
-        behaviorId: 'all',
-        type: 'all'
-      }
-    });
+    return this.delete(`v2/student/notification?date=0&studentId=${studentId}&behaviorId=all&type=all`);
   }
 
   async ignorePendingForStudent(studentId: string) {
-    return this.delete('v2/student/notification', {
-      date: 0,
-      details: {
-        studentId,
-        behaviorId: 'all',
-        type: 'pending'
-      }
-    });
+    return this.delete(`v2/student/notification?date=0&studentId=${studentId}&behaviorId=all&type=pending`);
   }
 
   async getSavedActivities() : Promise<UserContext> {
@@ -446,7 +415,7 @@ export class ApiClientService {
   }
 
   async deleteActivityGroup(activityGroup: ActivityGroupSummary) {
-    return await this.delete('context/activity/group', activityGroup);
+    return await this.delete(`context/activity/group?id=${activityGroup.id}`);
   }
 
   async getLicenses(): Promise<LicenseDetailsWithUsage[]> {
@@ -459,7 +428,7 @@ export class ApiClientService {
     return await this.put('v2/license/student', applyData);
   }
   async permanentlyDeleteStudent(studentId: string) {
-    return await this.delete('v2/license/student', { studentId });
+    return await this.delete(`v2/license/student?studentId=${studentId}`);
   }
   async putLicenseDisplayTags(request: LicenseDisplayTagsPut): Promise<void> {
     return await this.put('v2/license/displaytags', request);
@@ -468,7 +437,7 @@ export class ApiClientService {
     return await this.get('license/dedicated');
   }
   async deleteLicense(license: string): Promise<void> {
-    await this.delete('license', license);
+    await this.delete('license?license=license');
   }
 
   async getSchedules(studentId: string): Promise<ScheduleCategory[]> {
@@ -478,10 +447,7 @@ export class ApiClientService {
     return await this.put('v2/student/schedule', input);
   }
   async deleteSchedule(input: ScheduleDeleteRequest) {
-    return await this.delete('v2/student/schedule', {
-      ...input,
-      date: moment(input.date).format('yyyy-MM-DD')
-    });
+    return await this.delete(`v2/student/schedule?category=${input.category}&studentId=${input.studentId}&date=${moment(input.date).format('yyyy-MM-DD')}`);
   }
   async putScheduleOverwrite(input: OverwriteSchedulePutRequest) {
     return await this.put('v2/reports/schedule', input);
@@ -507,7 +473,7 @@ export class ApiClientService {
     return await this.get(`v2/student/document?studentId=${studentId}&documentId=${documentId}`);
   }
   async deleteDocument(studentId: string, documentId: string) {
-    return await this.delete('v2/student/document', { studentId, id: documentId });
+    return await this.delete(`v2/student/document?studentId=${studentId}&id=${documentId}`);
   }
 
   private async get<T>(subpath: string): Promise<T> {
@@ -597,7 +563,7 @@ export class ApiClientService {
     return subpath;
   }
 
-  private async delete(subpath: string, content: any) {
+  private async delete(subpath: string) {
     if(!this.auth.token) {
       return;
     }
@@ -605,8 +571,6 @@ export class ApiClientService {
     const headers = new HttpHeaders({Authorization: this.auth.token});
     headers.set('Authorization', this.auth.token);
     subpath = this.processImpersonate(subpath);
-
-    const body = JSON.stringify(content);
 
     let retry = 0;
     let error;
@@ -616,8 +580,7 @@ export class ApiClientService {
         const delResponse = await del({
           apiName: 'api', 
           path: subpath,
-          options: { 
-            body: JSON.stringify(content),
+          options: {
             headers: {
               Authorization: 'Bearer ' + this.auth.token
             }

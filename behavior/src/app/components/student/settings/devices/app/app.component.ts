@@ -27,7 +27,7 @@ class DeviceBehavior {
   reset() {
     this.event = {
       eventId: this.studentBehavior.id,
-      track: false,
+      track: true,
       abc: this.studentBehavior.trackAbc,
       order: 9999,
     };
@@ -151,7 +151,7 @@ export class DeviceAppComponent implements OnInit {
 
       x.event = {
         eventId: x.studentBehavior.id,
-        track: false,
+        track: true,
         abc: x.studentBehavior.trackAbc,
         order: 9999
       };

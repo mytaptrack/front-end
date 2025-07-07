@@ -29,6 +29,8 @@ export class AuthClientService {
   public password:any;
   public previousUrl: string;
   public nextRefresh: Date;
+  private refreshTimer: any;
+  private refreshInterval: number = 5 * 60 * 1000; // 5 minutes before expiry
 
   get token(): string { return this.session.getValue()?.tokens.idToken.toString(); }
   get group(): string[] { 
@@ -70,6 +72,7 @@ export class AuthClientService {
         const user = await getCurrentUser();
         this.cognitoUser = user;
         this.session.next(session);
+        this.scheduleTokenRefresh(session);
       }
     } catch (err) {
       return false;
@@ -86,12 +89,86 @@ export class AuthClientService {
 
       if(!session.credentials.sessionToken) {
         this.session.next(null);
+        this.clearRefreshTimer();
       } else {
         this.nextRefresh = new Date(new Date().getTime() + (1000 * 60 * 5));
         this.session.next(session);
+        this.scheduleTokenRefresh(session);
       }
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  private scheduleTokenRefresh(session: AuthSession) {
+    if(!session?.tokens?.accessToken) {
+      return;
+    }
+
+    // Clear any existing timer
+    this.clearRefreshTimer();
+
+    try {
+      // Get token expiration time
+      const accessToken = session.tokens.accessToken;
+      const payload = JSON.parse(atob(accessToken.toString().split('.')[1]));
+      const expirationTime = payload.exp * 1000; // Convert to milliseconds
+      const currentTime = Date.now();
+      const timeUntilExpiry = expirationTime - currentTime;
+
+      // Schedule refresh 5 minutes before expiry (or immediately if already close to expiry)
+      const refreshTime = Math.max(0, timeUntilExpiry - this.refreshInterval);
+      
+      console.log(`Token expires in ${Math.round(timeUntilExpiry / 1000 / 60)} minutes, scheduling refresh in ${Math.round(refreshTime / 1000 / 60)} minutes`);
+
+      this.refreshTimer = setTimeout(() => {
+        this.refreshToken();
+      }, refreshTime);
+
+    } catch (error) {
+      console.error('Error scheduling token refresh:', error);
+      // Fallback: schedule refresh in 50 minutes
+      this.refreshTimer = setTimeout(() => {
+        this.refreshToken();
+      }, 50 * 60 * 1000);
+    }
+  }
+
+  private async refreshToken() {
+    try {
+      console.log('Refreshing authentication token...');
+      
+      // Fetch a new session which will include refreshed tokens
+      const newSession = await fetchAuthSession({ forceRefresh: true });
+      
+      if (newSession && newSession.tokens) {
+        this.session.next(newSession);
+        this.nextRefresh = new Date(new Date().getTime() + (1000 * 60 * 5));
+        console.log('Token refreshed successfully');
+        
+        // Schedule the next refresh
+        this.scheduleTokenRefresh(newSession);
+      } else {
+        console.error('Failed to refresh token - no valid session received');
+        this.handleTokenRefreshFailure();
+      }
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      this.handleTokenRefreshFailure();
+    }
+  }
+
+  private handleTokenRefreshFailure() {
+    // If token refresh fails, try once more after a short delay
+    setTimeout(() => {
+      this.refreshToken();
+    }, 30000); // Try again in 30 seconds
+  }
+
+  private clearRefreshTimer() {
+    if (this.refreshTimer) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = null;
     }
   }
 
@@ -113,6 +190,9 @@ export class AuthClientService {
     // await gapi.auth2.getAuthInstance().signOut();
     // window.location.href = `https://${environment.cognitoLoginDomain}/oauth2/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.cognitoCallbackUrl}`;
     try {
+      // Clear the refresh timer
+      this.clearRefreshTimer();
+      
       // window.location.href = `https://${environment.cognitoLoginDomain}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.cognitoCallbackUrl}`;
       await signOut({global: true});
       this.session.next(null);
