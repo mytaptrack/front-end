@@ -430,3 +430,4 @@
 "./testing/ui/src/tests/student-management.spec.ts"
 "./testing/ui/src/tests/dashboard.spec.ts"
 "./testing/ui/src/config/jest-setup.ts"
+"./behavior-site-test-plan.md"

@@ -86,10 +86,14 @@ export class ScheduleClass implements ActivityGroupDetails {
     }
 
     validate(): ScheduleValidationError[] {
+        // Filter out empty activities before sorting
+        this.activities = this.activities.filter(a => a.title && a.title.trim() !== '');
+        
         this.activities.sort((a, b) => { 
             const aStartTime = this.dateTimeService.parseHoursMinutes(a.startTime);
             const bStartTime = this.dateTimeService.parseHoursMinutes(b.startTime);
             
+            if (!aStartTime || !bStartTime) return 0;
             return aStartTime.toDate().getTime() - bStartTime.toDate().getTime() ;
         });
         const errors: ScheduleValidationError[] = this.activities.map(x => ({
@@ -104,7 +108,7 @@ export class ScheduleClass implements ActivityGroupDetails {
             if(!a.startTime || !this.dateTimeService.parseHoursMinutes(a.startTime)) {
               errors[i].startError = 'Could not identify the time specified';
             }
-            if(!a.endTime || !this.dateTimeService.parseHoursMinutes(a.startTime)) {
+            if(!a.endTime || !this.dateTimeService.parseHoursMinutes(a.endTime)) {
               errors[i].endError = 'Could not identify the time specified';
             }
         });

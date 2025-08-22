@@ -29,6 +29,7 @@ export class AuthClientService {
   public nextRefresh: Date;
   private refreshTimer: any;
   private refreshInterval: number = 5 * 60 * 1000; // 5 minutes before expiry
+  private isSigningOut: boolean = false;
 
   get token(): string { return this.session.getValue()?.tokens.idToken.toString(); }
   get group(): string[] { 
@@ -73,11 +74,17 @@ export class AuthClientService {
         this.scheduleTokenRefresh(session);
       }
     } catch (err) {
+      if (err.name === 'NotAuthorizedException' && err.message.includes('Token is inactive')) {
+        this.handleTokenRefreshFailure();
+      }
       return false;
     }
   }
 
   async processUserSession() {
+    if (this.isSigningOut) {
+      return;
+    }
     try {
       const user = await getCurrentUser();
       this.cognitoUser = user.signInDetails;
@@ -98,6 +105,9 @@ export class AuthClientService {
       }
     } catch (err) {
       console.error(err);
+      if (err.name === 'NotAuthorizedException' && err.message.includes('Token is inactive')) {
+        this.handleTokenRefreshFailure();
+      }
     }
   }
 
@@ -160,10 +170,16 @@ export class AuthClientService {
   }
 
   private handleTokenRefreshFailure() {
-    // If token refresh fails, try once more after a short delay
-    setTimeout(() => {
-      this.refreshToken();
-    }, 30000); // Try again in 30 seconds
+    if (this.isSigningOut) {
+      return;
+    }
+    this.isSigningOut = true;
+    console.log('Token refresh failed, signing out user');
+    this.session.next(null);
+    this.clearRefreshTimer();
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = '/login';
   }
 
   private clearRefreshTimer() {
@@ -194,12 +210,25 @@ export class AuthClientService {
       // Clear the refresh timer
       this.clearRefreshTimer();
       
+      // Clear all session data
+      this.session.next(null);
+      this.previousUrl = null;
+      this.cognitoUser = undefined;
+      
+      // Clear storage to prevent token conflicts
+      localStorage.clear();
+      sessionStorage.clear();
+      
       // window.location.href = `https://${environment.cognitoLoginDomain}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.cognitoCallbackUrl}`;
       await signOut({global: true});
-      this.session.next(null);
-      this.previousUrl = null;  
     } catch (err) {
       console.error(err);
+      // Even if signOut fails, clear local state
+      this.session.next(null);
+      this.previousUrl = null;
+      this.cognitoUser = undefined;
+      localStorage.clear();
+      sessionStorage.clear();
     }
   }
 

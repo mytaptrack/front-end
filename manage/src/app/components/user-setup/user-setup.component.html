@@ -1,0 +1,121 @@
+<div class="user-setup-container">
+  <mat-card class="setup-card">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <img src="../assets/images/sm-text-logo.gif" alt="mytaptrack® logo" class="logo-avatar"/>
+      </div>
+      <mat-card-title>Welcome to mytaptrack® Admin</mat-card-title>
+      <mat-card-subtitle>Let's set up your profile to get started</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="user && !loading">
+      <form class="setup-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>First Name</mat-label>
+          <input matInput [(ngModel)]="user.details.firstName" name="firstName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input matInput [(ngModel)]="user.details.lastName" name="lastName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Display Name</mat-label>
+          <input matInput [(ngModel)]="user.details.name" name="displayName" required>
+          <mat-hint>This is how your name will appear to others</mat-hint>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="state-field">
+            <mat-label>State</mat-label>
+            <mat-select [(ngModel)]="user.details.state" name="state" required>
+              <mat-option value="">Select your state</mat-option>
+              <mat-option value="AL">Alabama</mat-option>
+              <mat-option value="AK">Alaska</mat-option>
+              <mat-option value="AZ">Arizona</mat-option>
+              <mat-option value="AR">Arkansas</mat-option>
+              <mat-option value="CA">California</mat-option>
+              <mat-option value="CO">Colorado</mat-option>
+              <mat-option value="CT">Connecticut</mat-option>
+              <mat-option value="DE">Delaware</mat-option>
+              <mat-option value="DC">District Of Columbia</mat-option>
+              <mat-option value="FL">Florida</mat-option>
+              <mat-option value="GA">Georgia</mat-option>
+              <mat-option value="HI">Hawaii</mat-option>
+              <mat-option value="ID">Idaho</mat-option>
+              <mat-option value="IL">Illinois</mat-option>
+              <mat-option value="IN">Indiana</mat-option>
+              <mat-option value="IA">Iowa</mat-option>
+              <mat-option value="KS">Kansas</mat-option>
+              <mat-option value="KY">Kentucky</mat-option>
+              <mat-option value="LA">Louisiana</mat-option>
+              <mat-option value="ME">Maine</mat-option>
+              <mat-option value="MD">Maryland</mat-option>
+              <mat-option value="MA">Massachusetts</mat-option>
+              <mat-option value="MI">Michigan</mat-option>
+              <mat-option value="MN">Minnesota</mat-option>
+              <mat-option value="MS">Mississippi</mat-option>
+              <mat-option value="MO">Missouri</mat-option>
+              <mat-option value="MT">Montana</mat-option>
+              <mat-option value="NE">Nebraska</mat-option>
+              <mat-option value="NV">Nevada</mat-option>
+              <mat-option value="NH">New Hampshire</mat-option>
+              <mat-option value="NJ">New Jersey</mat-option>
+              <mat-option value="NM">New Mexico</mat-option>
+              <mat-option value="NY">New York</mat-option>
+              <mat-option value="NC">North Carolina</mat-option>
+              <mat-option value="ND">North Dakota</mat-option>
+              <mat-option value="OH">Ohio</mat-option>
+              <mat-option value="OK">Oklahoma</mat-option>
+              <mat-option value="OR">Oregon</mat-option>
+              <mat-option value="PA">Pennsylvania</mat-option>
+              <mat-option value="RI">Rhode Island</mat-option>
+              <mat-option value="SC">South Carolina</mat-option>
+              <mat-option value="SD">South Dakota</mat-option>
+              <mat-option value="TN">Tennessee</mat-option>
+              <mat-option value="TX">Texas</mat-option>
+              <mat-option value="UT">Utah</mat-option>
+              <mat-option value="VT">Vermont</mat-option>
+              <mat-option value="VA">Virginia</mat-option>
+              <mat-option value="WA">Washington</mat-option>
+              <mat-option value="WV">West Virginia</mat-option>
+              <mat-option value="WI">Wisconsin</mat-option>
+              <mat-option value="WY">Wyoming</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="zip-field">
+            <mat-label>Zip Code</mat-label>
+            <input matInput [(ngModel)]="user.details.zip" name="zip" required>
+          </mat-form-field>
+        </div>
+
+        <div class="terms-section">
+          <p class="terms-text">
+            mytaptrack® is targeted to be HIPAA and FERPA-compliant, meeting federal standards for the protection and privacy of children's health and education data. 
+            By clicking "Complete Setup" you agree to mytaptrack®'s Terms of Use.
+          </p>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end" *ngIf="!loading">
+      <button mat-button (click)="signOut()" [disabled]="saving">
+        Cancel
+      </button>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="saveUserInfo()" 
+        [disabled]="!userInfoComplete() || saving">
+        <mat-icon *ngIf="saving">hourglass_empty</mat-icon>
+        Complete Setup
+      </button>
+    </mat-card-actions>
+
+    <div *ngIf="loading" class="loading-container">
+      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    </div>
+  </mat-card>
+</div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -27,10 +28,14 @@ export class AppComponent {
     },
   };
 
-  constructor() {
+  constructor(private router: Router) {
     const base = window.document.getElementById('baseHref')
       if(base) {
         base.setAttribute('href', environment.routes.behavior);
       }
+  }
+
+  showNavigation(): boolean {
+    return !this.router.url.endsWith('setup');
   }
 }

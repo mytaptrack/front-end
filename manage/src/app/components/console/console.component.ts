@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { 
   ManageClass, StudentClass, UserClass
 } from '../../lib';
@@ -21,7 +22,10 @@ export class ConsoleComponent implements OnInit {
   public dedicatedIds: string[];
   public students: StudentClass[];
   
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.userService.user.subscribe(user => {
@@ -29,6 +33,7 @@ export class ConsoleComponent implements OnInit {
       if(!user) {
         return;
       }
+      
       this.license = this.user.licenseDetails;
       this.management = user.management;
       if(!this.management) {

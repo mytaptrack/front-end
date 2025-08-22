@@ -3,7 +3,6 @@ import { DashboardPage } from '../pages/behavior/dashboard-page';
 import { LoginPage } from '../pages/auth/login-page';
 import { DriverFactory } from '../utils/driver-factory';
 import { TestConfig, defaultConfig } from '../config/test-config';
-import { cleanUp } from '../utils/clean-up';
 
 // Helper function to safely extract error message
 function getErrorMessage(error: unknown): string {
@@ -33,9 +32,6 @@ describe('Dashboard Tests', () => {
   }, 10000);
 
   describe('Dashboard Access', () => {
-    beforeEach(async () => {
-      await cleanUp();
-    });
 
     it('should redirect to login when not authenticated', async () => {
       
@@ -90,9 +86,6 @@ describe('Dashboard Tests', () => {
   });
 
   describe('Dashboard Elements', () => {
-    beforeEach(async () => {
-      await cleanUp();
-    });
 
     beforeAll(async () => {
       // Skip if no test credentials

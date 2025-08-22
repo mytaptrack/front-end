@@ -55,7 +55,7 @@ export class MilestonesComponent implements OnInit {
     this.selectedDate = moment();
   }
   create() {
-    this.selected = undefined;
+    this.setSelected(null);
   }
 
   isNew(): boolean {
