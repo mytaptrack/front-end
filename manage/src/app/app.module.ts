@@ -29,6 +29,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 import { MttTagsComponent } from './components/mtt-tags/mtt-tags.component';
 import { TagManagementComponent } from './components/tag-management/tag-management.component';
@@ -48,6 +49,7 @@ import { BehaviorComponent } from './components/templates/student/behaviors/beha
 import { ResponseTrackingComponent } from './components/templates/student/response-tracking/response-tracking.component';
 import { AbcComponent } from './components/templates/student/abc/abc.component';
 import { LicenseComponent } from './components/license/license.component';
+import { UserSetupComponent } from './components/user-setup/user-setup.component';
 
 @NgModule({ 
     declarations: [
@@ -70,7 +72,8 @@ import { LicenseComponent } from './components/license/license.component';
         BehaviorsComponent,
         BehaviorComponent,
         ResponseTrackingComponent,
-        LicenseComponent
+        LicenseComponent,
+        UserSetupComponent
     ],
     bootstrap: [
         AppComponent
@@ -103,6 +106,7 @@ import { LicenseComponent } from './components/license/license.component';
         MatProgressSpinnerModule,
         MatAutocompleteModule,
         MatTabsModule,
+        MatSelectModule,
 
         NgChartsModule,
         NgxPrintModule

@@ -22,7 +22,7 @@
             <div class="col-6">
                 <mat-form-field>
                     <mat-label>Schedule Name:</mat-label>
-                    <input matInput type="text" [(ngModel)]="schedule.name" [readonly]="readOnly" />    
+                    <input matInput type="text" id="schedule-name-input" class="schedule-name" [(ngModel)]="schedule.name" [readonly]="readOnly" />    
                 </mat-form-field>
             </div>
             <div class="col-6">
@@ -54,10 +54,12 @@
                         <td *ngIf="!readOnly"></td>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let activity of schedule.activities; index as i">
+                        <tr *ngFor="let activity of schedule.activities; index as i" class="schedule-activity-row" [attr.data-activity-index]="i">
                             <td>
                                 <mat-form-field>
                                     <input matInput
+                                    id="activity-name-{{i}}"
+                                    class="activity-name-input"
                                     [(ngModel)]="activity.title"
                                     [readonly]="readOnly"
                                     [class.validation-error]="errors[i].titleError"/>
@@ -65,18 +67,18 @@
                                 <div class="validation-error-text">{{errors[i].titleError}}</div>
                             </td>
                             <td>
-                                <app-time-input [(time)]="activity.startTime" [(error)]="errors[i].startError" [readonly]="readOnly"></app-time-input>
+                                <app-time-input id="activity-start-time-{{i}}" class="activity-start-time" [(time)]="activity.startTime" [(error)]="errors[i].startError" [readonly]="readOnly"></app-time-input>
                             </td>
                             <td>
-                                <app-time-input [(time)]="activity.endTime" [lastTime]="activity.startTime" [(error)]="errors[i].endError" [readonly]="readOnly"></app-time-input>
+                                <app-time-input id="activity-end-time-{{i}}" class="activity-end-time" [(time)]="activity.endTime" [lastTime]="activity.startTime" [(error)]="errors[i].endError" [readonly]="readOnly"></app-time-input>
                             </td>
                             <td *ngIf="!readOnly">
-                                <a (click)="deleteActivity(activity)"><mat-icon>delete</mat-icon></a>
+                                <a id="delete-activity-{{i}}" class="delete-activity-btn" (click)="deleteActivity(activity)"><mat-icon>delete</mat-icon></a>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4">
-                                <button class="btn btn-primary" (click)="addNewActivity()" *ngIf="!readOnly">Add to Schedule</button>
+                                <button id="add-schedule-activity" class="btn btn-primary add-activity-btn" (click)="addNewActivity()" *ngIf="!readOnly">Add to Schedule</button>
                                 <button class="btn btn-primary" (click)="showLoadSchedule = true" *ngIf="!readOnly">Load Schedule from File</button>
                             </td>
                         </tr>
@@ -90,13 +92,13 @@
             </div>
             <mat-form-field>
                 <label>Start Change On</label>
-                <input matInput type="date" [matDatepicker]="picker" [(ngModel)]="fromDate"/>
+                <input matInput type="date" id="schedule-start-date" class="schedule-start-date" [matDatepicker]="picker" [(ngModel)]="fromDate"/>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <div class="col-12" *ngIf="!readOnly">
                 <div class="dropup date-dropdown d-print-none">
-                    <button mat-raised-button color="primary" (click)="saveOnDate()"><mat-icon>save</mat-icon> Save</button>
+                    <button id="save-schedule" class="save-schedule-btn" mat-raised-button color="primary" (click)="saveOnDate()"><mat-icon>save</mat-icon> Save</button>
                 </div>
                 <button mat-raised-button color="secondary" (click)="cancel()"><mat-icon>cancel</mat-icon> Cancel</button>
                 <button mat-raised-button color="warn" *ngIf="schedule" (click)="delete()"><mat-icon>delete</mat-icon> Delete</button>

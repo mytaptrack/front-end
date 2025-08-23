@@ -120,6 +120,7 @@ export class ManageScheduleComponent implements OnInit {
       this.schedule = this.currentCategory.newSchedule();
       this.errors = [{ titleError: '', startError: '', endError: '' }];
       this.scheduleName = '';
+      this.fromDate = moment(); // Default to current day
     } else {
       this.currentCategory = this.scheduleCategories.find(x => x.name === this.categoryName);
       this.version = this.version? this.version : this.currentCategory.history[0].start;
@@ -191,11 +192,22 @@ export class ManageScheduleComponent implements OnInit {
   }
 
   async saveOnDate() {
+    // Validate that schedule name is set
+    if (!this.schedule.name || this.schedule.name.trim() === '') {
+      alert('Schedule name is required');
+      return;
+    }
+
+    // Validate activities
+    if (!this.validateFields()) {
+      return;
+    }
+
     const name = this.schedule.name;
     const cat = this.currentCategory;
     cat.name = name;
 
-    const startDate = this.fromDate? this.fromDate.clone() : this.schedule.start;
+    const startDate = this.fromDate? this.fromDate.clone() : moment();
     if(!this.schedule.start || this.schedule.start.isSame(startDate, 'day')) {
       this.schedule.start = startDate;
     } else {
@@ -210,7 +222,7 @@ export class ManageScheduleComponent implements OnInit {
     try {
       await this.schedule.save();
     } catch (err) {
-      alert(err.message);
+      alert(err.message || 'An error occurred while saving the schedule');
     }
 
     this.setLoading(false, 'Saving');

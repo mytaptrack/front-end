@@ -36,7 +36,10 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "define": {
+              "global": "globalThis"
+            }
           },
           "configurations": {
             "production": {
@@ -106,7 +109,10 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "define": {
+                "global": "globalThis"
+              }
             }
           },
           "defaultConfiguration": "production"
