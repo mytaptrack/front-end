@@ -149,9 +149,8 @@ export class ListComponent implements OnInit {
     });
   }
 
-  isActiveNoResponse(student: StudentClass) {
-    const summary = this.user.students.find(x => x.studentId == student.studentId);
-    return summary.awaitingResponse;
+  isActiveNoResponse(student: StudentSummary) {
+    return student.awaitingResponse;
   }
 
   getDate(date: string) {

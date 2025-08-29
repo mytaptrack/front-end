@@ -17,15 +17,15 @@ class ProfileError {
   standalone: false
 })
 export class ProfileComponent implements OnInit {
-  private user: UserDetails;
-  private newData: UserDetails;
-  private edit: boolean = false;
-  private editPassword: boolean = false;
-  private oldPassword = '';
-  private newPassword = '';
-  private confirmPassword = '';
-  private error: ProfileError = {};
-  private stateHashmap = UserService.States;
+  public user: UserDetails;
+  public newData: UserDetails;
+  public edit: boolean = false;
+  public editPassword: boolean = false;
+  public oldPassword = '';
+  public newPassword = '';
+  public confirmPassword = '';
+  public error: ProfileError = {};
+  public stateHashmap = UserService.States;
   public loading: boolean = true;
   private userSource: UserClass;
 

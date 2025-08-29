@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   UserService, ViewerConfigService, StudentBehavior, 
-  StudentBehaviorClass, StudentClass, StudentResponse, moment
+  StudentBehaviorClass, StudentClass, StudentResponse, StudentResponseClass, moment
 } from '../../..';
 
 @Component({
@@ -72,7 +72,7 @@ export class TrackingComponent implements OnInit {
   public intervalCalcPointer: any;
   public intervalFlashOn: boolean = false;
   private beepsound: HTMLAudioElement;
-  public responses: StudentResponse[] = [];
+  public responses: StudentResponseClass[] = [];
 
   public get isMobile() {
     return this.viewerConfigService.isMobile;
@@ -270,7 +270,7 @@ export class TrackingComponent implements OnInit {
     localStorage.setItem(`intervalTrackedIds_${this.student.studentId}`, JSON.stringify(this.intervalTrackedIds));
   }
 
-  async track(behavior: StudentBehaviorClass) {
+  async track(behavior: StudentBehaviorClass | StudentResponseClass) {
     await behavior.trackEvent();
   }
 

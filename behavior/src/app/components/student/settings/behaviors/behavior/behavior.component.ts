@@ -208,6 +208,7 @@ export class BehaviorComponent implements OnInit {
   public administrator: boolean;
   public reportingOn = true;
   public loading: boolean;
+  public status: string;
   public get onlyShowDelete() { return this.selected instanceof StudentTemplateBehaviorClass; }
   private _selected: StudentBehaviorClass | StudentTemplateBehaviorClass;
   public get selected() { return this._selected; }

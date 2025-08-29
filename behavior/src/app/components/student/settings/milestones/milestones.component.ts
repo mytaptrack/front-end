@@ -16,6 +16,7 @@ export class MilestonesComponent implements OnInit {
   public administrator: boolean;
   public loading: boolean;
   selectedDate: Moment;
+  selectedDateHandler: string;
 
   constructor() { }
 

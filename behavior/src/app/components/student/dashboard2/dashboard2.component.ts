@@ -1098,7 +1098,7 @@ export class Dashboard2Component implements OnInit {
               offset++;
             }
             total++;
-          } else if(this.settings.autoExcludeDays.findIndex(z => z == onDate.weekday()) < 0) {
+          } else if(this.settings && this.settings.autoExcludeDays && this.settings.autoExcludeDays.findIndex(z => z == onDate.weekday()) < 0) {
             if(onDate.isSameOrBefore(date, 'day')) {
               offset++;
             }
@@ -1387,7 +1387,7 @@ export class Dashboard2Component implements OnInit {
           const dateFormat = onDate.format('MM/DD/yyyy');
           if(this.reportData.includeDays.find(inDate => dateFormat == inDate)) {
             // Do nothing
-          } else if(this.settings.autoExcludeDays.findIndex(z => z == i) >= 0) {
+          } else if(this.settings && this.settings.autoExcludeDays && this.settings.autoExcludeDays.findIndex(z => z == i) >= 0) {
             dateOffset++;
           }
 
@@ -1573,7 +1573,7 @@ export class Dashboard2Component implements OnInit {
     if(this.reportData.includeDays.find(x => x === formattedDate)) {
       return false;
     }
-    if(this.settings.autoExcludeDays && this.settings.autoExcludeDays.findIndex(x => x == dateToCheck.weekday()) >= 0) {
+    if(this.settings && this.settings.autoExcludeDays && this.settings.autoExcludeDays.findIndex(x => x == dateToCheck.weekday()) >= 0) {
       return true;
     }
 
@@ -1581,7 +1581,7 @@ export class Dashboard2Component implements OnInit {
   }
 
   async excludeDate() {
-    if(this.settings.autoExcludeDays.findIndex(x => x == this.currentDay.weekday()) >= 0) {
+    if(this.settings && this.settings.autoExcludeDays && this.settings.autoExcludeDays.findIndex(x => x == this.currentDay.weekday()) >= 0) {
       await this.student.reports.setDateTrackingStatus(this.currentDay, 'undo');
     } else {
       await this.student.reports.setDateTrackingStatus(this.currentDay, 'exclude');
@@ -1590,7 +1590,7 @@ export class Dashboard2Component implements OnInit {
   }
 
   async includeDate() {
-    if(this.settings.autoExcludeDays.findIndex(x => x == this.currentDay.weekday()) >= 0) {
+    if(this.settings && this.settings.autoExcludeDays && this.settings.autoExcludeDays.findIndex(x => x == this.currentDay.weekday()) >= 0) {
       await this.student.reports.setDateTrackingStatus(this.currentDay, 'include');
     } else {
       await this.student.reports.setDateTrackingStatus(this.currentDay, 'undo');

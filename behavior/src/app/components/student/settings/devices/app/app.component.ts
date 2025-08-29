@@ -9,6 +9,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 class DeviceBehavior {
   public event: IoTDeviceEvent;
   public isResponse: boolean;
+  public id: string;
+  public name: string;
 
   get order() { return this.event.order; }
   set order(val: number) {
@@ -18,6 +20,8 @@ class DeviceBehavior {
 
   constructor(public studentBehavior: StudentBehavior, isResponse: boolean, private sortFunction) {
     this.isResponse = isResponse;
+    this.id = studentBehavior.id;
+    this.name = studentBehavior.name;
     Object.keys(studentBehavior).forEach(key => {
       this[key] = this.studentBehavior[key];
     });
@@ -293,5 +297,10 @@ export class DeviceAppComponent implements OnInit {
 
   closeQrCode() {
     this.selected.hideToken();
+  }
+
+  cancel() {
+    // Cancel any pending operations
+    this.setLoading(false);
   }
 }

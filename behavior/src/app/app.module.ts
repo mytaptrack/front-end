@@ -77,6 +77,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NotesComponent } from './components/notes/notes.component';
 import { QRCodeComponent } from 'angularx-qrcode';
 
@@ -179,6 +180,7 @@ providers.push({provide: ErrorHandler, useClass: ErrorHandlingService },
     MatGridListModule,
     MatButtonToggleModule,
     MatDialogModule,
+    MatTooltipModule,
     DragDropModule,
     QRCodeComponent
   ],

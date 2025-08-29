@@ -11,7 +11,7 @@
     </div>
     <div class="row cover-page">
         <div class="col-12" *ngIf="showSettingsDropdown">
-            <app-dashboard-settings [student]="student" [(settings)]="settings" (close)="showSettingsDropdown = false" (apply)="selectStudent(selectedStudent)"></app-dashboard-settings>
+            <app-dashboard-settings [student]="student" [settings]="settings" (settings)="settings = $event" (close)="showSettingsDropdown = false" (apply)="selectStudent(selectedStudent)"></app-dashboard-settings>
         </div>
         <div class="col-4">
             <button class="btn btn-primary d-print-none" (click)="print()"><mat-icon>print</mat-icon> Print</button>

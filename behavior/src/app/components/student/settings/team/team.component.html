@@ -126,7 +126,7 @@
                                 </table>
 
                                 <div *ngIf="selected.restrictions.reports == 'Admin'">
-                                    <mat-checkbox [(checked)]="overrideReport">Override Snapshot</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="overrideReport">Override Snapshot</mat-checkbox>
                                 </div>
     
                                 <!-- Behaviors Section -->

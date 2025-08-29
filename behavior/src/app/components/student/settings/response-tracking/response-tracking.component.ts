@@ -20,6 +20,7 @@ export class ResponseTrackingComponent implements OnInit {
   public behaviorIdSelected: string = '';
   public loading = false;
   public saving = false;
+  public status: string = '';
 
   public get selected() {
     return this._selected;

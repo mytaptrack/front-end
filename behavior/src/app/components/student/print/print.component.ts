@@ -114,7 +114,7 @@ export class PrintComponent extends Dashboard2Component implements OnInit {
       while(onDate.isBefore(this.endDate)) {
         const dateString = onDate.format('MM/DD/yyyy');
         if(!this.reportData.includeDays.find(d => d == dateString) && (
-          this.reportData.excludeDays.find(d => d == dateString) || reportConfig.autoExcludeDays.find(d => d == onDate.weekday()))) {
+          this.reportData.excludeDays.find(d => d == dateString) || (reportConfig && reportConfig.autoExcludeDays && reportConfig.autoExcludeDays.find(d => d == onDate.weekday())))) {
           onDate = onDate.add(1, 'day');
           continue;
         }
@@ -170,7 +170,7 @@ export class PrintComponent extends Dashboard2Component implements OnInit {
           const date = moment(y.dateEpoc).startOf('day');
           const dateString = date.format('yyyy-MM-DD');
           if(!reportData.includeDays.find(d => d == dateString) && (
-            reportData.excludeDays.find(d => d == dateString) || reportConfig.autoExcludeDays.find(d => d == date.weekday()))) {
+            reportData.excludeDays.find(d => d == dateString) || (reportConfig && reportConfig.autoExcludeDays && reportConfig.autoExcludeDays.find(d => d == date.weekday())))) {
             return;
           }
           return true;
@@ -196,7 +196,7 @@ export class PrintComponent extends Dashboard2Component implements OnInit {
         while(onDate.isBefore(this.endDate)) {
           const dateString = onDate.format('MM/DD/yyyy');
           if(!reportData.includeDays.find(d => d == dateString) && (
-            reportData.excludeDays.find(d => d == dateString) || reportConfig.autoExcludeDays.find(d => d == onDate.weekday()))) {
+            reportData.excludeDays.find(d => d == dateString) || (reportConfig && reportConfig.autoExcludeDays && reportConfig.autoExcludeDays.find(d => d == onDate.weekday())))) {
             onDate = onDate.add(1, 'day');
             continue;
           }
@@ -511,5 +511,10 @@ export class PrintComponent extends Dashboard2Component implements OnInit {
       return 0;
     }
     return stat.days[date].count;
+  }
+
+  goToReportDetails(event: any) {
+    // Handle chart click event - placeholder implementation
+    console.log('Chart clicked:', event);
   }
 }
