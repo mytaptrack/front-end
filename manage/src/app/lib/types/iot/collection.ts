@@ -41,16 +41,23 @@ export class IoTDeviceCollection {
         if(this.student.restrictions.devices == AccessLevel.none) {
             return;
         }
-        const devices = await this.api.getStudentDevicesV2(this.student.studentId);
         
-        const managedItems = devices.map(x => {
-            if (x.isApp) {
-                return new AppClass(x as IoTAppDevice, this.student, this.api, (val) => { this.onAddDevice(val); }, (val) => { this.onRemoveDevice(val); });
-            } else {
-                return new TrackClass(x, this.student, this.api, (val) => { this.onAddDevice(val); }, (val) => { this.onRemoveDevice(val); });
-            }
-        });
-        this._items.push(...managedItems);
+        try {
+            const devices = await this.api.getStudentDevicesV2(this.student.studentId);
+            
+            const managedItems = devices.map(x => {
+                if (x.isApp) {
+                    return new AppClass(x as IoTAppDevice, this.student, this.api, (val) => { this.onAddDevice(val); }, (val) => { this.onRemoveDevice(val); });
+                } else {
+                    return new TrackClass(x, this.student, this.api, (val) => { this.onAddDevice(val); }, (val) => { this.onRemoveDevice(val); });
+                }
+            });
+            this._items.push(...managedItems);
+        } catch (error) {
+            console.error('Failed to load student devices:', error);
+            // Optionally show user-friendly error message
+            // You could emit an event or set a flag here to show an error message in the UI
+        }
     }
 
     public addTrack2(): TrackClass {
