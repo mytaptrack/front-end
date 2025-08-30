@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
   public id: string;
   public tabName: string;
   private subscriptions: Array<BehaviorSubscription> = [];
-  private student: StudentClass;
+  public student: StudentClass;
   private user: UserClass;
   private userPreference: UserPreferences;
   public loading: boolean = true;

@@ -42,6 +42,7 @@ export class NotesComponent implements OnInit {
   @Input() textHeight: string;
   @Input() print: boolean = false;
   @Input() showPrevNotes: boolean = true;
+  @Input() studentId: string;
 
   @Input()
   set student(value: StudentClass) {

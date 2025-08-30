@@ -6,7 +6,7 @@
                 <label>Select a schedule</label>
                 <select class="form-control" 
                         [(ngModel)]="categoryName"
-                        (change)="onCategorySelected($event.target.value)">
+                        (change)="onCategorySelectedEvent($event)">
                     <option *ngFor="let cat of student.schedules" [value]="cat.name">{{cat.name}}</option>
                     <option *ngIf="!readOnly" [value]="">Create new schedule</option>
                 </select>

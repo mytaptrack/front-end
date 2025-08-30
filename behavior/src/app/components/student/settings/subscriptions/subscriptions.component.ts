@@ -25,6 +25,10 @@ export class SubscriptionsComponent implements OnInit {
   selected: SubscriptionGroupClass;
   loading: boolean;
   saving: boolean;
+  showPlaceholders: boolean = false;
+  showCustomEmail: boolean = false;
+  showCustomSms: boolean = false;
+  showCustomApp: boolean = false;
   get readonly() { 
     return !this.student || this.student?.restrictions.notifications == AccessLevel.read; 
   }

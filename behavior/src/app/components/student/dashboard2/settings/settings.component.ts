@@ -12,7 +12,7 @@ class DayOfWeekConfig {
   }
 
   get boolValue(): boolean {
-    if(!this.settings.autoExcludeDays) {
+    if(!this.settings || !this.settings.autoExcludeDays) {
       return false;
     }
     const retval = this.settings.autoExcludeDays.findIndex(x => x === this.weekdayNumber) < 0;
@@ -20,6 +20,9 @@ class DayOfWeekConfig {
   }
 
   set boolValue(setting: boolean) {
+    if(!this.settings || !this.settings.autoExcludeDays) {
+      return;
+    }
     const index = this.settings.autoExcludeDays.findIndex(x => x === this.weekdayNumber);
     if(setting) {
       if(index >= 0) {

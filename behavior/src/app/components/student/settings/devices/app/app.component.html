@@ -91,7 +91,7 @@
                             <div>ABC</div>
                         </div>
                         <div cdkDropList (cdkDropListDropped)="drop($event)">
-                            @for(behavior of activeBehaviors; track behavior.id) {
+                            @for(behavior of activeBehaviors; track behavior.id; let i = $index) {
                                 <div class="trackable-item" cdkDrag>
                                     <mat-icon>drag_indicator</mat-icon>
                                     <div>{{behavior.name}}</div>

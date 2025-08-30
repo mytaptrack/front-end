@@ -1,10 +1,10 @@
 <!-- Read-only display -->
 <div class="status-display" *ngIf="!allowSelection">
-    <span *ngIf="!isFace()" [style.color]="getFaceColor(behavior)">
-        {{getStatusName(behavior, weekdayOffset)}}
+    <span *ngIf="!isFace()" [style.color]="getFaceColor()">
+        {{getStatusName()}}
     </span>
     <mat-icon *ngIf="isFace()" 
-              [style.color]="getFaceColor(behavior)"
+              [style.color]="getFaceColor()"
               [class.large]="true">
         {{getFaceFromText(face)}}
     </mat-icon>
@@ -14,11 +14,11 @@
 <mat-form-field *ngIf="allowSelection" appearance="fill" class="status-select">
     <mat-select [value]="face" (selectionChange)="setFace($event.value)">
         <mat-select-trigger>
-            <span *ngIf="!isFace()" [style.color]="getFaceColor(behavior)">
-                {{getStatusName(behavior)}}
+            <span *ngIf="!isFace()" [style.color]="getFaceColor()">
+                {{getStatusName()}}
             </span>
             <mat-icon *ngIf="isFace()" 
-                      [style.color]="getFaceColor(behavior)"
+                      [style.color]="getFaceColor()"
                       [class.large]="true">{{getFaceFromText(face)}}</mat-icon>
         </mat-select-trigger>
         

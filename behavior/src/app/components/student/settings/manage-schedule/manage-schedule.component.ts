@@ -92,9 +92,20 @@ export class ManageScheduleComponent implements OnInit {
     this.version = undefined;
     this.reloadCategoryAndVersion();
   }
+  
+  onCategorySelectedEvent(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.onCategorySelected(target.value);
+  }
+  
   onVersionChange(version: string) {
     this.version = moment(version);
     this.reloadCategoryAndVersion();
+  }
+  
+  onVersionChangeEvent(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.onVersionChange(target.value);
   }
 
   reloadCategoryAndVersion() {
