@@ -17,7 +17,7 @@
   "private": true,
   "devDependencies": {
     "@angular/animations": "^20.0.3",
-    "@angular/build": "^20.0.2",
+    "@angular/build": "^20.2.1",
     "@angular/cdk": "^20.0.3",
     "@angular/cli": "^20.0.2",
     "@angular/common": "^20.0.3",
