@@ -1,9 +1,11 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   UserService, ViewerConfigService, StudentBehavior, 
   StudentBehaviorClass, StudentClass, StudentResponse, StudentResponseClass, moment
 } from '../../..';
+import { AbcSelectionDialogComponent, AbcSelectionData, AbcSelectionResult } from './abc-selection-dialog/abc-selection-dialog.component';
 
 @Component({
   selector: 'app-tracking',
@@ -81,7 +83,8 @@ export class TrackingComponent implements OnInit {
   constructor(
     private userService: UserService,
     private viewerConfigService: ViewerConfigService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private dialog: MatDialog) {
     this.loading = true;
   }
 
@@ -271,7 +274,38 @@ export class TrackingComponent implements OnInit {
   }
 
   async track(behavior: StudentBehaviorClass | StudentResponseClass) {
-    await behavior.trackEvent();
+    // Check if this behavior requires ABC tracking
+    if (behavior instanceof StudentBehaviorClass && behavior.trackAbc && this.student.abc) {
+      const abc = await this.promptForAbc();
+      if (abc) {
+        await behavior.trackEvent(moment(), abc);
+      }
+    } else {
+      await behavior.trackEvent();
+    }
+  }
+
+  private async promptForAbc(): Promise<{ a: string, c: string } | null> {
+    const antecedents = this.student.abc.antecedents || [];
+    const consequences = this.student.abc.consequences || [];
+
+    if (antecedents.length === 0 || consequences.length === 0) {
+      alert('ABC tracking is enabled for this behavior, but no antecedents or consequences have been defined. Please configure ABC settings first.');
+      return null;
+    }
+
+    const dialogData: AbcSelectionData = {
+      antecedents,
+      consequences
+    };
+
+    const dialogRef = this.dialog.open(AbcSelectionDialogComponent, {
+      width: '400px',
+      data: dialogData
+    });
+
+    const result: AbcSelectionResult = await dialogRef.afterClosed().toPromise();
+    return result || null;
   }
 
   isIntervalTracked(behavior) {

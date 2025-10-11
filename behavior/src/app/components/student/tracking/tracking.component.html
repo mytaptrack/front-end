@@ -61,16 +61,17 @@
                                 <div [class.col-6]="!isMobile" [class.col-12]="isMobile" [class.text-center]="isMobile">
                                     <div class="title">
                                         {{behavior.name}}
-                                        <i *ngIf="behavior.isDuration" class="fa fa-clock-o"></i>    
+                                        <i *ngIf="behavior.isDuration" class="fa fa-clock-o"></i>
+                                        <span *ngIf="behavior.trackAbc" class="abc-indicator" title="ABC tracking enabled">ABC</span>
                                     </div>
                                     <div @slideDownUp *ngIf="showDescription" class="description">
                                         {{behavior.desc}}
                                     </div>
                                 </div>
                                 <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!behavior.isDuration">
-                                    <button [id]="'interval-track-' + behavior.id" class="btn btn-large btn-primary" (click)="behavior.trackEvent()">
+                                    <button [id]="'interval-track-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                                         <mat-icon *ngIf="!behavior.saving">bolt</mat-icon>
-                                        <mat-spinner *ngIf="behavior.saving"></mat-spinner>
+                                        <mat-spinner *ngIf="behavior.saving" diameter="20"></mat-spinner>
                                         &nbsp;Track
                                     </button>
                                 </div>
@@ -82,7 +83,8 @@
                     <div [class.col-6]="!isMobile" [class.col-12]="isMobile" [class.text-center]="isMobile">
                         <div class="title">
                             {{behavior.name}}
-                            <i *ngIf="behavior.isDuration" class="fa fa-clock-o"></i>    
+                            <i *ngIf="behavior.isDuration" class="fa fa-clock-o"></i>
+                            <span *ngIf="behavior.trackAbc" class="abc-indicator" title="ABC tracking enabled">ABC</span>
                         </div>
                         <div @slideDownUp *ngIf="showDescription" class="description">
                             {{behavior.desc}}
@@ -91,21 +93,21 @@
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!behavior.isDuration">
                         <button [id]="'track-behavior-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">bolt</mat-icon>
-                            <mat-spinner *ngIf="behavior.saving"></mat-spinner>
+                            <mat-spinner *ngIf="behavior.saving" diameter="20"></mat-spinner>
                             &nbsp;Track
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="behavior.isDuration && !behavior.durationStarted">
                         <button [id]="'start-behavior-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">play_arrow</mat-icon>
-                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="behavior.saving"></i>
+                            <mat-spinner *ngIf="behavior.saving" diameter="20"></mat-spinner>
                             &nbsp;Start
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="behavior.durationStarted">
                         <button [id]="'stop-behavior-' + behavior.id" class="btn btn-large btn-primary" (click)="track(behavior)">
                             <mat-icon *ngIf="!behavior.saving">stop</mat-icon>
-                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="behavior.saving"></i>
+                            <mat-spinner *ngIf="behavior.saving" diameter="20"></mat-spinner>
                             Stop
                         </button>
                     </div>
@@ -127,21 +129,21 @@
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="!response.isDuration">
                         <button [id]="'track-response-' + response.id" class="btn btn-large btn-primary" (click)="track(response)">
                             <mat-icon *ngIf="!response.saving">bolt</mat-icon>
-                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="response.saving"></i>
+                            <mat-spinner *ngIf="response.saving" diameter="20"></mat-spinner>
                             &nbsp;Respond
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="response.isDuration && !response.durationStarted">
                         <button [id]="'start-response-' + response.id" class="btn btn-large btn-primary" (click)="response.trackEvent()">
                             <mat-icon *ngIf="!response.saving">play_arrow</mat-icon>
-                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="response.saving"></i>
+                            <mat-spinner *ngIf="response.saving" diameter="20"></mat-spinner>
                             &nbsp;Responding
                         </button>
                     </div>
                     <div [class.offset-3]="isMobile" [class.col-6]="isMobile" [class.text-center]="isMobile" [class.col-3]="!isMobile" *ngIf="response.durationStarted">
                         <button [id]="'stop-response-' + response.id" class="btn btn-large btn-primary" (click)="response.trackEvent()">
                             <mat-icon *ngIf="!response.saving">stop</mat-icon>
-                            <i class="fa fa-circle-o-notch fa-spin" *ngIf="response.saving"></i>
+                            <mat-spinner *ngIf="response.saving" diameter="20"></mat-spinner>
                             &nbsp;Complete
                         </button>
                     </div>
