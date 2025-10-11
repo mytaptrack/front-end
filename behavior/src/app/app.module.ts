@@ -49,6 +49,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { AbcCollectionComponent } from './components/abc-collection/abc-collection.component';
 import { DownloadComponent } from './components/student/download/download.component';
+import { AbcSelectionDialogComponent } from './components/student/tracking/abc-selection-dialog/abc-selection-dialog.component';
 
 import { MatMomentDateModule, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -135,6 +136,7 @@ providers.push({provide: ErrorHandler, useClass: ErrorHandlingService },
     AbcCollectionComponent,
     DownloadComponent,
     DownloadDataComponent,
+    AbcSelectionDialogComponent,
     MilestonesComponent,
     ManageScheduleComponent,
     DeviceAppComponent,
