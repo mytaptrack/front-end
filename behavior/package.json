@@ -68,7 +68,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "^4.0.1",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "mammoth": "^1.4.17",
+    "mammoth": "^1.11.0",
     "moment": "^2.29.2",
     "moment-timezone": "^0.5.40",
     "ng-packagr": "^20.0.0",
