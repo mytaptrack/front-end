@@ -18,15 +18,15 @@ docker:
 	docker build -t mtt-front-end:latest .
 
 deploy-s3:
-	cp ./behavior/src/environments/environment_s3_sample.ts.example ./behavior/src/environments/environment.ts
-	cp ./behavior/src/environments/environment_s3_sample.ts.example ./behavior/src/environments/environment.prod.ts
-	cp ./manage/src/environments/environment_s3_sample.ts.example ./manage/src/environments/environment.ts
-	cp ./manage/src/environments/environment_s3_sample.ts.example ./manage/src/environments/environment.prod.ts
+# 	cp ./behavior/src/environments/environment_s3_sample.ts.example ./behavior/src/environments/environment.ts
+# 	cp ./behavior/src/environments/environment_s3_sample.ts.example ./behavior/src/environments/environment.prod.ts
+# 	cp ./manage/src/environments/environment_s3_sample.ts.example ./manage/src/environments/environment.ts
+# 	cp ./manage/src/environments/environment_s3_sample.ts.example ./manage/src/environments/environment.prod.ts
 	
 	cd utils && npm ci && npm run env-build
 
-	cd behavior && npm ci && npm run build
-	cd behavior/dist/website/browser && aws s3 sync . s3://${WEBSITE_BUCKET}/behavior
+	cd behavior && npm i && npm run build
+# 	cd behavior/dist/website/browser && aws s3 sync . s3://${WEBSITE_BUCKET}/behavior
 	
-	cd manage && npm ci && npm run build
-	cd manage/dist/website/browser && aws s3 sync . s3://${WEBSITE_BUCKET}/manage
+	cd manage && npm i && npm run build
+# 	cd manage/dist/website/browser && aws s3 sync . s3://${WEBSITE_BUCKET}/manage
