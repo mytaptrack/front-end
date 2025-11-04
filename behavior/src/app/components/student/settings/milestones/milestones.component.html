@@ -49,6 +49,7 @@
                                     id="student-setting-device-support-date"
                                     [matDatepicker]="picker"
                                     [(ngModel)]="selectedDateHandler"
+                                    (ngModelChange)="onDateChange()"
                                     name="date"
                                     [readonly]="!administrator">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

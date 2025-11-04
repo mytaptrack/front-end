@@ -643,13 +643,15 @@ export class Dashboard2Component implements OnInit {
     if (this.student.milestones) {
       const milestones = this.student.milestones.filter(x => {
         const date = moment(x.date);
-        return date.isSameOrAfter(this.startDate) && date.isBefore(this.endDate);
+        console.log('Milestone date check:', x.date, 'parsed as:', date.format('YYYY-MM-DD'), 'startDate:', this.startDate.format('YYYY-MM-DD'), 'endDate:', this.endDate.format('YYYY-MM-DD'));
+        return date.isSameOrAfter(this.startDate, 'day') && date.isSameOrBefore(this.endDate, 'day');
       }).map((x, index) => {
         const copy = x.milestone as DisplayMilestones
         copy.color = colors_light[index % colors_light.length];
         copy.date = x.dateString;
         return copy;
       });
+      console.log('Filtered milestones for display:', milestones);
       this.milestones = milestones;
     }
     this.scheduledExcludes = [];

@@ -16,7 +16,7 @@ export class MilestonesComponent implements OnInit {
   public administrator: boolean;
   public loading: boolean;
   selectedDate: Moment;
-  selectedDateHandler: string;
+  selectedDateHandler: Date;
 
   constructor() { }
 
@@ -53,7 +53,8 @@ export class MilestonesComponent implements OnInit {
       date: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`,
     });
 
-    this.selectedDate = moment();
+    this.selectedDate = moment(this.selected.date);
+    this.selectedDateHandler = this.selectedDate.toDate();
   }
   create() {
     this.setSelected(null);
@@ -81,6 +82,15 @@ export class MilestonesComponent implements OnInit {
 
   cancel() {
     this.selected.cancel();
+    this.selectedDate = moment(this.selected.date);
+    this.selectedDateHandler = this.selectedDate.toDate();
+  }
+
+  onDateChange() {
+    if (this.selectedDateHandler && this.selected) {
+      this.selectedDate = moment(this.selectedDateHandler);
+      this.selected.date = this.selectedDate.format('MM/DD/YYYY');
+    }
   }
 
   async remove() {
