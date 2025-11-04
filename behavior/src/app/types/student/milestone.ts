@@ -15,7 +15,7 @@ export class MilestoneClass {
 
     get milestone(): Milestone {
         return {
-            date: moment(this.date).format('yyyy-MM-DD'),
+            date: moment(this.date).format('YYYY-MM-DD'),
             title: this.title,
             description: this.description
         };
@@ -28,6 +28,7 @@ export class MilestoneClass {
     }
 
     async save() {
+        console.log('Saving milestone:', this.title, 'with date:', this.date, 'formatted as:', moment(this.date).format('YYYY-MM-DD'));
         if(this.isNew) {
             this._student.milestones.push(this);
         }
